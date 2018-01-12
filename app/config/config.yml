@@ -67,3 +67,44 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+
+lexik_jwt_authentication:
+    private_key_path: '%jwt_private_key_path%'
+    public_key_path:  '%jwt_public_key_path%'
+    pass_phrase:      '%jwt_key_pass_phrase%'
+    token_ttl:        '%jwt_token_ttl%'
+
+gesdinet_jwt_refresh_token:
+    ttl: '%jwt_refresh_token_ttl%'
+    ttl_update: true
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Bbt\Migrations
+    table_name: migration_versions
+    name: Bbt Migrations
+
+fos_rest:
+    body_listener: true
+    format_listener:  true
+    param_fetcher_listener: force
+    view:
+        view_response_listener: 'force'
+        formats:
+            json: true
+            jsonp: false
+            xml: false
+            rss: false
+        mime_types:
+            json: ['application/json', 'application/x-json']
+    routing_loader:
+        default_format:  json
+    exception:
+        enabled: true
+        messages:
+            Symfony\Component\HttpKernel\Exception\BadRequestHttpException: true
+            Symfony\Component\HttpKernel\Exception\HttpException: true
+
+nelmio_api_doc:
+    name: Klaizar Univer API

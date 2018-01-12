@@ -1,0 +1,7 @@
+parameters:
+    app.jwt_authenticator.class: AppBundle\Security\Guard\JWTAuthenticator
+services:
+
+    app.jwt_token_authenticator:
+        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+        class: "%app.jwt_authenticator.class%"
