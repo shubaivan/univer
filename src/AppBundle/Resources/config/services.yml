@@ -1,7 +1,17 @@
 parameters:
     app.jwt_authenticator.class: AppBundle\Security\Guard\JWTAuthenticator
+    app.object_manager.class: AppBundle\Services\ObjectManager
+
 services:
 
     app.jwt_token_authenticator:
         parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
         class: "%app.jwt_authenticator.class%"
+
+    app.auth:
+        class: "%app.object_manager.class%"
+        arguments:
+            - "@jms_serializer"
+            - "@validator"
+            - "@request_stack"
+            - "@security.token_storage"

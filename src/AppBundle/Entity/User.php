@@ -140,6 +140,14 @@ class User extends AbstractUser implements UserInterface
         $this->roles = new ArrayCollection();
     }
 
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->setIsActiveAccessor();
+    }
+
     public function getUsername()
     {
         return $this->username;
@@ -254,6 +262,19 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
+     * @param null $inviteCode
+     */
+    public function setIsActiveAccessor($inviteCode = null)
+    {
+        if (null === $this->isActive && $inviteCode) {
+            $this->setIsActive($inviteCode);
+        } elseif (null === $this->isActive) {
+            $this->setIsActive(true);
+        }
+    }
+
+
+    /**
      * Get isActive
      *
      * @return boolean
@@ -275,6 +296,17 @@ class User extends AbstractUser implements UserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmailAccessor($email)
+    {
+        $this->setEmail($email);
+        if (!$this->username) {
+            $this->username = $email;
+        }
     }
 
     /**

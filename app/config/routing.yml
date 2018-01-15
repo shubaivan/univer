@@ -1,3 +1,15 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+login_check:
+    path:     /login_check
+    methods:  [POST]
+
+gesdinet_jwt_refresh_token:
+    path:     /api/token/refresh
+    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc
+
+app_api:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /

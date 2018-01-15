@@ -1,0 +1,4 @@
+api_users_registration:
+    type: rest
+    prefix:   /api
+    resource: "@AppBundle/Controller/Api/RegistrationController.php"
