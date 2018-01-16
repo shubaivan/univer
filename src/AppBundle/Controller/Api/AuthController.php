@@ -35,4 +35,25 @@ class AuthController extends AbstractRestController
         
     }
 
+
+    /**
+     * @Post("/api/token/refresh", name="api_token_refresh")
+     * @ApiDoc(
+     *      resource = true,
+     *      authentication=true,
+     *      description = "logic check",
+     *      parameters={
+     *          {"name"="refresh_token", "dataType"="string", "required"=true, "description"="refresh_token"}
+     *      },
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned bad request"
+     *      },
+     *      section="Authentification"
+     * )
+     */
+    public function refreshAction(Request $request)
+    {
+
+    }
 }
