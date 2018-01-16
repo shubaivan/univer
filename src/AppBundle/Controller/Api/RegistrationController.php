@@ -75,4 +75,41 @@ class RegistrationController extends AbstractRestController
 
         return $this->handleView($view);
     }
+
+    /**
+     * User Registration.
+     * <strong>Simple example:</strong><br />
+     * http://bbt.dev/api/registration <br>.
+     *
+     * @ApiDoc(
+     * resource = true,
+     * description = "User Registration",
+     * authentication=true,
+     *  parameters={
+     *      {"name"="_password", "dataType"="string", "required"=false, "description"="user password"},
+     *      {"name"="_email", "dataType"="string", "required"=false, "description"="user email"}
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Registration"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Request $request
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function postTestAction(Request $request)
+    {
+        return $this->createSuccessResponse(
+            [
+               'test'
+            ]
+        );
+    }
 }
