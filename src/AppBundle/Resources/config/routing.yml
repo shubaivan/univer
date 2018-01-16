@@ -2,3 +2,9 @@ api_users_registration:
     type: rest
     prefix:   /api
     resource: "@AppBundle/Controller/Api/RegistrationController.php"
+
+api_users_auth:
+    type: annotation
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/AuthController.php"
+    defaults: {_format: json}
