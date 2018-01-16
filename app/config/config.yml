@@ -108,3 +108,11 @@ fos_rest:
 
 nelmio_api_doc:
     name: Klaizar Univer API
+
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    orm:
+        default:
+            timestampable: true
+            sluggable:     true
+            softdeleteable: true
