@@ -8,3 +8,8 @@ api_users_auth:
     prefix:   /
     resource: "@AppBundle/Controller/Api/AuthController.php"
     defaults: {_format: json}
+
+api_users:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/UserController.php"
