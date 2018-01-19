@@ -1,6 +1,7 @@
 parameters:
     app.jwt_authenticator.class: AppBundle\Security\Guard\JWTAuthenticator
     app.object_manager.class: AppBundle\Services\ObjectManager
+    app.authentication_success_handler.class: AppBundle\Security\AuthenticationSuccessHandler
 
 services:
 
@@ -15,3 +16,11 @@ services:
             - "@validator"
             - "@request_stack"
             - "@security.token_storage"
+
+    custom:
+        class: "%app.authentication_success_handler.class%"
+        arguments:
+            - "@lexik_jwt_authentication.jwt_manager"
+            - "@event_dispatcher"
+        tags:
+            - { name: monolog.logger, channel: security }

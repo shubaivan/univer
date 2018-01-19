@@ -3,14 +3,8 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\User;
-use AppBundle\Exception\ValidatorException;
-use AppBundle\Model\Request\RecoveryPasswordRequest;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\RestBundle\Controller\Annotations\Put;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;

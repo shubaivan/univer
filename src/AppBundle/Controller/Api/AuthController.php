@@ -2,15 +2,9 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\User;
-use AppBundle\Exception\ValidatorException;
-use FOS\RestBundle\Controller\Annotations\View as RestView;
-use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations\Post;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use FOS\RestBundle\Controller\Annotations\Post;
 
 class AuthController extends AbstractRestController
 {
@@ -32,9 +26,7 @@ class AuthController extends AbstractRestController
      */
     public function loginAction(Request $request)
     {
-        
     }
-
 
     /**
      * @Post("/api/token/refresh", name="api_token_refresh")
@@ -54,6 +46,5 @@ class AuthController extends AbstractRestController
      */
     public function refreshAction(Request $request)
     {
-
     }
 }

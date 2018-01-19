@@ -225,9 +225,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -235,7 +235,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
      *
@@ -249,9 +249,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set isActive
+     * Set isActive.
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return User
      */
@@ -274,11 +274,10 @@ class User extends AbstractUser implements UserInterface
         }
     }
 
-
     /**
-     * Get isActive
+     * Get isActive.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {
@@ -286,7 +285,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -311,7 +310,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -321,7 +320,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set firstName
+     * Set firstName.
      *
      * @param string $firstName
      *
@@ -335,7 +334,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get firstName
+     * Get firstName.
      *
      * @return string
      */
@@ -345,7 +344,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set lastName
+     * Set lastName.
      *
      * @param string $lastName
      *
@@ -359,7 +358,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get lastName
+     * Get lastName.
      *
      * @return string
      */
@@ -369,9 +368,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set studentId
+     * Set studentId.
      *
-     * @param integer $studentId
+     * @param int $studentId
      *
      * @return User
      */
@@ -383,9 +382,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get studentId
+     * Get studentId.
      *
-     * @return integer
+     * @return int
      */
     public function getStudentId()
     {
@@ -393,9 +392,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set yearOfGraduation
+     * Set yearOfGraduation.
      *
-     * @param integer $yearOfGraduation
+     * @param int $yearOfGraduation
      *
      * @return User
      */
@@ -407,9 +406,9 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get yearOfGraduation
+     * Get yearOfGraduation.
      *
-     * @return integer
+     * @return int
      */
     public function getYearOfGraduation()
     {

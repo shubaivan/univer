@@ -10,7 +10,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use FOS\RestBundle\Controller\Annotations\Post;
 
 class RegistrationController extends AbstractRestController
 {
@@ -57,11 +56,12 @@ class RegistrationController extends AbstractRestController
 
             $user
                 ->setPassword($encoder->encodePassword($user, $password));
-
             $em->persist($user);
             $em->flush();
+            $lexikJwtAuthentication = $this->get('custom');
+            $event = $lexikJwtAuthentication->handleAuthenticationSuccess($user, null, true);
 
-            return $this->createSuccessResponse($user, ['profile'], true);
+            return $this->createSuccessResponse($event->getData());
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
