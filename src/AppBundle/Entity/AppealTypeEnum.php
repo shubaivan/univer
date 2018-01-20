@@ -4,8 +4,8 @@ namespace AppBundle\Enum;
 
 abstract class AppealTypeEnum
 {
-    const TYPE_APPEAL = "appeal";
-    const TYPE_ANSWER = "answer";
+    const TYPE_APPEAL = 'appeal';
+    const TYPE_ANSWER = 'answer';
 
     /** @var array user friendly named type */
     protected static $typeName = [
@@ -14,7 +14,8 @@ abstract class AppealTypeEnum
     ];
 
     /**
-     * @param  string $typeShortName
+     * @param string $typeShortName
+     *
      * @return string
      */
     public static function getTypeName($typeShortName)
@@ -33,8 +34,7 @@ abstract class AppealTypeEnum
     {
         return [
             self::TYPE_APPEAL,
-            self::TYPE_ANSWER
+            self::TYPE_ANSWER,
         ];
     }
-
 }

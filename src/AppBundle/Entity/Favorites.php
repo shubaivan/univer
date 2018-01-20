@@ -2,11 +2,8 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -40,9 +37,9 @@ class Favorites
     private $user;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -50,7 +47,7 @@ class Favorites
     }
 
     /**
-     * Set questions
+     * Set questions.
      *
      * @param \AppBundle\Entity\Questions $questions
      *
@@ -64,7 +61,7 @@ class Favorites
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \AppBundle\Entity\Questions
      */
@@ -74,7 +71,7 @@ class Favorites
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -88,7 +85,7 @@ class Favorites
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */

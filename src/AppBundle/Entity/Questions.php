@@ -5,8 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -111,7 +109,7 @@ class Questions
     private $semesters;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -122,9 +120,9 @@ class Questions
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -132,7 +130,7 @@ class Questions
     }
 
     /**
-     * Set customId
+     * Set customId.
      *
      * @param string $customId
      *
@@ -146,7 +144,7 @@ class Questions
     }
 
     /**
-     * Get customId
+     * Get customId.
      *
      * @return string
      */
@@ -156,9 +154,9 @@ class Questions
     }
 
     /**
-     * Set subCourseId
+     * Set subCourseId.
      *
-     * @param integer $subCourseId
+     * @param int $subCourseId
      *
      * @return Questions
      */
@@ -170,9 +168,9 @@ class Questions
     }
 
     /**
-     * Get subCourseId
+     * Get subCourseId.
      *
-     * @return integer
+     * @return int
      */
     public function getSubCourseId()
     {
@@ -180,9 +178,9 @@ class Questions
     }
 
     /**
-     * Set year
+     * Set year.
      *
-     * @param integer $year
+     * @param int $year
      *
      * @return Questions
      */
@@ -194,9 +192,9 @@ class Questions
     }
 
     /**
-     * Get year
+     * Get year.
      *
-     * @return integer
+     * @return int
      */
     public function getYear()
     {
@@ -204,7 +202,7 @@ class Questions
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -218,7 +216,7 @@ class Questions
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -228,9 +226,9 @@ class Questions
     }
 
     /**
-     * Set questionNumber
+     * Set questionNumber.
      *
-     * @param integer $questionNumber
+     * @param int $questionNumber
      *
      * @return Questions
      */
@@ -242,9 +240,9 @@ class Questions
     }
 
     /**
-     * Get questionNumber
+     * Get questionNumber.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionNumber()
     {
@@ -252,7 +250,7 @@ class Questions
     }
 
     /**
-     * Set imageUrl
+     * Set imageUrl.
      *
      * @param string $imageUrl
      *
@@ -266,7 +264,7 @@ class Questions
     }
 
     /**
-     * Get imageUrl
+     * Get imageUrl.
      *
      * @return string
      */
@@ -276,7 +274,7 @@ class Questions
     }
 
     /**
-     * Set notes
+     * Set notes.
      *
      * @param string $notes
      *
@@ -290,7 +288,7 @@ class Questions
     }
 
     /**
-     * Get notes
+     * Get notes.
      *
      * @return string
      */
@@ -300,7 +298,7 @@ class Questions
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -314,7 +312,7 @@ class Questions
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */
@@ -324,7 +322,7 @@ class Questions
     }
 
     /**
-     * Add report
+     * Add report.
      *
      * @param \AppBundle\Entity\Reports $report
      *
@@ -338,7 +336,7 @@ class Questions
     }
 
     /**
-     * Remove report
+     * Remove report.
      *
      * @param \AppBundle\Entity\Reports $report
      */
@@ -348,7 +346,7 @@ class Questions
     }
 
     /**
-     * Get report
+     * Get report.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -358,7 +356,7 @@ class Questions
     }
 
     /**
-     * Add note
+     * Add note.
      *
      * @param \AppBundle\Entity\Notes $note
      *
@@ -372,7 +370,7 @@ class Questions
     }
 
     /**
-     * Remove note
+     * Remove note.
      *
      * @param \AppBundle\Entity\Notes $note
      */
@@ -382,7 +380,7 @@ class Questions
     }
 
     /**
-     * Get note
+     * Get note.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -392,7 +390,7 @@ class Questions
     }
 
     /**
-     * Add favorite
+     * Add favorite.
      *
      * @param \AppBundle\Entity\Notes $favorite
      *
@@ -406,7 +404,7 @@ class Questions
     }
 
     /**
-     * Remove favorite
+     * Remove favorite.
      *
      * @param \AppBundle\Entity\Notes $favorite
      */
@@ -416,7 +414,7 @@ class Questions
     }
 
     /**
-     * Get favorites
+     * Get favorites.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -426,7 +424,7 @@ class Questions
     }
 
     /**
-     * Add comment
+     * Add comment.
      *
      * @param \AppBundle\Entity\Comments $comment
      *
@@ -440,7 +438,7 @@ class Questions
     }
 
     /**
-     * Remove comment
+     * Remove comment.
      *
      * @param \AppBundle\Entity\Comments $comment
      */
@@ -450,7 +448,7 @@ class Questions
     }
 
     /**
-     * Get comments
+     * Get comments.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

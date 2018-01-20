@@ -5,8 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -39,7 +37,7 @@ class Semesters
     private $questions;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -47,9 +45,9 @@ class Semesters
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -57,7 +55,7 @@ class Semesters
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -71,7 +69,7 @@ class Semesters
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -81,7 +79,7 @@ class Semesters
     }
 
     /**
-     * Add question
+     * Add question.
      *
      * @param \AppBundle\Entity\Questions $question
      *
@@ -95,7 +93,7 @@ class Semesters
     }
 
     /**
-     * Remove question
+     * Remove question.
      *
      * @param \AppBundle\Entity\Questions $question
      */
@@ -105,7 +103,7 @@ class Semesters
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

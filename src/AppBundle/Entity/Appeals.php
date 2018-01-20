@@ -3,11 +3,8 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Enum\AppealTypeEnum;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -45,9 +42,9 @@ class Appeals
     private $user;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -55,7 +52,7 @@ class Appeals
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
      *
@@ -69,7 +66,7 @@ class Appeals
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
@@ -79,7 +76,7 @@ class Appeals
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -87,8 +84,8 @@ class Appeals
      */
     public function setType($type)
     {
-        if (!in_array($type, AppealTypeEnum::getAvailableTypes())) {
-            throw new \InvalidArgumentException("Invalid type");
+        if (!in_array($type, AppealTypeEnum::getAvailableTypes(), true)) {
+            throw new \InvalidArgumentException('Invalid type');
         }
 
         $this->type = $type;
@@ -97,7 +94,7 @@ class Appeals
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -107,7 +104,7 @@ class Appeals
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -121,7 +118,7 @@ class Appeals
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */

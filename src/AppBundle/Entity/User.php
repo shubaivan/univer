@@ -144,7 +144,7 @@ class User extends AbstractUser implements UserInterface
     private $userQuestionAnswerTest;
 
     /**
-     * @var ArrayCollection|Appeals[]
+     * @var Appeals[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Appeals", mappedBy="user", cascade={"persist"})
      */
@@ -480,7 +480,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add userQuestionAnswerOpen
+     * Add userQuestionAnswerOpen.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen
      *
@@ -494,7 +494,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove userQuestionAnswerOpen
+     * Remove userQuestionAnswerOpen.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen
      */
@@ -504,7 +504,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get userQuestionAnswerOpen
+     * Get userQuestionAnswerOpen.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -514,7 +514,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add userQuestionAnswerTest
+     * Add userQuestionAnswerTest.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
      *
@@ -528,7 +528,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove userQuestionAnswerTest
+     * Remove userQuestionAnswerTest.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
      */
@@ -538,7 +538,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get userQuestionAnswerTest
+     * Get userQuestionAnswerTest.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -548,7 +548,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add appeal
+     * Add appeal.
      *
      * @param \AppBundle\Entity\Appeals $appeal
      *
@@ -562,7 +562,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove appeal
+     * Remove appeal.
      *
      * @param \AppBundle\Entity\Appeals $appeal
      */
@@ -572,7 +572,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get appeals
+     * Get appeals.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -582,7 +582,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add question
+     * Add question.
      *
      * @param \AppBundle\Entity\Questions $question
      *
@@ -596,7 +596,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove question
+     * Remove question.
      *
      * @param \AppBundle\Entity\Questions $question
      */
@@ -606,7 +606,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -616,7 +616,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add report
+     * Add report.
      *
      * @param \AppBundle\Entity\Reports $report
      *
@@ -630,7 +630,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove report
+     * Remove report.
      *
      * @param \AppBundle\Entity\Reports $report
      */
@@ -640,7 +640,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get report
+     * Get report.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -650,7 +650,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add note
+     * Add note.
      *
      * @param \AppBundle\Entity\Notes $note
      *
@@ -664,7 +664,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove note
+     * Remove note.
      *
      * @param \AppBundle\Entity\Notes $note
      */
@@ -674,7 +674,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get note
+     * Get note.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -684,7 +684,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add favorite
+     * Add favorite.
      *
      * @param \AppBundle\Entity\Favorites $favorite
      *
@@ -698,7 +698,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove favorite
+     * Remove favorite.
      *
      * @param \AppBundle\Entity\Favorites $favorite
      */
@@ -708,7 +708,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get favorites
+     * Get favorites.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -718,7 +718,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Add comment
+     * Add comment.
      *
      * @param \AppBundle\Entity\Comments $comment
      *
@@ -732,7 +732,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Remove comment
+     * Remove comment.
      *
      * @param \AppBundle\Entity\Comments $comment
      */
@@ -742,7 +742,7 @@ class User extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get comments
+     * Get comments.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

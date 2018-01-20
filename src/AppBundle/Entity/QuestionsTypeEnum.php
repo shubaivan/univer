@@ -4,8 +4,8 @@ namespace AppBundle\Enum;
 
 abstract class QuestionsTypeEnum
 {
-    const TYPE_OPEN = "open";
-    const TYPE_TEST = "test";
+    const TYPE_OPEN = 'open';
+    const TYPE_TEST = 'test';
 
     /** @var array user friendly named type */
     protected static $typeName = [
@@ -14,7 +14,8 @@ abstract class QuestionsTypeEnum
     ];
 
     /**
-     * @param  string $typeShortName
+     * @param string $typeShortName
+     *
      * @return string
      */
     public static function getTypeName($typeShortName)
@@ -33,8 +34,7 @@ abstract class QuestionsTypeEnum
     {
         return [
             self::TYPE_OPEN,
-            self::TYPE_TEST
+            self::TYPE_TEST,
         ];
     }
-
 }

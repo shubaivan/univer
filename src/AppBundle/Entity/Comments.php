@@ -2,11 +2,8 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -63,7 +60,7 @@ class Comments
     private $children;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -71,9 +68,9 @@ class Comments
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -81,7 +78,7 @@ class Comments
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
      *
@@ -95,7 +92,7 @@ class Comments
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
@@ -105,7 +102,7 @@ class Comments
     }
 
     /**
-     * Set questions
+     * Set questions.
      *
      * @param \AppBundle\Entity\Questions $questions
      *
@@ -119,7 +116,7 @@ class Comments
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \AppBundle\Entity\Questions
      */
@@ -129,7 +126,7 @@ class Comments
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -143,7 +140,7 @@ class Comments
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */
@@ -153,7 +150,7 @@ class Comments
     }
 
     /**
-     * Set reply
+     * Set reply.
      *
      * @param \AppBundle\Entity\Comments $reply
      *
@@ -167,7 +164,7 @@ class Comments
     }
 
     /**
-     * Get reply
+     * Get reply.
      *
      * @return \AppBundle\Entity\Comments
      */
@@ -177,7 +174,7 @@ class Comments
     }
 
     /**
-     * Add child
+     * Add child.
      *
      * @param \AppBundle\Entity\Comments $child
      *
@@ -191,7 +188,7 @@ class Comments
     }
 
     /**
-     * Remove child
+     * Remove child.
      *
      * @param \AppBundle\Entity\Comments $child
      */
@@ -201,7 +198,7 @@ class Comments
     }
 
     /**
-     * Get children
+     * Get children.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

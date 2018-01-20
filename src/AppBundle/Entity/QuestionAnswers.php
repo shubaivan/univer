@@ -5,8 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -58,8 +56,9 @@ class QuestionAnswers
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="note")
      */
     private $questions;
+
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -67,9 +66,9 @@ class QuestionAnswers
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -77,7 +76,7 @@ class QuestionAnswers
     }
 
     /**
-     * Set answer
+     * Set answer.
      *
      * @param string $answer
      *
@@ -91,7 +90,7 @@ class QuestionAnswers
     }
 
     /**
-     * Get answer
+     * Get answer.
      *
      * @return string
      */
@@ -101,9 +100,9 @@ class QuestionAnswers
     }
 
     /**
-     * Set isTrue
+     * Set isTrue.
      *
-     * @param boolean $isTrue
+     * @param bool $isTrue
      *
      * @return QuestionAnswers
      */
@@ -115,9 +114,9 @@ class QuestionAnswers
     }
 
     /**
-     * Get isTrue
+     * Get isTrue.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsTrue()
     {
@@ -125,7 +124,7 @@ class QuestionAnswers
     }
 
     /**
-     * Set pointEng
+     * Set pointEng.
      *
      * @param string $pointEng
      *
@@ -139,7 +138,7 @@ class QuestionAnswers
     }
 
     /**
-     * Get pointEng
+     * Get pointEng.
      *
      * @return string
      */
@@ -149,7 +148,7 @@ class QuestionAnswers
     }
 
     /**
-     * Set pointHeb
+     * Set pointHeb.
      *
      * @param string $pointHeb
      *
@@ -163,7 +162,7 @@ class QuestionAnswers
     }
 
     /**
-     * Get pointHeb
+     * Get pointHeb.
      *
      * @return string
      */
@@ -173,7 +172,7 @@ class QuestionAnswers
     }
 
     /**
-     * Add userQuestionAnswerTest
+     * Add userQuestionAnswerTest.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
      *
@@ -187,7 +186,7 @@ class QuestionAnswers
     }
 
     /**
-     * Remove userQuestionAnswerTest
+     * Remove userQuestionAnswerTest.
      *
      * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
      */
@@ -197,7 +196,7 @@ class QuestionAnswers
     }
 
     /**
-     * Get userQuestionAnswerTest
+     * Get userQuestionAnswerTest.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -207,7 +206,7 @@ class QuestionAnswers
     }
 
     /**
-     * Set questions
+     * Set questions.
      *
      * @param \AppBundle\Entity\Questions $questions
      *
@@ -221,7 +220,7 @@ class QuestionAnswers
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \AppBundle\Entity\Questions
      */

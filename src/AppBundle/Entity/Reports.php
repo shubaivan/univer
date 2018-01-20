@@ -2,11 +2,8 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -40,9 +37,9 @@ class Reports
     private $user;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -50,7 +47,7 @@ class Reports
     }
 
     /**
-     * Set questions
+     * Set questions.
      *
      * @param \AppBundle\Entity\Questions $questions
      *
@@ -64,7 +61,7 @@ class Reports
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \AppBundle\Entity\Questions
      */
@@ -74,7 +71,7 @@ class Reports
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -88,7 +85,7 @@ class Reports
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */

@@ -2,17 +2,15 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user_question_answer_test")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserQuestionAnswerTestRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @coversNothing
  */
 class UserQuestionAnswerTest
 {
@@ -45,9 +43,9 @@ class UserQuestionAnswerTest
     private $result;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -55,9 +53,9 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Set result
+     * Set result.
      *
-     * @param boolean $result
+     * @param bool $result
      *
      * @return UserQuestionAnswerTest
      */
@@ -69,9 +67,9 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Get result
+     * Get result.
      *
-     * @return boolean
+     * @return bool
      */
     public function getResult()
     {
@@ -79,7 +77,7 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Set questionAnswers
+     * Set questionAnswers.
      *
      * @param \AppBundle\Entity\QuestionAnswers $questionAnswers
      *
@@ -93,7 +91,7 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Get questionAnswers
+     * Get questionAnswers.
      *
      * @return \AppBundle\Entity\QuestionAnswers
      */
@@ -103,7 +101,7 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \AppBundle\Entity\User $user
      *
@@ -117,7 +115,7 @@ class UserQuestionAnswerTest
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \AppBundle\Entity\User
      */
