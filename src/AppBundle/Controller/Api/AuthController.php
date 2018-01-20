@@ -14,7 +14,7 @@ class AuthController extends AbstractRestController
      *      resource = true,
      *      description = "logic check",
      *      parameters={
-     *          {"name"="_username", "dataType"="string", "required"=true, "description"="username"},
+     *          {"name"="_email", "dataType"="string", "required"=true, "description"="email"},
      *          {"name"="_password", "dataType"="string", "required"=true, "description"="password"}
      *      },
      *      statusCodes = {
