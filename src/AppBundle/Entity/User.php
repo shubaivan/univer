@@ -130,6 +130,62 @@ class User extends AbstractUser implements UserInterface
     private $roles = [];
 
     /**
+     * @var ArrayCollection|UserQuestionAnswerOpen[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerOpen", mappedBy="user", cascade={"persist"})
+     */
+    private $userQuestionAnswerOpen;
+
+    /**
+     * @var ArrayCollection|UserQuestionAnswerTest[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="user", cascade={"persist"})
+     */
+    private $userQuestionAnswerTest;
+
+    /**
+     * @var ArrayCollection|Appeals[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Appeals", mappedBy="user", cascade={"persist"})
+     */
+    private $appeals;
+
+    /**
+     * @var ArrayCollection|Questions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Questions", mappedBy="user", cascade={"persist"})
+     */
+    private $questions;
+
+    /**
+     * @var ArrayCollection|Reports[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reports", mappedBy="user", cascade={"persist"})
+     */
+    private $report;
+
+    /**
+     * @var ArrayCollection|Notes[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="user", cascade={"persist"})
+     */
+    private $note;
+
+    /**
+     * @var ArrayCollection|Favorites[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="user", cascade={"persist"})
+     */
+    private $favorites;
+
+    /**
+     * @var ArrayCollection|Comments[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="user", cascade={"persist"})
+     */
+    private $comments;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -139,6 +195,14 @@ class User extends AbstractUser implements UserInterface
         $this->isActive = true;
         $this->username = $username;
         $this->roles = new ArrayCollection();
+        $this->userQuestionAnswerOpen = new ArrayCollection();
+        $this->userQuestionAnswerTest = new ArrayCollection();
+        $this->appeals = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->report = new ArrayCollection();
+        $this->note = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -413,5 +477,277 @@ class User extends AbstractUser implements UserInterface
     public function getYearOfGraduation()
     {
         return $this->yearOfGraduation;
+    }
+
+    /**
+     * Add userQuestionAnswerOpen
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen
+     *
+     * @return User
+     */
+    public function addUserQuestionAnswerOpen(\AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen)
+    {
+        $this->userQuestionAnswerOpen[] = $userQuestionAnswerOpen;
+
+        return $this;
+    }
+
+    /**
+     * Remove userQuestionAnswerOpen
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen
+     */
+    public function removeUserQuestionAnswerOpen(\AppBundle\Entity\UserQuestionAnswerOpen $userQuestionAnswerOpen)
+    {
+        $this->userQuestionAnswerOpen->removeElement($userQuestionAnswerOpen);
+    }
+
+    /**
+     * Get userQuestionAnswerOpen
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserQuestionAnswerOpen()
+    {
+        return $this->userQuestionAnswerOpen;
+    }
+
+    /**
+     * Add userQuestionAnswerTest
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
+     *
+     * @return User
+     */
+    public function addUserQuestionAnswerTest(\AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest)
+    {
+        $this->userQuestionAnswerTest[] = $userQuestionAnswerTest;
+
+        return $this;
+    }
+
+    /**
+     * Remove userQuestionAnswerTest
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
+     */
+    public function removeUserQuestionAnswerTest(\AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest)
+    {
+        $this->userQuestionAnswerTest->removeElement($userQuestionAnswerTest);
+    }
+
+    /**
+     * Get userQuestionAnswerTest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserQuestionAnswerTest()
+    {
+        return $this->userQuestionAnswerTest;
+    }
+
+    /**
+     * Add appeal
+     *
+     * @param \AppBundle\Entity\Appeals $appeal
+     *
+     * @return User
+     */
+    public function addAppeal(\AppBundle\Entity\Appeals $appeal)
+    {
+        $this->appeals[] = $appeal;
+
+        return $this;
+    }
+
+    /**
+     * Remove appeal
+     *
+     * @param \AppBundle\Entity\Appeals $appeal
+     */
+    public function removeAppeal(\AppBundle\Entity\Appeals $appeal)
+    {
+        $this->appeals->removeElement($appeal);
+    }
+
+    /**
+     * Get appeals
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAppeals()
+    {
+        return $this->appeals;
+    }
+
+    /**
+     * Add question
+     *
+     * @param \AppBundle\Entity\Questions $question
+     *
+     * @return User
+     */
+    public function addQuestion(\AppBundle\Entity\Questions $question)
+    {
+        $this->questions[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question
+     *
+     * @param \AppBundle\Entity\Questions $question
+     */
+    public function removeQuestion(\AppBundle\Entity\Questions $question)
+    {
+        $this->questions->removeElement($question);
+    }
+
+    /**
+     * Get questions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * Add report
+     *
+     * @param \AppBundle\Entity\Reports $report
+     *
+     * @return User
+     */
+    public function addReport(\AppBundle\Entity\Reports $report)
+    {
+        $this->report[] = $report;
+
+        return $this;
+    }
+
+    /**
+     * Remove report
+     *
+     * @param \AppBundle\Entity\Reports $report
+     */
+    public function removeReport(\AppBundle\Entity\Reports $report)
+    {
+        $this->report->removeElement($report);
+    }
+
+    /**
+     * Get report
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReport()
+    {
+        return $this->report;
+    }
+
+    /**
+     * Add note
+     *
+     * @param \AppBundle\Entity\Notes $note
+     *
+     * @return User
+     */
+    public function addNote(\AppBundle\Entity\Notes $note)
+    {
+        $this->note[] = $note;
+
+        return $this;
+    }
+
+    /**
+     * Remove note
+     *
+     * @param \AppBundle\Entity\Notes $note
+     */
+    public function removeNote(\AppBundle\Entity\Notes $note)
+    {
+        $this->note->removeElement($note);
+    }
+
+    /**
+     * Get note
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Add favorite
+     *
+     * @param \AppBundle\Entity\Favorites $favorite
+     *
+     * @return User
+     */
+    public function addFavorite(\AppBundle\Entity\Favorites $favorite)
+    {
+        $this->favorites[] = $favorite;
+
+        return $this;
+    }
+
+    /**
+     * Remove favorite
+     *
+     * @param \AppBundle\Entity\Favorites $favorite
+     */
+    public function removeFavorite(\AppBundle\Entity\Favorites $favorite)
+    {
+        $this->favorites->removeElement($favorite);
+    }
+
+    /**
+     * Get favorites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFavorites()
+    {
+        return $this->favorites;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     *
+     * @return User
+     */
+    public function addComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
