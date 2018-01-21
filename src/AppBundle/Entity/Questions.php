@@ -109,6 +109,27 @@ class Questions
     private $semesters;
 
     /**
+     * @var ExamPeriods
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="questions")
+     */
+    private $examPeriods;
+
+    /**
+     * @var SubCourses
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="questions")
+     */
+    private $subCourses;
+
+    /**
+     * @var Lectors
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="questions")
+     */
+    private $lectors;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -455,5 +476,101 @@ class Questions
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set semesters.
+     *
+     * @param \AppBundle\Entity\Semesters $semesters
+     *
+     * @return Questions
+     */
+    public function setSemesters(\AppBundle\Entity\Semesters $semesters = null)
+    {
+        $this->semesters = $semesters;
+
+        return $this;
+    }
+
+    /**
+     * Get semesters.
+     *
+     * @return \AppBundle\Entity\Semesters
+     */
+    public function getSemesters()
+    {
+        return $this->semesters;
+    }
+
+    /**
+     * Set examPeriods.
+     *
+     * @param \AppBundle\Entity\ExamPeriods $examPeriods
+     *
+     * @return Questions
+     */
+    public function setExamPeriods(\AppBundle\Entity\ExamPeriods $examPeriods = null)
+    {
+        $this->examPeriods = $examPeriods;
+
+        return $this;
+    }
+
+    /**
+     * Get examPeriods.
+     *
+     * @return \AppBundle\Entity\ExamPeriods
+     */
+    public function getExamPeriods()
+    {
+        return $this->examPeriods;
+    }
+
+    /**
+     * Set subCourses.
+     *
+     * @param \AppBundle\Entity\SubCourses $subCourses
+     *
+     * @return Questions
+     */
+    public function setSubCourses(\AppBundle\Entity\SubCourses $subCourses = null)
+    {
+        $this->subCourses = $subCourses;
+
+        return $this;
+    }
+
+    /**
+     * Get subCourses.
+     *
+     * @return \AppBundle\Entity\SubCourses
+     */
+    public function getSubCourses()
+    {
+        return $this->subCourses;
+    }
+
+    /**
+     * Set lectors.
+     *
+     * @param \AppBundle\Entity\Lectors $lectors
+     *
+     * @return Questions
+     */
+    public function setLectors(\AppBundle\Entity\Lectors $lectors = null)
+    {
+        $this->lectors = $lectors;
+
+        return $this;
+    }
+
+    /**
+     * Get lectors.
+     *
+     * @return \AppBundle\Entity\Lectors
+     */
+    public function getLectors()
+    {
+        return $this->lectors;
     }
 }
