@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -48,6 +49,14 @@ class RegistrationController extends AbstractRestController
         $logger = $this->container->get('logger');
 
         try {
+            $role = $em->getRepository('AppBundle\Entity\Role')
+                ->findBy(['name' => User::ROLE_USER]);
+            if (!$role) {
+                $role = new Role();
+                $role->setName(User::ROLE_USER);
+                $em->persist($role);
+            }
+
             $auth = $this->get('app.auth');
 
             /** @var User $user */
@@ -55,9 +64,11 @@ class RegistrationController extends AbstractRestController
             $password = $request->request->get('_password');
 
             $user
+                ->addUserRole($role)
                 ->setPassword($encoder->encodePassword($user, $password));
             $em->persist($user);
             $em->flush();
+
             $lexikJwtAuthentication = $this->get('custom');
             $event = $lexikJwtAuthentication->handleAuthenticationSuccess($user, null, true);
 

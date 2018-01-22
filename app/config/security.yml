@@ -3,10 +3,18 @@ security:
         AppBundle\Entity\User:
             algorithm: bcrypt
 
+        AppBundle\Entity\Admin:
+            algorithm: bcrypt
+
     providers:
         chain_provider:
             chain:
-                providers: [entity_provider]
+                providers: [admins, entity_provider]
+
+        admins:
+            entity:
+                class: AppBundle:Admin
+                property: email
 
         entity_provider:
             entity:
@@ -55,4 +63,4 @@ security:
         - { path: ^/api/registrations, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/admins, roles: ROLE_ADMIN }

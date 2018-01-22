@@ -43,4 +43,35 @@ class UserController extends AbstractRestController
     {
         return $this->createSuccessResponse($this->getUser(), ['profile'], true);
     }
+
+    /**
+     * Get Auth User Profile data.
+     * <strong>Simple example:</strong><br />
+     * http://bbt.dev/api/admins/user <br>.
+     *
+     * @Get("/api/admins/user", name="get_admin_user")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get Auth User Profile data",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="User"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getTestAction()
+    {
+        return $this->createSuccessResponse($this->getUser(), ['profile'], true);
+    }
 }

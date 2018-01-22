@@ -9,6 +9,9 @@ abstract class AbstractUser
 {
     use TraitTimestampable;
 
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * Never use this to check if this user has access to anything!
      *

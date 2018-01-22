@@ -120,16 +120,6 @@ class User extends AbstractUser implements UserInterface
     private $yearOfGraduation;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="role", type="array", length=25, nullable=false)
-     * @Annotation\Groups({
-     *      "profile"
-     * })
-     */
-    private $roles = [];
-
-    /**
      * @var ArrayCollection|UserQuestionAnswerOpen[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerOpen", mappedBy="user", cascade={"persist"})
@@ -186,6 +176,15 @@ class User extends AbstractUser implements UserInterface
     private $comments;
 
     /**
+     * @var Role The role
+     *
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="users_roles")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $userRoles;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -203,6 +202,7 @@ class User extends AbstractUser implements UserInterface
         $this->note = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
 
     /**
@@ -242,44 +242,54 @@ class User extends AbstractUser implements UserInterface
      */
     public function getRoles()
     {
-        $roles = $this->roles;
+        $rolesEntities = $this->getUserRoles();
+        $roles = [];
+        foreach ($rolesEntities as $role) {
+            $roles[] = $role->getName();
+        }
 
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles)
+    /**
+     * Gets all roles.
+     *
+     * @return Role|ArrayCollection
+     */
+    public function getUserRoles()
     {
-        $this->roles = [];
+        if (!$this->userRoles) {
+            $this->userRoles = new ArrayCollection();
+        }
+        return $this->userRoles;
+    }
 
-        foreach ($roles as $role) {
-            $this->addRole($role);
+    /**
+     * Adds the given role.
+     *
+     * @param Role $role The role object
+     *
+     * @return $this
+     */
+    public function addUserRole(Role $role)
+    {
+        if(!$this->getUserRoles()->contains($role)){
+            $this->getUserRoles()->add($role);
         }
 
         return $this;
     }
 
     /**
-     * @param string $role
+     * Removes the given role.
+     *
+     * @param Role $role The role object
      *
      * @return $this
      */
-    public function addRole($role)
+    public function removeUserRole(Role $role)
     {
-        $role = strtoupper($role);
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole($role)
-    {
-        if (count($this->roles) > 1 && false !== $key = array_search(strtoupper($role), $this->roles, true)) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
+        $this->getUserRoles()->remove($role);
 
         return $this;
     }
