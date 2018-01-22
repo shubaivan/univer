@@ -10,7 +10,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="user_question_answer_test")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserQuestionAnswerTestRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
- * @coversNothing
  */
 class UserQuestionAnswerTest
 {
