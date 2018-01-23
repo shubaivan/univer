@@ -13,19 +13,27 @@ class UserRepository extends EntityRepository
 {
     /**
      * @param ParamFetcher $paramFetcher
+     * @param bool         $count
      *
-     * @return User[]
+     * @return int|User[]
      */
-    public function getUsersByParams(ParamFetcher $paramFetcher)
+    public function getUsersByParams(ParamFetcher $paramFetcher, $count = false)
     {
         $em = $this->getEntityManager();
 
         $qb = $em->createQueryBuilder();
 
+        if ($count) {
+            $qb
+                ->select('
+                    COUNT(DISTINCT u.id)
+                ');
+        } else {
+            $qb
+                ->select('u');
+        }
+
         $qb
-            ->select('
-                u
-            ')
             ->from('AppBundle:User', 'u');
 
         if ($paramFetcher->get('search')) {
@@ -49,16 +57,20 @@ class UserRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-        $qb
-            ->groupBy('u.id');
-
-        $qb
-            ->orderBy('u.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
-            ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
-            ->setMaxResults($paramFetcher->get('count'));
+        if (!$count) {
+            $qb
+                ->orderBy('u.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
+                ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
+                ->setMaxResults($paramFetcher->get('count'));
+        }
 
         $query = $qb->getQuery();
-        $results = $query->getResult();
+
+        if ($count) {
+            $results = $query->getSingleScalarResult();
+        } else {
+            $results = $query->getResult();
+        }
 
         return $results;
     }

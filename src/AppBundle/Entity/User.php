@@ -29,18 +29,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends AbstractUser implements UserInterface
 {
     /**
-     * @var Role The role
-     *
-     * @ORM\ManyToMany(targetEntity="Role", cascade={"persist"})
-     * @ORM\JoinTable(name="users_roles")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Annotation\Groups({
-     *     "admin_post_user"
-     * })
-     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Role>")
-     */
-    protected $userRoles;
-    /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -53,7 +41,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "registration", "admin_post_user"
+     *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user"
      * })
      * @Annotation\SerializedName("_username")
      * @Assert\NotBlank(groups={"registration", "admin_post_user"})
@@ -63,7 +51,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @ORM\Column(name="is_active", type="boolean")
      * @Annotation\Groups({
-     *      "profile", "admin_post_user"
+     *      "profile", "admin_post_user", "admin_put_user"
      * })
      * @Annotation\Accessor(setter="setIsActiveAccessor")
      */
@@ -72,7 +60,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
-     *      "profile", "registration", "put_user", "admin_post_user"
+     *      "profile", "registration", "put_user", "admin_post_user", "admin_put_user"
      * })
      * @Assert\NotBlank(groups={"registration", "put_user", "admin_post_user"})
      * @Annotation\SerializedName("_email")
@@ -84,7 +72,7 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Column(type="string", length=500)
      * @Assert\NotBlank(groups={"registration", "admin_post_user"})
      * @Annotation\Groups({
-     *      "registration", "admin_post_user"
+     *      "registration", "admin_post_user", "admin_put_user"
      * })
      * @Annotation\SerializedName("_password")
      */
@@ -97,7 +85,7 @@ class User extends AbstractUser implements UserInterface
      * @Assert\NotBlank(groups={"admin_post_user"})
      * @Assert\Length(groups={"put_user"}, min=2, max=255)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user"
      * })
      */
     private $firstName;
@@ -108,7 +96,7 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      * @Assert\NotBlank(groups={"admin_post_user"})
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user"
      * })
      */
     private $lastName;
@@ -118,7 +106,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @ORM\Column(name="student_id", type="integer", nullable=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user"
      * })
      */
     private $studentId;
@@ -128,7 +116,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @ORM\Column(name="year_of_graduation", type="integer", nullable=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user"
      * })
      */
     private $yearOfGraduation;
@@ -188,6 +176,19 @@ class User extends AbstractUser implements UserInterface
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="user", cascade={"persist"})
      */
     private $comments;
+
+    /**
+     * @var Role The role
+     *
+     * @ORM\ManyToMany(targetEntity="Role", cascade={"persist"})
+     * @ORM\JoinTable(name="users_roles")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Annotation\Groups({
+     *     "admin_post_user", "admin_put_user"
+     * })
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Role>")
+     */
+    private $userRoles;
 
     /**
      * User constructor.
@@ -347,7 +348,7 @@ class User extends AbstractUser implements UserInterface
      */
     public function setIsActiveAccessor($isActive = null)
     {
-        if (!$isActive) {
+        if ($isActive === null) {
             $this->setIsActive(true);
         } else {
             $this->setIsActive($isActive);

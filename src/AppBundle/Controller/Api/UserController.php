@@ -127,6 +127,87 @@ class UserController extends AbstractRestController
     }
 
     /**
+     * Put User by admin.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/user <br>.
+     *
+     * @Rest\Put("/api/admins/user/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Put User by admins",
+     * authentication=true,
+     *  parameters={
+     *      {"name"="_username", "dataType"="string", "required"=false, "description"="username"},
+     *      {"name"="is_active", "dataType"="boolean", "required"=false, "description"="user is_active parameter"},
+     *      {"name"="_email", "dataType"="string", "required"=false, "description"="user email"},
+     *      {"name"="_password", "dataType"="string", "required"=false, "description"="user password"},
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="user first_name"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
+     *      {"name"="student_id", "dataType"="integer", "required"=false, "description"="user student_id"},
+     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"}
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Admins"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Request $request
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function putAdminUserAction(Request $request, User $user)
+    {
+        $em = $this->get('doctrine')->getManager();
+        $logger = $this->container->get('logger');
+
+        try {
+            $auth = $this->get('app.auth');
+            $request->request->set('id', $user->getId());
+            /** @var User $user */
+            $user = $auth->validateEntites('request', User::class, ['admin_put_user']);
+
+            if ($request->request->get('_password')) {
+                $encoder = $this->container->get('security.password_encoder');
+                $password = $request->request->get('_password');
+
+                $user
+                    ->setPassword($encoder->encodePassword($user, $password));
+            }
+
+            if (!$user->getUserRoles()) {
+                $role = $em->getRepository('AppBundle\Entity\Role')
+                    ->findOneBy(['name' => User::ROLE_USER]);
+                if (!$role) {
+                    $role = new Role();
+                    $role->setName(User::ROLE_USER);
+                    $em->persist($role);
+                }
+
+                $user
+                    ->addUserRole($role);
+            }
+
+            $em->flush();
+
+            return $this->createSuccessResponse($user, ['profile'], true);
+        } catch (ValidatorException $e) {
+            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $logger->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Get list users for admin.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/users <br>.
@@ -143,7 +224,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="User"
+     * section="Admins"
      * )
      *
      * @RestView()
@@ -161,15 +242,21 @@ class UserController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminsUserAction(Request $request, ParamFetcher $paramFetcher)
+    public function getAdminUsersAction(Request $request, ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();
 
             $userRepository = $em->getRepository('AppBundle:User');
-            $users = $userRepository->getUsersByParams($paramFetcher);
 
-            return $this->createSuccessResponse($users, ['profile'], true);
+            return $this->createSuccessResponse(
+                [
+                    'users' => $userRepository->getUsersByParams($paramFetcher),
+                    'total' => $userRepository->getUsersByParams($paramFetcher, true),
+                ],
+                ['profile'],
+                true
+            );
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
