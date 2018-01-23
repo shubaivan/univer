@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\RoleRepository")
@@ -14,11 +15,17 @@ class Role
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Annotation\Groups({
+     *     "admin_post_user"
+     * })
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
+     * @Annotation\Groups({
+     *     "admin_post_user"
+     * })
      */
     protected $name;
 

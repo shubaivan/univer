@@ -17,7 +17,7 @@ class RegistrationController extends AbstractRestController
     /**
      * User Registration.
      * <strong>Simple example:</strong><br />
-     * http://bbt.dev/api/registration <br>.
+     * http://host/api/registration <br>.
      *
      * @ApiDoc(
      * resource = true,
