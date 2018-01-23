@@ -64,3 +64,4 @@ security:
         - { path: ^/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/admins, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }

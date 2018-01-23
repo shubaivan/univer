@@ -50,7 +50,7 @@ class RegistrationController extends AbstractRestController
 
         try {
             $role = $em->getRepository('AppBundle\Entity\Role')
-                ->findBy(['name' => User::ROLE_USER]);
+                ->findOneBy(['name' => User::ROLE_USER]);
             if (!$role) {
                 $role = new Role();
                 $role->setName(User::ROLE_USER);
