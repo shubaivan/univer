@@ -29,6 +29,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends AbstractUser implements UserInterface
 {
     /**
+     * @var Role The role
+     *
+     * @ORM\ManyToMany(targetEntity="Role", cascade={"persist"})
+     * @ORM\JoinTable(name="users_roles")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Annotation\Groups({
+     *     "admin_post_user"
+     * })
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Role>")
+     */
+    protected $userRoles;
+    /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -102,7 +114,7 @@ class User extends AbstractUser implements UserInterface
     private $lastName;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="student_id", type="integer", nullable=true)
      * @Annotation\Groups({
@@ -112,7 +124,7 @@ class User extends AbstractUser implements UserInterface
     private $studentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="year_of_graduation", type="integer", nullable=true)
      * @Annotation\Groups({
@@ -176,19 +188,6 @@ class User extends AbstractUser implements UserInterface
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="user", cascade={"persist"})
      */
     private $comments;
-
-    /**
-     * @var Role The role
-     *
-     * @ORM\ManyToMany(targetEntity="Role", cascade={"persist"})
-     * @ORM\JoinTable(name="users_roles")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Annotation\Groups({
-     *     "admin_post_user"
-     * })
-     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Role>")
-     */
-    protected $userRoles;
 
     /**
      * User constructor.
@@ -260,13 +259,14 @@ class User extends AbstractUser implements UserInterface
     /**
      * Gets all roles.
      *
-     * @return Role|ArrayCollection
+     * @return ArrayCollection|Role
      */
     public function getUserRoles()
     {
         if (!$this->userRoles) {
             $this->userRoles = new ArrayCollection();
         }
+
         return $this->userRoles;
     }
 
@@ -279,7 +279,7 @@ class User extends AbstractUser implements UserInterface
      */
     public function addUserRole(Role $role)
     {
-        if(!$this->getUserRoles()->contains($role)){
+        if (!$this->getUserRoles()->contains($role)) {
             $this->getUserRoles()->add($role);
         }
 
@@ -765,16 +765,5 @@ class User extends AbstractUser implements UserInterface
     public function getComments()
     {
         return $this->comments;
-    }
-
-    /**
-     * @Annotation\VirtualProperty
-     * @Annotation\Type("array<string>")
-     * @Annotation\SerializedName("roles")
-     * @Annotation\Groups({"profile"})
-     */
-    public function getSerializedRole()
-    {
-        return $this->getRoles();
     }
 }
