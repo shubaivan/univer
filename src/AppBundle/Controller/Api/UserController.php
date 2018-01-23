@@ -264,4 +264,50 @@ class UserController extends AbstractRestController
 
         return $this->handleView($view);
     }
+
+    /**
+     * Delete User by Admin.
+     *
+     * <strong>Simple example:</strong><br />
+     * http://host/api/admins/user{id} <br>.
+     *
+     * @Rest\Delete("/api/admins/user/{id}")
+     * @ApiDoc(
+     *      resource = true,
+     *      description = "Delete User by Admin",
+     *      authentication=true,
+     *      parameters={
+     *
+     *      },
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned bad request"
+     *      },
+     *      section="Admins"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Request $request
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function deletedCategoryAction(Request $request, User $user)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        try {
+            $em->remove($user);
+            $em->flush();
+
+            return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
 }
