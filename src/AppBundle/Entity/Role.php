@@ -4,10 +4,19 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\RoleRepository")
  * @ORM\Table(name="roles")
+ * @ORM\HasLifecycleCallbacks
+ * @AssertBridge\UniqueEntity(
+ *     groups={"admin_post_user", "admin_put_user", "admin_post_role"},
+ *     fields="name",
+ *     errorPath="not valid",
+ *     message="This name is already in use."
+ * )
  */
 class Role
 {
@@ -16,18 +25,20 @@ class Role
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Annotation\Groups({
-     *     "admin_post_user", "admin_put_user"
+     *     "admin_post_user", "admin_put_user", "get_roles"
      * })
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string")
      * @Annotation\Groups({
-     *     "admin_post_user"
+     *     "admin_post_user", "get_roles", "admin_post_role"
      * })
+     * @Assert\NotBlank(groups={"admin_post_user", "admin_post_role"})
+     * @Annotation\Accessor(setter="setNameAccessor")
      */
-    protected $name;
+    private $name;
 
     /**
      * Gets the ID.
@@ -58,8 +69,13 @@ class Role
      */
     public function setName(string $name)
     {
-        $this->name = $name;
+        $this->name = mb_strtoupper($name);
 
         return $this;
+    }
+
+    public function setNameAccessor(string $name)
+    {
+        $this->setName($name);
     }
 }
