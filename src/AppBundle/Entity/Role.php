@@ -16,7 +16,7 @@ class Role
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Annotation\Groups({
-     *     "admin_post_user"
+     *     "admin_post_user", "admin_put_user"
      * })
      */
     protected $id;

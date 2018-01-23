@@ -14,7 +14,7 @@ class AbstractRestController extends FOSRestController
     const HTTP_STATUS_CODE_BAD_REQUEST = 400;
     const HTTP_STATUS_CODE_INTERNAL_ERROR = 500;
     const DATA_MESSAGE = 'message';
-    const DELETED_SUCCESSFUL = 'deleted successful';
+    const DELETED_SUCCESSFULLY = 'deleted successfully';
 
     const PARAM_DATE_FROM = 'date_from';
     const PARAM_DATE_TO = 'date_to';
@@ -87,21 +87,5 @@ class AbstractRestController extends FOSRestController
             $class,
             $groups
         );
-    }
-
-    /**
-     * @return \AppBundle\Application\User\UserApplication|object
-     */
-    protected function getUserApplication()
-    {
-        return $this->get('app.application.user_application');
-    }
-
-    /**
-     * @return \AppBundle\Application\Ebooks\EbooksApplication|object
-     */
-    protected function getEbooksApplication()
-    {
-        return $this->container->get('app.application.ebooks_application');
     }
 }
