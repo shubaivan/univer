@@ -31,6 +31,15 @@ security:
             stateless: true
             anonymous: true
 
+        api_admin:
+            pattern:   ^/api/admin
+            stateless: true
+            anonymous: false
+            provider: chain_provider
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
+
         login:
             pattern:  ^/api/login
             stateless: true

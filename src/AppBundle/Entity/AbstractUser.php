@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use JMS\Serializer\Annotation;
+
 /**
  * AbstractUser.
  */
@@ -27,5 +29,16 @@ abstract class AbstractUser
     public function hasRole($role)
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("array<string>")
+     * @Annotation\SerializedName("roles")
+     * @Annotation\Groups({"profile"})
+     */
+    public function getSerializedRole()
+    {
+        return $this->getRoles();
     }
 }

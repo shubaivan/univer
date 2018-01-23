@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -105,9 +104,9 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -115,7 +114,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
      *
@@ -129,7 +128,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set firstName
+     * Set firstName.
      *
      * @param string $firstName
      *
@@ -143,7 +142,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get firstName
+     * Get firstName.
      *
      * @return string
      */
@@ -153,7 +152,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set lastName
+     * Set lastName.
      *
      * @param string $lastName
      *
@@ -167,7 +166,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get lastName
+     * Get lastName.
      *
      * @return string
      */
@@ -177,7 +176,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
      *
@@ -191,7 +190,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -205,7 +204,7 @@ class Admin extends AbstractUser implements UserInterface
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
