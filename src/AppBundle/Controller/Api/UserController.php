@@ -52,7 +52,7 @@ class UserController extends AbstractRestController
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/users <br>.
      *
-     * @Rest\Post("/api/admins/users", name="admin_post_user")
+     * @Rest\Post("/api/admins/users")
      * @ApiDoc(
      * resource = true,
      * description = "Create User by admin",

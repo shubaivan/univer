@@ -13,3 +13,8 @@ api_users:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/UserController.php"
+
+api_roles:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/RoleController.php"
