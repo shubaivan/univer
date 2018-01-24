@@ -33,12 +33,18 @@ abstract class AbstractUser
 
     /**
      * @Annotation\VirtualProperty
-     * @Annotation\Type("array<string>")
+     * @Annotation\Type("array<integer>")
      * @Annotation\SerializedName("roles")
      * @Annotation\Groups({"profile"})
      */
     public function getSerializedRole()
     {
-        return $this->getRoles();
+        $ids = [];
+        foreach ($this->getUserRoles() as $role)
+        {
+            $ids[] = $role->getId();
+        }
+
+        return $ids;
     }
 }
