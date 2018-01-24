@@ -72,10 +72,10 @@ class ObjectManager
                     AbstractRestController::REQUEST_HEADER_APPLICATION_JSON
             )) {
             $dataJson = $paramRequest->getContent();
-            $authUser = $this->getUser();
+
             if ($paramRequest->request->get('id')) {
                 $authData = $this->getSerializer()
-                    ->serialize(['id' => $authUser->getId()], 'json');
+                    ->serialize(['id' => $paramRequest->request->get('id')], 'json');
                 $dataJson = json_encode(
                     array_merge(
                         (array) json_decode($authData),
