@@ -17,6 +17,37 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class RoleController extends AbstractRestController
 {
     /**
+     * Get role by id.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/admins/role/{id} <br>.
+     *
+     * @Rest\Get("/api/admins/role/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get role by id",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Admins"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getAdminRoleAction(Role $role)
+    {
+        return $this->createSuccessResponse($role, ['get_roles'], true);
+    }
+
+    /**
      * Get list roles.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/roles <br>.

@@ -48,6 +48,37 @@ class UserController extends AbstractRestController
     }
 
     /**
+     * Admin get user by id.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/admins/user{id} <br>.
+     *
+     * @Rest\Get("/api/admins/user/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Admin get user by id",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="User"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getAdminUserAction(User $user)
+    {
+        return $this->createSuccessResponse($user, ['profile'], true);
+    }
+
+    /**
      * Create User by admin.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/users <br>.
@@ -129,7 +160,7 @@ class UserController extends AbstractRestController
     /**
      * Put User by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/user <br>.
+     * http://host/api/admins/user{id} <br>.
      *
      * @Rest\Put("/api/admins/user/{id}")
      * @ApiDoc(
@@ -144,7 +175,8 @@ class UserController extends AbstractRestController
      *      {"name"="first_name", "dataType"="string", "required"=false, "description"="user first_name"},
      *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
      *      {"name"="student_id", "dataType"="integer", "required"=false, "description"="user student_id"},
-     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"}
+     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"},
+     *      {"name"="user_roles", "dataType"="array<objects{id}>", "required"=false, "description"="user roles"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
