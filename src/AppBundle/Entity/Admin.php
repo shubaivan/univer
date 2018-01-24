@@ -216,7 +216,7 @@ class Admin extends AbstractUser implements UserInterface
     /**
      * @Annotation\VirtualProperty
      * @Annotation\Type("array<string>")
-     * @Annotation\SerializedName("role_ids")
+     * @Annotation\SerializedName("roles")
      * @Annotation\Groups({"profile"})
      */
     public function getSerializedRole()

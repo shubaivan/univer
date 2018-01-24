@@ -25,7 +25,7 @@ class Role
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Annotation\Groups({
-     *     "admin_post_user", "admin_put_user", "get_roles"
+     *     "admin_post_user", "admin_put_user", "get_roles", "profile"
      * })
      */
     private $id;
@@ -33,7 +33,7 @@ class Role
     /**
      * @ORM\Column(type="string")
      * @Annotation\Groups({
-     *     "admin_post_user", "get_roles", "admin_post_role"
+     *     "admin_post_user", "get_roles", "admin_post_role", "profile"
      * })
      * @Assert\NotBlank(groups={"admin_post_user", "admin_post_role"})
      * @Annotation\Accessor(setter="setNameAccessor")
