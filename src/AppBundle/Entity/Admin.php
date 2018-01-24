@@ -212,4 +212,15 @@ class Admin extends AbstractUser implements UserInterface
     {
         return $this->email;
     }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("array<string>")
+     * @Annotation\SerializedName("role_ids")
+     * @Annotation\Groups({"profile"})
+     */
+    public function getSerializedRole()
+    {
+        return $this->getRoles();
+    }
 }
