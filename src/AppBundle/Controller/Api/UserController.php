@@ -294,7 +294,7 @@ class UserController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function deletedCategoryAction(Request $request, User $user)
+    public function deletedUserAction(Request $request, User $user)
     {
         $em = $this->get('doctrine')->getManager();
 
