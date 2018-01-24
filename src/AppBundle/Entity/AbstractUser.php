@@ -34,7 +34,7 @@ abstract class AbstractUser
     /**
      * @Annotation\VirtualProperty
      * @Annotation\Type("array<integer>")
-     * @Annotation\SerializedName("roles")
+     * @Annotation\SerializedName("role_ids")
      * @Annotation\Groups({"profile"})
      */
     public function getSerializedRole()
