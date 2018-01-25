@@ -187,6 +187,7 @@ class User extends AbstractUser implements UserInterface
      *     "admin_post_user", "admin_put_user"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Role>")
+     * @Annotation\SerializedName("roles")
      */
     private $userRoles;
 

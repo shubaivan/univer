@@ -96,7 +96,8 @@ class UserController extends AbstractRestController
      *      {"name"="first_name", "dataType"="string", "required"=false, "description"="user first_name"},
      *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
      *      {"name"="student_id", "dataType"="integer", "required"=false, "description"="user student_id"},
-     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"}
+     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"},
+     *      {"name"="roles", "dataType"="array<objects{id}>", "required"=false, "description"="user roles"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -176,7 +177,7 @@ class UserController extends AbstractRestController
      *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
      *      {"name"="student_id", "dataType"="integer", "required"=false, "description"="user student_id"},
      *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"},
-     *      {"name"="user_roles", "dataType"="array<objects{id}>", "required"=false, "description"="user roles"}
+     *      {"name"="roles", "dataType"="array<objects{id}>", "required"=false, "description"="user roles"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
