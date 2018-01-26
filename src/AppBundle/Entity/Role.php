@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="roles")
  * @ORM\HasLifecycleCallbacks
  * @AssertBridge\UniqueEntity(
- *     groups={"admin_post_user", "admin_put_user", "admin_post_role"},
+ *     groups={"admin_post_user", "admin_put_user", "admin_post_role", "admin_put_role"},
  *     fields="name",
  *     errorPath="not valid",
  *     message="This name is already in use."
