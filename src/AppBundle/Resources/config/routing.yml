@@ -18,3 +18,8 @@ api_roles:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/RoleController.php"
+
+api_courses_of_study:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/CoursesOfStudyController.php"

@@ -50,7 +50,7 @@ class UserController extends AbstractRestController
     /**
      * Admin get user by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/user{id} <br>.
+     * http://host/api/admins/user/{id} <br>.
      *
      * @Rest\Get("/api/admins/user/{id}")
      * @ApiDoc(
@@ -64,7 +64,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="User"
+     * section="Admins"
      * )
      *
      * @RestView()
@@ -268,14 +268,13 @@ class UserController extends AbstractRestController
      * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
      * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
      *
-     * @param Request      $request
      * @param ParamFetcher $paramFetcher
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getAdminUsersAction(Request $request, ParamFetcher $paramFetcher)
+    public function getAdminUsersAction(ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();

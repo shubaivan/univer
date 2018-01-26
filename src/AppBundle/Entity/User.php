@@ -349,7 +349,7 @@ class User extends AbstractUser implements UserInterface
      */
     public function setIsActiveAccessor($isActive = null)
     {
-        if ($isActive === null) {
+        if (null === $isActive) {
             $this->setIsActive(true);
         } else {
             $this->setIsActive($isActive);

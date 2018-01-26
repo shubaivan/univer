@@ -40,8 +40,7 @@ abstract class AbstractUser
     public function getSerializedRole()
     {
         $result = [];
-        foreach ($this->getUserRoles() as $role)
-        {
+        foreach ($this->getUserRoles() as $role) {
             $result[] = $role;
         }
 
