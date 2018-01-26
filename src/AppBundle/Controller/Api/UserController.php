@@ -302,7 +302,7 @@ class UserController extends AbstractRestController
      * Delete User by Admin.
      *
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/user{id} <br>.
+     * http://host/api/admins/user/{id} <br>.
      *
      * @Rest\Delete("/api/admins/user/{id}")
      * @ApiDoc(
@@ -321,13 +321,11 @@ class UserController extends AbstractRestController
      *
      * @RestView()
      *
-     * @param Request $request
-     *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function deletedUserAction(Request $request, User $user)
+    public function deletedUserAction(User $user)
     {
         $em = $this->get('doctrine')->getManager();
 
