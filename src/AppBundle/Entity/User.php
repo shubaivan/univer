@@ -770,4 +770,26 @@ class User extends AbstractUser implements UserInterface
     {
         return $this->comments;
     }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"profile", "registration"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"profile", "registration"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }

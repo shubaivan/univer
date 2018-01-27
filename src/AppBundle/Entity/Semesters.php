@@ -125,4 +125,26 @@ class Semesters
     {
         return $this->questions;
     }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_semester", "get_semesters"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_semester", "get_semesters"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }

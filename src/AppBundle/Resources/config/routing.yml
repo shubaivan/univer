@@ -38,3 +38,8 @@ api_lectors:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/LectorsController.php"
+
+api_exam_periods:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/ExamPeriodsController.php"

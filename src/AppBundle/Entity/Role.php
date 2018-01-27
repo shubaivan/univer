@@ -20,6 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Role
 {
+    use TraitTimestampable;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -77,5 +79,27 @@ class Role
     public function setNameAccessor(string $name)
     {
         $this->setName($name);
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_roles"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_roles"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

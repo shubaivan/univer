@@ -126,4 +126,26 @@ class CoursesOfStudy
     {
         return $this->courses;
     }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_course_of_study", "get_courses_of_study"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_course_of_study", "get_courses_of_study"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }
