@@ -4,13 +4,27 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="lectors")
+ * @ORM\Table(name="lectors",
+ *    uniqueConstraints={
+ *        @UniqueConstraint(name="fio_unique",
+ *            columns={"first_name", "last_name"})
+ *    }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\LectorsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @UniqueEntity(
+ *     groups={"post_lector", "put_lector"},
+ *     fields={"firstName", "lastName"},
+ *     message="lastName_already_set"
+ * )
  */
 class Lectors
 {
@@ -20,18 +34,41 @@ class Lectors
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_lector", "get_lectors"
+     * })
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="first_name", type="string", length=100, nullable=false)
+     * @Annotation\Groups({
+     *     "get_lector", "get_lectors", "post_lector", "put_lector"
+     * })
+     * @Assert\Length(
+     *     groups={"post_lector", "put_lector"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $firstName;
 
     /**
      * @var string
      * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
+     * @Annotation\Groups({
+     *     "get_lector", "get_lectors", "post_lector", "put_lector"
+     * })
+     * @Assert\Length(
+     *     groups={"post_lector", "put_lector"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your last name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your last name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $lastName;
 

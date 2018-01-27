@@ -5,12 +5,20 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="semesters")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\SemestersRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @AssertBridge\UniqueEntity(
+ *     groups={"post_semester", "put_semester"},
+ *     fields="name",
+ *     errorPath="not valid",
+ *     message="This name is already in use."
+ * )
  */
 class Semesters
 {
@@ -20,12 +28,18 @@ class Semesters
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_semester", "get_semesters"
+     * })
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255, options={"fixed" = true}, nullable=false)
+     * @Annotation\Groups({
+     *     "get_semester", "get_semesters", "post_semester", "put_semester"
+     * })
      */
     private $name;
 
