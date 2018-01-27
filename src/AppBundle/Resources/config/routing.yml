@@ -23,3 +23,8 @@ api_courses_of_study:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/CoursesOfStudyController.php"
+
+api_courses:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/CoursesController.php"

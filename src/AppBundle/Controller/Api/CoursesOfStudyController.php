@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\CoursesOfStudy;
-use AppBundle\Entity\Role;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -17,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CoursesOfStudyController extends AbstractRestController
 {
     /**
-     * Get cours of study by id.
+     * Get course of study by id.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/course_of_study/{id} <br>.
      *
@@ -33,10 +32,12 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins CoursesOfStudy"
      * )
      *
      * @RestView()
+     *
+     * @param CoursesOfStudy $coursesOfStudy
      *
      * @throws NotFoundHttpException when not exist
      *
@@ -64,7 +65,7 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins CoursesOfStudy"
      * )
      *
      * @RestView()
@@ -121,7 +122,7 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins CoursesOfStudy"
      * )
      *
      * @RestView()
@@ -138,13 +139,13 @@ class CoursesOfStudyController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            /** @var Role $role */
-            $role = $auth->validateEntites('request', CoursesOfStudy::class, ['post_course_of_study']);
+            /** @var CoursesOfStudy $coursesOfStudy */
+            $coursesOfStudy = $auth->validateEntites('request', CoursesOfStudy::class, ['post_course_of_study']);
 
-            $em->persist($role);
+            $em->persist($coursesOfStudy);
             $em->flush();
 
-            return $this->createSuccessResponse($role, ['get_course_of_study'], true);
+            return $this->createSuccessResponse($coursesOfStudy, ['get_course_of_study'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -173,10 +174,13 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins CoursesOfStudy"
      * )
      *
      * @RestView()
+     *
+     * @param Request $request
+     * @param CoursesOfStudy $coursesOfStudy
      *
      * @throws NotFoundHttpException when not exist
      *
@@ -225,7 +229,7 @@ class CoursesOfStudyController extends AbstractRestController
      *          200 = "Returned when successful",
      *          400 = "Returned bad request"
      *      },
-     *      section="Admins"
+     *      section="Admins CoursesOfStudy"
      * )
      *
      * @RestView()

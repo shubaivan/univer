@@ -29,7 +29,7 @@ class CoursesOfStudy
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_course_of_study", "get_courses_of_study"
+     *     "get_course_of_study", "get_courses_of_study", "get_course", "get_courses"
      * })
      */
     private $id;
@@ -38,7 +38,8 @@ class CoursesOfStudy
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Annotation\Groups({
-     *     "get_course_of_study", "get_courses_of_study", "post_course_of_study", "put_course_of_study"
+     *     "get_course_of_study", "get_courses_of_study", "post_course_of_study", "put_course_of_study",
+     *     "get_course", "get_courses"
      * })
      */
     private $name;

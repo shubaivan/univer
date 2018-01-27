@@ -5,12 +5,20 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="courses")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\CoursesRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @AssertBridge\UniqueEntity(
+ *     groups={"post_course", "put_course"},
+ *     fields="name",
+ *     errorPath="not valid",
+ *     message="This name is already in use."
+ * )
  */
 class Courses
 {
@@ -20,12 +28,18 @@ class Courses
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_course", "get_courses"
+     * })
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Annotation\Groups({
+     *     "post_course", "put_course", "get_course", "get_courses"
+     * })
      */
     private $name;
 
@@ -33,6 +47,11 @@ class Courses
      * @var CoursesOfStudy
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="courses")
+     * @Annotation\Groups({
+     *     "post_course", "put_course", "get_course", "get_courses"
+     * })
+     * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
+     * @Annotation\SerializedName("courses_of_study")
      */
     private $coursesOfStudy;
 

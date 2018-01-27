@@ -2,27 +2,28 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Role;
+use AppBundle\Entity\Courses;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
+use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class RoleController extends AbstractRestController
+class CoursesController extends AbstractRestController
 {
     /**
-     * Get role by id.
+     * Get course  by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/role/{id} <br>.
+     * http://host/api/admins/course/{id} <br>.
      *
-     * @Rest\Get("/api/admins/role/{id}")
+     * @Rest\Get("/api/admins/course/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Get role by id",
+     * description = "Get course  by id",
      * authentication=true,
      *  parameters={
      *
@@ -31,29 +32,31 @@ class RoleController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Role"
+     * section="Admins Courses"
      * )
      *
      * @RestView()
+     *
+     * @param Courses $courses
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getAdminRoleAction(Role $role)
+    public function getCourseAction(Courses $courses)
     {
-        return $this->createSuccessResponse($role, ['get_roles'], true);
+        return $this->createSuccessResponse($courses, ['get_course'], true);
     }
 
     /**
-     * Get list roles.
+     * Get list courses .
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/roles <br>.
+     * http://host/api/admins/courses <br>.
      *
-     * @Rest\Get("/api/admins/roles")
+     * @Rest\Get("/api/admins/courses")
      * @ApiDoc(
      * resource = true,
-     * description = "Get list roles",
+     * description = "Get list courses ",
      * authentication=true,
      *  parameters={
      *
@@ -62,29 +65,37 @@ class RoleController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Role"
+     * section="Admins Courses"
      * )
      *
      * @RestView()
+     *
+     * @Rest\QueryParam(name="search", description="search field")
+     * @Rest\QueryParam(name="courses_of_study", requirements="\d+", description="courses_of_study id")
+     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
+     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
+     * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
+     * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
+     *
+     * @param ParamFetcher $paramFetcher
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getAdminRolesAction()
+    public function getAdminCoursesAction(ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();
 
-            $roleRepository = $em->getRepository('AppBundle:Role');
-            $roles = $roleRepository->findAll();
+            $courses = $em->getRepository('AppBundle:Courses');
 
             return $this->createSuccessResponse(
                 [
-                    'roles' => $roles,
-                    'total' => count($roles),
+                    'courses' => $courses->getEntitiesByParams($paramFetcher),
+                    'total' => $courses->getEntitiesByParams($paramFetcher, true),
                 ],
-                ['get_roles'],
+                ['get_courses'],
                 true
             );
         } catch (\Exception $e) {
@@ -96,23 +107,24 @@ class RoleController extends AbstractRestController
     }
 
     /**
-     * Create role by admin.
+     * Create course  by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/role <br>.
+     * http://host/api/admins/course <br>.
      *
-     * @Rest\Post("/api/admins/role")
+     * @Rest\Post("/api/admins/course")
      * @ApiDoc(
      * resource = true,
-     * description = "Create role by admin",
+     * description = "Create course  by admin",
      * authentication=true,
      *  parameters={
-     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"}
+     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"},
+     *      {"name"="courses_of_study", "dataType"="string", "required"=false, "description"="courses of study id"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Role"
+     * section="Admins Courses"
      * )
      *
      * @RestView()
@@ -121,7 +133,7 @@ class RoleController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function postAdminRoleAction()
+    public function postAdminCourseAction()
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
@@ -129,13 +141,13 @@ class RoleController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            /** @var Role $role */
-            $role = $auth->validateEntites('request', Role::class, ['admin_post_role']);
+            /** @var Courses $course */
+            $course = $auth->validateEntites('request', Courses::class, ['post_course']);
 
-            $em->persist($role);
+            $em->persist($course);
             $em->flush();
 
-            return $this->createSuccessResponse($role, ['get_roles'], true);
+            return $this->createSuccessResponse($course, ['get_course'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -148,45 +160,49 @@ class RoleController extends AbstractRestController
     }
 
     /**
-     * Put role by admin.
+     * Put course  by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/role/{id} <br>.
+     * http://host/api/admins/course/{id} <br>.
      *
-     * @Rest\Put("/api/admins/role/{id}")
+     * @Rest\Put("/api/admins/course/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Put role by admin",
+     * description = "Put course  by admin",
      * authentication=true,
      *  parameters={
-     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"}
+     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"},
+     *      {"name"="courses_of_study", "dataType"="string", "required"=false, "description"="courses of study id"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Role"
+     * section="Admins Courses"
      * )
      *
      * @RestView()
+     *
+     * @param Request $request
+     * @param Courses $courses
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function putAdminRoleAction(Request $request, Role $role)
+    public function putAdminCourseAction(Request $request, Courses $courses)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
         try {
             $auth = $this->get('app.auth');
-            $request->request->set('id', $role->getId());
-            /** @var Role $role */
-            $role = $auth->validateEntites('request', Role::class, ['admin_put_role']);
+            $request->request->set('id', $courses->getId());
+            /** @var Courses $courses */
+            $courses = $auth->validateEntites('request', Courses::class, ['put_course']);
 
             $em->flush();
 
-            return $this->createSuccessResponse($role, ['get_roles'], true);
+            return $this->createSuccessResponse($courses, ['get_course'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -199,15 +215,15 @@ class RoleController extends AbstractRestController
     }
 
     /**
-     * Delete Role by Admin.
+     * Delete course  by Admin.
      *
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/role/{id} <br>.
+     * http://host/api/admins/course/{id} <br>.
      *
-     * @Rest\Delete("/api/admins/role/{id}")
+     * @Rest\Delete("/api/admins/course/{id}")
      * @ApiDoc(
      *      resource = true,
-     *      description = "Delete Role by Admin",
+     *      description = "Delete course  by Admin",
      *      authentication=true,
      *      parameters={
      *
@@ -216,21 +232,23 @@ class RoleController extends AbstractRestController
      *          200 = "Returned when successful",
      *          400 = "Returned bad request"
      *      },
-     *      section="Admins Role"
+     *      section="Admins Courses"
      * )
      *
      * @RestView()
+     *
+     * @param Courses $courses
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function deletedRoleAction(Role $role)
+    public function deletedCourseAction(Courses $courses)
     {
         $em = $this->get('doctrine')->getManager();
 
         try {
-            $em->remove($role);
+            $em->remove($courses);
             $em->flush();
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);

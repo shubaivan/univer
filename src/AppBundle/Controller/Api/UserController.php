@@ -64,7 +64,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins User"
      * )
      *
      * @RestView()
@@ -103,7 +103,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins User"
      * )
      *
      * @RestView()
@@ -183,7 +183,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins User"
      * )
      *
      * @RestView()
@@ -257,7 +257,7 @@ class UserController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins"
+     * section="Admins User"
      * )
      *
      * @RestView()
@@ -315,7 +315,7 @@ class UserController extends AbstractRestController
      *          200 = "Returned when successful",
      *          400 = "Returned bad request"
      *      },
-     *      section="Admins"
+     *      section="Admins User"
      * )
      *
      * @RestView()
