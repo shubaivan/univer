@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -51,6 +52,7 @@ class SubCourses
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course"
      * })
      * @Annotation\Type("AppBundle\Entity\Courses")
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $courses;
 

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -52,6 +53,7 @@ class Courses
      * })
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\SerializedName("courses_of_study")
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $coursesOfStudy;
 

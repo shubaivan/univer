@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9e2101f4e5badc72712fcff0776459b",
+    "content-hash": "5e91cc5a49f89a2f46c762c93a9f1014",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1125,6 +1125,52 @@
                 "orm"
             ],
             "time": "2017-09-18T06:50:20+00:00"
+        },
+        {
+            "name": "evence/soft-deleteable-extension-bundle",
+            "version": "1.3.0",
+            "target-dir": "Evence/Bundle/SoftDeleteableExtensionBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/E-vence/SoftDeleteableListenerExtensionBundle.git",
+                "reference": "f3e8496f0d17d33174e3cd091fb064e5ab7a9ca7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/E-vence/SoftDeleteableListenerExtensionBundle/zipball/f3e8496f0d17d33174e3cd091fb064e5ab7a9ca7",
+                "reference": "f3e8496f0d17d33174e3cd091fb064e5ab7a9ca7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.0 || ~3.0"
+            },
+            "require-dev": {
+                "symfony/console": "~2.0 || ~3.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Evence\\Bundle\\SoftDeleteableExtensionBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Ruben Harms",
+                    "homepage": "http://www.rubenharms.nl/"
+                }
+            ],
+            "description": "Provides exta functions to the soft deleteable listener of gedmo",
+            "keywords": [
+                "soft-deleteable"
+            ],
+            "time": "2017-09-29T11:33:56+00:00"
         },
         {
             "name": "fig/link-util",
