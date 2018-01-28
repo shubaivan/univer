@@ -29,7 +29,7 @@ class Courses
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_course", "get_courses"
+     *     "get_course", "get_courses", "get_sub_course", "get_sub_courses"
      * })
      */
     private $id;

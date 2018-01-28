@@ -43,3 +43,8 @@ api_exam_periods:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/ExamPeriodsController.php"
+
+api_sub_courses:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/SubCoursesController.php"

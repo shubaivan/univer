@@ -5,12 +5,20 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="sub_cources")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\SubCoursesRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @AssertBridge\UniqueEntity(
+ *     groups={"post_sub_course", "put_sub_course"},
+ *     fields="name",
+ *     errorPath="not valid",
+ *     message="This name is already in use."
+ * )
  */
 class SubCourses
 {
@@ -20,12 +28,18 @@ class SubCourses
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_sub_course", "get_sub_courses"
+     * })
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Annotation\Groups({
+     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course"
+     * })
      */
     private $name;
 
@@ -33,6 +47,10 @@ class SubCourses
      * @var Courses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses")
+     * @Annotation\Groups({
+     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course"
+     * })
+     * @Annotation\Type("AppBundle\Entity\Courses")
      */
     private $courses;
 
@@ -141,5 +159,27 @@ class SubCourses
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_sub_course", "get_sub_courses"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_sub_course", "get_sub_courses"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
