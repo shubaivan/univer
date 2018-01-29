@@ -48,3 +48,8 @@ api_sub_courses:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/SubCoursesController.php"
+
+api_questions:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/QuestionsController.php"

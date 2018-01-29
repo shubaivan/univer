@@ -2,9 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Enum\QuestionsTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -20,11 +24,17 @@ class Questions
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
      */
     private $id;
 
     /**
      * @ORM\Column(name="custom_id", type="text", length=255, nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $customId;
 
@@ -32,26 +42,31 @@ class Questions
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $user;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="sub_course_id", type="integer", nullable=true)
-     */
-    private $subCourseId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(type="integer", nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $year;
 
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(groups={"post_course", "put_course"})
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Annotation\Accessor(setter="setSerializedAccessorType")
      */
     private $type;
 
@@ -59,17 +74,23 @@ class Questions
      * @var int
      *
      * @ORM\Column(name="question_number", type="integer", nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $questionNumber;
 
     /**
      * @var string
-     * @ORM\Column(name="image_url", type="string", length=255, options={"fixed" = true}, nullable=false)
+     * @ORM\Column(name="image_url", type="string", length=255, options={"fixed" = true}, nullable=true)
      */
     private $imageUrl;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $notes;
 
@@ -105,6 +126,12 @@ class Questions
      * @var Semesters
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Semesters", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\Semesters")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $semesters;
 
@@ -112,6 +139,12 @@ class Questions
      * @var ExamPeriods
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\ExamPeriods")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $examPeriods;
 
@@ -119,6 +152,12 @@ class Questions
      * @var SubCourses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\SubCourses")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $subCourses;
 
@@ -126,6 +165,12 @@ class Questions
      * @var Lectors
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\Lectors")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $lectors;
 
@@ -175,30 +220,6 @@ class Questions
     }
 
     /**
-     * Set subCourseId.
-     *
-     * @param int $subCourseId
-     *
-     * @return Questions
-     */
-    public function setSubCourseId($subCourseId)
-    {
-        $this->subCourseId = $subCourseId;
-
-        return $this;
-    }
-
-    /**
-     * Get subCourseId.
-     *
-     * @return int
-     */
-    public function getSubCourseId()
-    {
-        return $this->subCourseId;
-    }
-
-    /**
      * Set year.
      *
      * @param int $year
@@ -231,9 +252,20 @@ class Questions
      */
     public function setType($type)
     {
+        if (!in_array($type, QuestionsTypeEnum::getAvailableTypes(), true)) {
+            throw new \InvalidArgumentException(
+                'Invalid type. Available type: ' . implode(',', QuestionsTypeEnum::getAvailableTypes())
+            );
+        }
+
         $this->type = $type;
 
         return $this;
+    }
+
+    public function setSerializedAccessorType($type)
+    {
+        $this->setType($type);
     }
 
     /**
@@ -572,5 +604,27 @@ class Questions
     public function getLectors()
     {
         return $this->lectors;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

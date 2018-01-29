@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -41,6 +42,14 @@ class Courses
      * @Annotation\Groups({
      *     "post_course", "put_course", "get_course", "get_courses"
      * })
+     * @Assert\NotBlank(groups={"post_course", "put_course"})
+     * @Assert\Length(
+     *     groups={"post_course", "put_course"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $name;
 

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -36,11 +37,19 @@ class CoursesOfStudy
 
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, nullable=false)
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "post_course_of_study", "put_course_of_study",
      *     "get_course", "get_courses"
      * })
+     * @Assert\NotBlank(groups={"post_course_of_study", "put_course_of_study"})
+     * @Assert\Length(
+     *     groups={"post_course_of_study", "put_course_of_study"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $name;
 

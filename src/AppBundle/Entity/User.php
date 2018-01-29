@@ -35,7 +35,7 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *      "profile"
+     *      "profile", "get_question", "get_questions"
      * })
      */
     private $id;

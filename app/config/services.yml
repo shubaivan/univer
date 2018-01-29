@@ -14,7 +14,7 @@ services:
         tags: ['controller.service_arguments']
 
     app_serialize.object_constructor:
-        class: JMS\Serializer\Construction\DoctrineObjectConstructor
+        class: AppBundle\Serializer\Construction\DoctrineObjectConstructor
         public: false
         arguments:
             - "@doctrine"

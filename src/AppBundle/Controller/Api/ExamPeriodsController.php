@@ -70,7 +70,7 @@ class ExamPeriodsController extends AbstractRestController
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search field")
+     * @Rest\QueryParam(name="search", description="search fields - name")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
      * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)

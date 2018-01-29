@@ -70,7 +70,7 @@ class SubCoursesController extends AbstractRestController
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search field")
+     * @Rest\QueryParam(name="search", description="search fields - name")
      * @Rest\QueryParam(name="courses", requirements="\d+", description="courses id")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")

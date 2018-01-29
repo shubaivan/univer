@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Lectors;
+use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -13,17 +13,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class LectorsController extends AbstractRestController
+class QuestionsController extends AbstractRestController
 {
     /**
-     * Get lector by id.
+     * Get question by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lector/{id} <br>.
+     * http://host/api/admins/question/{id} <br>.
      *
-     * @Rest\Get("/api/admins/lector/{id}")
+     * @Rest\Get("/api/admins/question/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Get lector by id",
+     * description = "Get question by id",
      * authentication=true,
      *  parameters={
      *
@@ -32,31 +32,31 @@ class LectorsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Admins Question"
      * )
      *
      * @RestView()
      *
-     * @param Lectors $lectors
+     * @param Questions $questions
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getLectorsAction(Lectors $lectors)
+    public function getQuestionsAction(Questions $questions)
     {
-        return $this->createSuccessResponse($lectors, ['get_lector'], true);
+        return $this->createSuccessResponse($questions, ['get_question'], true);
     }
 
     /**
-     * Get list lectors.
+     * Get list questions.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lectors <br>.
+     * http://host/api/admins/questions <br>.
      *
-     * @Rest\Get("/api/admins/lectors")
+     * @Rest\Get("/api/admins/questions")
      * @ApiDoc(
      * resource = true,
-     * description = "Get list lectors",
+     * description = "Get list questions",
      * authentication=true,
      *  parameters={
      *
@@ -65,12 +65,17 @@ class LectorsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Admins Question"
      * )
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search fields - first_name, last_name")
+     * @Rest\QueryParam(name="search", description="search field")
+     * @Rest\QueryParam(name="user", requirements="\d+", description="user id")
+     * @Rest\QueryParam(name="semesters", requirements="\d+", description="semesters id")
+     * @Rest\QueryParam(name="exam_periods", requirements="\d+", description="exam_periods id")
+     * @Rest\QueryParam(name="sub_courses", requirements="\d+", description="sub_courses id")
+     * @Rest\QueryParam(name="lectors", requirements="\d+", description="lectors id")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
      * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
@@ -82,19 +87,19 @@ class LectorsController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminLectorAction(ParamFetcher $paramFetcher)
+    public function getAdminQuestionAction(ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();
 
-            $lectors = $em->getRepository('AppBundle:Lectors');
+            $questions = $em->getRepository('AppBundle:Questions');
 
             return $this->createSuccessResponse(
                 [
-                    'lectors' => $lectors->getEntitiesByParams($paramFetcher),
-                    'total' => $lectors->getEntitiesByParams($paramFetcher, true),
+                    'questions' => $questions->getEntitiesByParams($paramFetcher),
+                    'total' => $questions->getEntitiesByParams($paramFetcher, true),
                 ],
-                ['get_lectors'],
+                ['get_questions'],
                 true
             );
         } catch (\Exception $e) {
@@ -106,24 +111,32 @@ class LectorsController extends AbstractRestController
     }
 
     /**
-     * Create lector by admin.
+     * Create question by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lector <br>.
+     * http://host/api/admins/question <br>.
      *
-     * @Rest\Post("/api/admins/lector")
+     * @Rest\Post("/api/admins/question")
      * @ApiDoc(
      * resource = true,
-     * description = "Create lector by admin",
+     * description = "Create question by admin",
      * authentication=true,
      *  parameters={
-     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="lector first name"},
-     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="lector last name"}
+     *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
+     *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id"},
+     *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
+     *      {"name"="type", "dataType"="enum", "required"=true, "description"="open or test"},
+     *      {"name"="question_number", "dataType"="integer", "required"=false, "description"="question number"},
+     *      {"name"="notes", "dataType"="text", "required"=false, "description"="notes"},
+     *      {"name"="semesters", "dataType"="integer", "required"=true, "description"="semesters id"},
+     *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
+     *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
+     *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Admins Question"
      * )
      *
      * @RestView()
@@ -132,7 +145,7 @@ class LectorsController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function postAdminLectorsAction()
+    public function postAdminQuestionsAction()
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
@@ -140,13 +153,13 @@ class LectorsController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            /** @var Lectors $lectors */
-            $lectors = $auth->validateEntites('request', Lectors::class, ['post_lector']);
+            /** @var Questions $questions */
+            $questions = $auth->validateEntites('request', Questions::class, ['post_question']);
 
-            $em->persist($lectors);
+            $em->persist($questions);
             $em->flush();
 
-            return $this->createSuccessResponse($lectors, ['get_lector'], true);
+            return $this->createSuccessResponse($questions, ['get_question'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -159,49 +172,57 @@ class LectorsController extends AbstractRestController
     }
 
     /**
-     * Put lector by admin.
+     * Put question by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lector/{id} <br>.
+     * http://host/api/admins/question/{id} <br>.
      *
-     * @Rest\Put("/api/admins/lector/{id}")
+     * @Rest\Put("/api/admins/question/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Put lector by admin",
+     * description = "Put question by admin",
      * authentication=true,
      *  parameters={
-     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="lector first name"},
-     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="lector last name"}
+     *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
+     *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id"},
+     *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
+     *      {"name"="type", "dataType"="enum", "required"=true, "description"="open or test"},
+     *      {"name"="question_number", "dataType"="integer", "required"=false, "description"="question number"},
+     *      {"name"="notes", "dataType"="text", "required"=false, "description"="notes"},
+     *      {"name"="semesters", "dataType"="integer", "required"=true, "description"="semesters id"},
+     *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
+     *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
+     *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Admins Question"
      * )
      *
      * @RestView()
      *
-     * @param Request $request
-     * @param Lectors $lectors
+     * @param Request   $request
+     * @param Questions $questions
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function putAdminLectorsAction(Request $request, Lectors $lectors)
+    public function putAdminQuestionsAction(Request $request, Questions $questions)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
         try {
             $auth = $this->get('app.auth');
-            $request->request->set('id', $lectors->getId());
-            /** @var Lectors $lectors */
-            $lectors = $auth->validateEntites('request', Lectors::class, ['put_lector']);
+            $request->request->set('id', $questions->getId());
+            /** @var Questions $questions */
+            $questions = $auth->validateEntites('request', Questions::class, ['put_question']);
 
             $em->flush();
 
-            return $this->createSuccessResponse($lectors, ['get_lector'], true);
+            return $this->createSuccessResponse($questions, ['get_question'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -214,15 +235,15 @@ class LectorsController extends AbstractRestController
     }
 
     /**
-     * Delete lector by Admin.
+     * Delete question by Admin.
      *
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lector/{id} <br>.
+     * http://host/api/admins/question/{id} <br>.
      *
-     * @Rest\Delete("/api/admins/lector/{id}")
+     * @Rest\Delete("/api/admins/question/{id}")
      * @ApiDoc(
      *      resource = true,
-     *      description = "Delete lector by Admin",
+     *      description = "Delete question by Admin",
      *      authentication=true,
      *      parameters={
      *
@@ -231,23 +252,23 @@ class LectorsController extends AbstractRestController
      *          200 = "Returned when successful",
      *          400 = "Returned bad request"
      *      },
-     *      section="Admins Lector"
+     *      section="Admins Question"
      * )
      *
      * @RestView()
      *
-     * @param Lectors $lectors
+     * @param Questions $questions
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function deletedLectorsAction(Lectors $lectors)
+    public function deletedQuestionsAction(Questions $questions)
     {
         $em = $this->get('doctrine')->getManager();
 
         try {
-            $em->remove($lectors);
+            $em->remove($questions);
             $em->flush();
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);

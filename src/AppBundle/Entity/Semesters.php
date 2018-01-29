@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -29,7 +30,7 @@ class Semesters
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_semester", "get_semesters"
+     *     "get_semester", "get_semesters", "get_question", "get_questions"
      * })
      */
     private $id;
@@ -40,6 +41,14 @@ class Semesters
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "post_semester", "put_semester"
      * })
+     * @Assert\NotBlank(groups={"post_semester", "put_semester"})
+     * @Assert\Length(
+     *     groups={"post_semester", "put_semester"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $name;
 

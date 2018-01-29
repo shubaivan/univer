@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Enum;
+namespace AppBundle\Entity\Enum;
 
-abstract class AppealTypeEnum
+abstract class QuestionsTypeEnum
 {
-    const TYPE_APPEAL = 'appeal';
-    const TYPE_ANSWER = 'answer';
+    const TYPE_OPEN = 'open';
+    const TYPE_TEST = 'test';
 
     /** @var array user friendly named type */
     protected static $typeName = [
-        self::TYPE_APPEAL => 'appeal',
-        self::TYPE_ANSWER => 'answer',
+        self::TYPE_OPEN => 'Open',
+        self::TYPE_TEST => 'Test',
     ];
 
     /**
@@ -33,8 +33,8 @@ abstract class AppealTypeEnum
     public static function getAvailableTypes()
     {
         return [
-            self::TYPE_APPEAL,
-            self::TYPE_ANSWER,
+            self::TYPE_OPEN,
+            self::TYPE_TEST,
         ];
     }
 }

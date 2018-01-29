@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Enum\AppealTypeEnum;
+use AppBundle\Entity\Enum\AppealTypeEnum;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
