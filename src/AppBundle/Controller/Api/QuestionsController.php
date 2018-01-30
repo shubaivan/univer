@@ -21,7 +21,7 @@ class QuestionsController extends AbstractRestController
     /**
      * Get question by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/question/{id} <br>.
+     * http://host/api/question/{id} <br>.
      *
      * @Rest\Get("/api/admins/question/{id}")
      * @ApiDoc(
@@ -54,9 +54,9 @@ class QuestionsController extends AbstractRestController
     /**
      * Get list questions.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/questions <br>.
+     * http://host/api/questions <br>.
      *
-     * @Rest\Get("/api/admins/questions")
+     * @Rest\Get("/api/questions")
      * @ApiDoc(
      * resource = true,
      * description = "Get list questions",

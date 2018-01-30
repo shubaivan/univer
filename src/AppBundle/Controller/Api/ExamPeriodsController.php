@@ -18,9 +18,9 @@ class ExamPeriodsController extends AbstractRestController
     /**
      * Get exam period by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/exam_period/{id} <br>.
+     * http://host/api/exam_period/{id} <br>.
      *
-     * @Rest\Get("/api/admins/exam_period/{id}")
+     * @Rest\Get("/api/exam_period/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Get exam period by id",
@@ -51,9 +51,9 @@ class ExamPeriodsController extends AbstractRestController
     /**
      * Get list exam periods.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/exam_periods <br>.
+     * http://host/api/exam_periods <br>.
      *
-     * @Rest\Get("/api/admins/exam_periods")
+     * @Rest\Get("/api/exam_periods")
      * @ApiDoc(
      * resource = true,
      * description = "Get list exam periods",

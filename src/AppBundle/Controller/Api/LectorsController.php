@@ -18,9 +18,9 @@ class LectorsController extends AbstractRestController
     /**
      * Get lector by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lector/{id} <br>.
+     * http://host/api/lector/{id} <br>.
      *
-     * @Rest\Get("/api/admins/lector/{id}")
+     * @Rest\Get("/api/lector/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Get lector by id",
@@ -51,9 +51,9 @@ class LectorsController extends AbstractRestController
     /**
      * Get list lectors.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/lectors <br>.
+     * http://host/api/lectors <br>.
      *
-     * @Rest\Get("/api/admins/lectors")
+     * @Rest\Get("/api/lectors")
      * @ApiDoc(
      * resource = true,
      * description = "Get list lectors",
