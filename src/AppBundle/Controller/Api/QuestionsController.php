@@ -4,11 +4,14 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Helper\FileUploader;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -130,7 +133,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="semesters", "dataType"="integer", "required"=true, "description"="semesters id"},
      *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
      *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
-     *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"}
+     *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"},
+     *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -141,11 +145,13 @@ class QuestionsController extends AbstractRestController
      *
      * @RestView()
      *
+     * @param Request $request
+     *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function postAdminQuestionsAction()
+    public function postAdminQuestionsAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
@@ -155,6 +161,17 @@ class QuestionsController extends AbstractRestController
 
             /** @var Questions $questions */
             $questions = $auth->validateEntites('request', Questions::class, ['post_question']);
+
+            if ($request->files->get('image_url') instanceof UploadedFile) {
+                $service = $this->get('app.file_uploader');
+
+                $fileName = $service->upload(
+                    $request->files->get('image_url'),
+                    FileUploader::LOCAL_STORAGE
+                );
+
+                $questions->setImageUrl($this->getParameter('kernel.root_dir').'/../web/files/' . $fileName);
+            }
 
             $em->persist($questions);
             $em->flush();

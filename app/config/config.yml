@@ -145,3 +145,15 @@ nelmio_cors:
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
             max_age: 3600
             hosts: ['^api\.']
+
+knp_gaufrette:
+    stream_wrapper: ~
+    adapters:
+        local_storage_adapter:
+            local:
+                directory: '%kernel.root_dir%/../web/files'
+                create:     true
+
+    filesystems:
+        local_storage:
+            adapter: local_storage_adapter

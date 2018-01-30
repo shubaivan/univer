@@ -2,6 +2,7 @@ parameters:
     app.jwt_authenticator.class: AppBundle\Security\Guard\JWTAuthenticator
     app.object_manager.class: AppBundle\Services\ObjectManager
     app.authentication_success_handler.class: AppBundle\Security\AuthenticationSuccessHandler
+    app.file_uploader.class: AppBundle\Helper\FileUploader
 
 services:
 
@@ -24,3 +25,8 @@ services:
             - "@event_dispatcher"
         tags:
             - { name: monolog.logger, channel: security }
+
+    app.file_uploader:
+        class: "%app.file_uploader.class%"
+        arguments:
+            - "@gaufrette.local_storage_filesystem"

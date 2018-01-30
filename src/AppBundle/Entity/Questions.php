@@ -83,6 +83,9 @@ class Questions
     /**
      * @var string
      * @ORM\Column(name="image_url", type="string", length=255, options={"fixed" = true}, nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
      */
     private $imageUrl;
 
