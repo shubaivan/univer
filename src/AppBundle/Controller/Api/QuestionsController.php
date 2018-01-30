@@ -118,7 +118,7 @@ class QuestionsController extends AbstractRestController
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/question <br>.
      *
-     * @Rest\Post("/api/admins/question")
+     * @Rest\Post("/api/admins/question/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Create question by admin",
@@ -146,21 +146,26 @@ class QuestionsController extends AbstractRestController
      * @RestView()
      *
      * @param Request $request
+     * @param Questions|null $questions
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function postAdminQuestionsAction(Request $request)
+    public function postAdminQuestionsAction(Request $request, Questions $questions = null)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
         try {
             $auth = $this->get('app.auth');
-
+            $serializerGroup = 'post_question';
+            if ($questions instanceof Questions) {
+                $request->request->set('id', $questions->getId());
+                $serializerGroup = 'put_question';
+            }
             /** @var Questions $questions */
-            $questions = $auth->validateEntites('request', Questions::class, ['post_question']);
+            $questions = $auth->validateEntites('request', Questions::class, [$serializerGroup]);
 
             if ($request->files->get('image_url') instanceof UploadedFile) {
                 $service = $this->get('app.file_uploader');
@@ -174,69 +179,6 @@ class QuestionsController extends AbstractRestController
             }
 
             $em->persist($questions);
-            $em->flush();
-
-            return $this->createSuccessResponse($questions, ['get_question'], true);
-        } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
-            $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
-        } catch (\Exception $e) {
-            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
-            $logger->error($this->getMessagePrefix().'error: '.$e->getMessage());
-        }
-
-        return $this->handleView($view);
-    }
-
-    /**
-     * Put question by admin.
-     * <strong>Simple example:</strong><br />
-     * http://host/api/admins/question/{id} <br>.
-     *
-     * @Rest\Put("/api/admins/question/{id}")
-     * @ApiDoc(
-     * resource = true,
-     * description = "Put question by admin",
-     * authentication=true,
-     *  parameters={
-     *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
-     *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id"},
-     *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
-     *      {"name"="type", "dataType"="enum", "required"=true, "description"="open or test"},
-     *      {"name"="question_number", "dataType"="integer", "required"=false, "description"="question number"},
-     *      {"name"="notes", "dataType"="text", "required"=false, "description"="notes"},
-     *      {"name"="semesters", "dataType"="integer", "required"=true, "description"="semesters id"},
-     *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
-     *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
-     *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"}
-     *  },
-     * statusCodes = {
-     *      200 = "Returned when successful",
-     *      400 = "Bad request"
-     * },
-     * section="Admins Question"
-     * )
-     *
-     * @RestView()
-     *
-     * @param Request   $request
-     * @param Questions $questions
-     *
-     * @throws NotFoundHttpException when not exist
-     *
-     * @return Response|View
-     */
-    public function putAdminQuestionsAction(Request $request, Questions $questions)
-    {
-        $em = $this->get('doctrine')->getManager();
-        $logger = $this->container->get('logger');
-
-        try {
-            $auth = $this->get('app.auth');
-            $request->request->set('id', $questions->getId());
-            /** @var Questions $questions */
-            $questions = $auth->validateEntites('request', Questions::class, ['put_question']);
-
             $em->flush();
 
             return $this->createSuccessResponse($questions, ['get_question'], true);
