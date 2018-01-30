@@ -40,7 +40,7 @@ class Courses
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
-     *     "post_course", "put_course", "get_course", "get_courses"
+     *     "post_course", "put_course", "get_course", "get_courses", "get_sub_course", "get_sub_courses"
      * })
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Assert\Length(
