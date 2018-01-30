@@ -114,14 +114,14 @@ class QuestionsController extends AbstractRestController
     }
 
     /**
-     * Create question by admin.
+     * Create/Put question by admin.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/question <br>.
      *
      * @Rest\Post("/api/admins/question/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Create question by admin",
+     * description = "Create/Put question by admin",
      * authentication=true,
      *  parameters={
      *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
@@ -160,9 +160,11 @@ class QuestionsController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
             $serializerGroup = 'post_question';
+            $persist = true;
             if ($questions instanceof Questions) {
                 $request->request->set('id', $questions->getId());
                 $serializerGroup = 'put_question';
+                $persist = false;
             }
             /** @var Questions $questions */
             $questions = $auth->validateEntites('request', Questions::class, [$serializerGroup]);
@@ -178,7 +180,7 @@ class QuestionsController extends AbstractRestController
                 $questions->setImageUrl($this->getParameter('kernel.root_dir').'/../web/files/' . $fileName);
             }
 
-            $em->persist($questions);
+            !$persist ? :$em->persist($questions);
             $em->flush();
 
             return $this->createSuccessResponse($questions, ['get_question'], true);
