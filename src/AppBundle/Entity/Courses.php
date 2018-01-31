@@ -31,7 +31,8 @@ class Courses
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_course", "get_courses", "get_sub_course", "get_sub_courses"
+     *     "get_course", "get_courses", "get_sub_course", "get_sub_courses",
+     *     "get_course_of_study", "get_courses_of_study"
      * })
      */
     private $id;
@@ -40,7 +41,8 @@ class Courses
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
-     *     "post_course", "put_course", "get_course", "get_courses", "get_sub_course", "get_sub_courses"
+     *     "post_course", "put_course", "get_course", "get_courses",
+     *     "get_sub_course", "get_sub_courses", "get_course_of_study", "get_courses_of_study"
      * })
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Assert\Length(
@@ -70,6 +72,9 @@ class Courses
      * @var ArrayCollection|SubCourses[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SubCourses", mappedBy="courses", cascade={"persist"})
+     * @Annotation\Groups({
+     *     "get_course", "get_courses"
+     * })
      */
     private $subCourses;
 

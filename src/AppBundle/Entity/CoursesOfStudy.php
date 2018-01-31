@@ -57,6 +57,9 @@ class CoursesOfStudy
      * @var ArrayCollection|Courses[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Courses", mappedBy="coursesOfStudy", cascade={"persist"})
+     * @Annotation\Groups({
+     *     "get_course_of_study", "get_courses_of_study"
+     * })
      */
     private $courses;
 

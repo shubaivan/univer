@@ -30,7 +30,8 @@ class SubCourses
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_sub_course", "get_sub_courses", "get_question", "get_questions"
+     *     "get_sub_course", "get_sub_courses", "get_question", "get_questions",
+     *     "get_course", "get_courses"
      * })
      */
     private $id;
@@ -39,7 +40,8 @@ class SubCourses
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
-     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course"
+     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
+     *     "get_course", "get_courses"
      * })
      */
     private $name;
