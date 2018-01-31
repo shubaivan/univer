@@ -35,7 +35,7 @@ class QuestionsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Question"
+     * section="Question"
      * )
      *
      * @RestView()
@@ -68,7 +68,7 @@ class QuestionsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Question"
+     * section="Question"
      * )
      *
      * @RestView()

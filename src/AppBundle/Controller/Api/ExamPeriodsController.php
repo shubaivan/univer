@@ -32,7 +32,7 @@ class ExamPeriodsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins ExamPeriod"
+     * section="ExamPeriod"
      * )
      *
      * @RestView()
@@ -65,7 +65,7 @@ class ExamPeriodsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins ExamPeriod"
+     * section="ExamPeriod"
      * )
      *
      * @RestView()

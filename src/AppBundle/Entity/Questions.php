@@ -25,7 +25,7 @@ class Questions
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions"
+     *     "get_question", "get_questions", "get_note", "get_notes"
      * })
      */
     private $id;
@@ -33,7 +33,8 @@ class Questions
     /**
      * @ORM\Column(name="custom_id", type="text", length=255, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_note", "get_notes"
      * })
      */
     private $customId;
@@ -54,7 +55,8 @@ class Questions
      *
      * @ORM\Column(type="integer", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_note", "get_notes"
      * })
      */
     private $year;
@@ -64,7 +66,8 @@ class Questions
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_note", "get_notes"
      * })
      * @Annotation\Accessor(setter="setSerializedAccessorType")
      */
@@ -75,7 +78,8 @@ class Questions
      *
      * @ORM\Column(name="question_number", type="integer", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_note", "get_notes"
      * })
      */
     private $questionNumber;
@@ -84,7 +88,7 @@ class Questions
      * @var string
      * @ORM\Column(name="image_url", type="string", length=255, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions"
+     *     "get_question", "get_questions", "get_note", "get_notes"
      * })
      */
     private $imageUrl;
@@ -92,7 +96,8 @@ class Questions
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_note", "get_notes"
      * })
      */
     private $notes;
@@ -158,7 +163,8 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_notes"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */

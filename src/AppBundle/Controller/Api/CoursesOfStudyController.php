@@ -32,7 +32,7 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins CoursesOfStudy"
+     * section="CoursesOfStudy"
      * )
      *
      * @RestView()
@@ -65,7 +65,7 @@ class CoursesOfStudyController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins CoursesOfStudy"
+     * section="CoursesOfStudy"
      * )
      *
      * @RestView()

@@ -53,3 +53,8 @@ api_questions:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/QuestionsController.php"
+
+api_notes:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/NotesController.php"

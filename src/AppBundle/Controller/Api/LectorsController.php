@@ -32,7 +32,7 @@ class LectorsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Lector"
      * )
      *
      * @RestView()
@@ -65,7 +65,7 @@ class LectorsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Lector"
+     * section="Lector"
      * )
      *
      * @RestView()

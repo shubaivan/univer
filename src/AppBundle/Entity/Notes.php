@@ -4,6 +4,9 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -19,6 +22,9 @@ class Notes
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_note", "get_notes"
+     * })
      */
     private $id;
 
@@ -26,6 +32,11 @@ class Notes
      * @var Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="note")
+     * @Annotation\Groups({
+     *     "get_note", "get_notes", "post_note", "put_note"
+     * })
+     * @Annotation\Type("AppBundle\Entity\Questions")
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $questions;
 
@@ -33,11 +44,39 @@ class Notes
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="note")
+     * @Annotation\Groups({
+     *     "get_note", "get_notes", "post_note", "put_note"
+     * })
+     * @Annotation\Type("AppBundle\Entity\User")
+     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $user;
 
     /**
+     * @var Admin
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="note")
+     * @Annotation\Groups({
+     *     "get_note", "get_notes", "post_note", "put_note"
+     * })
+     * @Annotation\Type("AppBundle\Entity\Admin")
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $admin;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
+     * @Annotation\Groups({
+     *     "get_note", "get_notes", "post_note", "put_note"
+     * })
+     * @Assert\NotBlank(groups={"post_note", "put_note"})
+     * @Assert\Length(
+     *     groups={"post_note", "put_note"},
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $text;
 
@@ -121,5 +160,51 @@ class Notes
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set admin
+     *
+     * @param \AppBundle\Entity\Admin $admin
+     *
+     * @return Notes
+     */
+    public function setAdmin(\AppBundle\Entity\Admin $admin = null)
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * Get admin
+     *
+     * @return \AppBundle\Entity\Admin
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_note", "get_notes"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_note", "get_notes"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

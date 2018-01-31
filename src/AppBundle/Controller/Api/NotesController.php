@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\SubCourses;
+use AppBundle\Entity\AbstractUser;
+use AppBundle\Entity\Notes;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -12,18 +13,20 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class SubCoursesController extends AbstractRestController
+class NotesController extends AbstractRestController
 {
     /**
-     * Get sub course by id.
+     * Get note by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/sub_course/{id} <br>.
+     * http://host/api/note/{id} <br>.
      *
-     * @Rest\Get("/api/sub_course/{id}")
+     * @Rest\Get("/api/note/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Get sub course by id",
+     * description = "Get note by id",
      * authentication=true,
      *  parameters={
      *
@@ -32,31 +35,31 @@ class SubCoursesController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="SubCourse"
+     * section="Note"
      * )
      *
      * @RestView()
      *
-     * @param SubCourses $subCourses
+     * @param Notes $notes
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getSubCourseAction(SubCourses $subCourses)
+    public function getNotesAction(Notes $notes)
     {
-        return $this->createSuccessResponse($subCourses, ['get_sub_course'], true);
+        return $this->createSuccessResponse($notes, ['get_note'], true);
     }
 
     /**
-     * Get list sub courses of study.
+     * Get list notes.
      * <strong>Simple example:</strong><br />
-     * http://host/api/sub_courses <br>.
+     * http://host/api/notes <br>.
      *
-     * @Rest\Get("/api/sub_courses")
+     * @Rest\Get("/api/notes")
      * @ApiDoc(
      * resource = true,
-     * description = "Get list courses of study",
+     * description = "Get list notes",
      * authentication=true,
      *  parameters={
      *
@@ -65,13 +68,13 @@ class SubCoursesController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="SubCourse"
+     * section="Note"
      * )
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search fields - name")
-     * @Rest\QueryParam(name="courses", requirements="\d+", description="courses id")
+     * @Rest\QueryParam(name="search", description="search fields - text")
+     * @Rest\QueryParam(name="questions", requirements="\d+", description="questions id")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
      * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
@@ -83,19 +86,35 @@ class SubCoursesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminSubCourseAction(ParamFetcher $paramFetcher)
+    public function getNoteAction(Request $request, ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();
 
-            $subCourses = $em->getRepository('AppBundle:SubCourses');
+            $notes = $em->getRepository('AppBundle:Notes');
+            /** @var AbstractUser $authUser */
+            $authUser = $this->getUser();
+
+            if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
+                $request->query->set('user', $this->getUser()->getId());
+                $param = new Rest\QueryParam();
+                $param->name = 'user';
+                $paramFetcher->addParam($param);
+            } elseif($authUser->hasRole(AbstractUser::ROLE_ADMIN)) {
+                $request->query->set('admin', $this->getUser()->getId());
+                $param = new Rest\QueryParam();
+                $param->name = 'admin';
+                $paramFetcher->addParam($param);
+            } else {
+                throw new AccessDeniedException();
+            }
 
             return $this->createSuccessResponse(
                 [
-                    'sub_courses' => $subCourses->getEntitiesByParams($paramFetcher),
-                    'total' => $subCourses->getEntitiesByParams($paramFetcher, true),
+                    'notes' => $notes->getEntitiesByParams($paramFetcher),
+                    'total' => $notes->getEntitiesByParams($paramFetcher, true),
                 ],
-                ['get_sub_courses'],
+                ['get_notes'],
                 true
             );
         } catch (\Exception $e) {
@@ -107,24 +126,24 @@ class SubCoursesController extends AbstractRestController
     }
 
     /**
-     * Create sub course by admin.
+     * Create note.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/sub_course <br>.
+     * http://host/api/note <br>.
      *
-     * @Rest\Post("/api/admins/sub_course")
+     * @Rest\Post("/api/note")
      * @ApiDoc(
      * resource = true,
-     * description = "Create sub course by admin",
+     * description = "Create note",
      * authentication=true,
      *  parameters={
-     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"},
-     *      {"name"="courses", "dataType"="string", "required"=false, "description"="course id"}
+     *      {"name"="text", "dataType"="string", "required"=true, "description"="note text"},
+     *      {"name"="questions", "dataType"="integer", "required"=true, "description"="questions id"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins SubCourse"
+     * section="Note"
      * )
      *
      * @RestView()
@@ -133,7 +152,7 @@ class SubCoursesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function postAdminSubCourseAction()
+    public function postNotesAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
@@ -141,13 +160,24 @@ class SubCoursesController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            /** @var SubCourses $subCourses */
-            $subCourses = $auth->validateEntites('request', SubCourses::class, ['post_sub_course']);
+            /** @var AbstractUser $authUser */
+            $authUser = $this->getUser();
 
-            $em->persist($subCourses);
+            if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
+                $request->request->set('user', $this->getUser()->getId());
+            } elseif ($authUser->hasRole(AbstractUser::ROLE_ADMIN)) {
+                $request->request->set('admin', $this->getUser()->getId());
+            } else {
+                throw new AccessDeniedException();
+            }
+
+            /** @var Notes $notes */
+            $notes = $auth->validateEntites('request', Notes::class, ['post_note']);
+
+            $em->persist($notes);
             $em->flush();
 
-            return $this->createSuccessResponse($subCourses, ['get_sub_courses'], true);
+            return $this->createSuccessResponse($notes, ['get_note'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -160,49 +190,49 @@ class SubCoursesController extends AbstractRestController
     }
 
     /**
-     * Put sub course by admin.
+     * Put note.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/sub_course/{id} <br>.
+     * http://host/api/note/{id} <br>.
      *
-     * @Rest\Put("/api/admins/sub_course/{id}")
+     * @Rest\Put("/api/note/{id}")
      * @ApiDoc(
      * resource = true,
-     * description = "Put sub course by admin",
+     * description = "Put note",
      * authentication=true,
      *  parameters={
-     *      {"name"="name", "dataType"="string", "required"=true, "description"="name"},
-     *      {"name"="courses", "dataType"="string", "required"=false, "description"="course id"}
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="note first name"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="note last name"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins SubCourse"
+     * section="Note"
      * )
      *
      * @RestView()
      *
      * @param Request $request
-     * @param SubCourses $subCourses
+     * @param Notes $notes
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function putAdminSubCourseAction(Request $request, SubCourses $subCourses)
+    public function putNotesAction(Request $request, Notes $notes)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
         try {
             $auth = $this->get('app.auth');
-            $request->request->set('id', $subCourses->getId());
-            /** @var SubCourses $subCourses */
-            $subCourses = $auth->validateEntites('request', SubCourses::class, ['put_sub_course']);
+            $request->request->set('id', $notes->getId());
+            /** @var Notes $notes */
+            $notes = $auth->validateEntites('request', Notes::class, ['put_note']);
 
             $em->flush();
 
-            return $this->createSuccessResponse($subCourses, ['get_sub_course'], true);
+            return $this->createSuccessResponse($notes, ['get_note'], true);
         } catch (ValidatorException $e) {
             $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
@@ -215,15 +245,15 @@ class SubCoursesController extends AbstractRestController
     }
 
     /**
-     * Delete sub course by Admin.
+     * Delete note.
      *
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/sub_course/{id} <br>.
+     * http://host/api/note/{id} <br>.
      *
-     * @Rest\Delete("/api/admins/sub_course/{id}")
+     * @Rest\Delete("/api/note/{id}")
      * @ApiDoc(
      *      resource = true,
-     *      description = "Delete sub course by Admin",
+     *      description = "Delete note",
      *      authentication=true,
      *      parameters={
      *
@@ -232,23 +262,23 @@ class SubCoursesController extends AbstractRestController
      *          200 = "Returned when successful",
      *          400 = "Returned bad request"
      *      },
-     *      section="Admins SubCourse"
+     *      section="Note"
      * )
      *
      * @RestView()
      *
-     * @param SubCourses $subCourses
+     * @param Notes $notes
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function deletedSubCourseAction(SubCourses $subCourses)
+    public function deletedNotesAction(Notes $notes)
     {
         $em = $this->get('doctrine')->getManager();
 
         try {
-            $em->remove($subCourses);
+            $em->remove($notes);
             $em->flush();
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);

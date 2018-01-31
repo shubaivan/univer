@@ -32,7 +32,7 @@ class SemestersController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Semester"
+     * section="Semester"
      * )
      *
      * @RestView()
@@ -65,7 +65,7 @@ class SemestersController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Semester"
+     * section="Semester"
      * )
      *
      * @RestView()
