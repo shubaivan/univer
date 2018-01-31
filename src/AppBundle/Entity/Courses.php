@@ -73,7 +73,7 @@ class Courses
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SubCourses", mappedBy="courses", cascade={"persist"})
      * @Annotation\Groups({
-     *     "get_course", "get_courses"
+     *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study"
      * })
      */
     private $subCourses;
