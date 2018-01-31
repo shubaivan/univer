@@ -34,8 +34,7 @@ class NotesRepository extends EntityRepository
         }
 
         $qb
-            ->from('AppBundle:Notes', 'n')
-            ->innerJoin('n.questions', 'q');
+            ->from('AppBundle:Notes', 'n');
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
@@ -74,7 +73,10 @@ class NotesRepository extends EntityRepository
 
         if (!$count) {
             $qb
-//                ->orderBy('n.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
+                ->innerJoin('n.questions', 'q');
+            $qb->orderBy('q.subCourses');
+            $qb
+                ->addOrderBy('n.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
                 ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
                 ->setMaxResults($paramFetcher->get('count'));
         }
@@ -83,7 +85,7 @@ class NotesRepository extends EntityRepository
             $query = $qb->getQuery();
             $results = $query->getSingleScalarResult();
         } else {
-            $qb->orderBy('q.subCourses');
+
             $query = $qb->getQuery();
             $results = $query->getResult();
         }
