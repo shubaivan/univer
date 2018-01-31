@@ -18,9 +18,9 @@ class SubCoursesController extends AbstractRestController
     /**
      * Get sub course by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/sub_course/{id} <br>.
+     * http://host/api/sub_course/{id} <br>.
      *
-     * @Rest\Get("/api/admins/sub_course/{id}")
+     * @Rest\Get("/api/sub_course/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Get sub course by id",
@@ -51,9 +51,9 @@ class SubCoursesController extends AbstractRestController
     /**
      * Get list sub courses of study.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/sub_courses <br>.
+     * http://host/api/sub_courses <br>.
      *
-     * @Rest\Get("/api/admins/sub_courses")
+     * @Rest\Get("/api/sub_courses")
      * @ApiDoc(
      * resource = true,
      * description = "Get list courses of study",

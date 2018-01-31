@@ -18,9 +18,9 @@ class SemestersController extends AbstractRestController
     /**
      * Get semester by id.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/semester/{id} <br>.
+     * http://host/api/semester/{id} <br>.
      *
-     * @Rest\Get("/api/admins/semester/{id}")
+     * @Rest\Get("/api/semester/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Get semester by id",
@@ -51,9 +51,9 @@ class SemestersController extends AbstractRestController
     /**
      * Get list semesters.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/semesters <br>.
+     * http://host/api/semesters <br>.
      *
-     * @Rest\Get("/api/admins/semesters")
+     * @Rest\Get("/api/semesters")
      * @ApiDoc(
      * resource = true,
      * description = "Get list semesters",
