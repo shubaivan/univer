@@ -1,3 +1,8 @@
+imports:
+    - { resource: services/application.yml }
+    - { resource: services/domain.yml }
+    - { resource: services/repository.yml }
+
 parameters:
     app.jwt_authenticator.class: AppBundle\Security\Guard\JWTAuthenticator
     app.object_manager.class: AppBundle\Services\ObjectManager

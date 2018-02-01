@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,6 +68,26 @@ class Admin extends AbstractUser implements UserInterface
      * })
      */
     private $email;
+
+    /**
+     * @var ArrayCollection|Notes[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="admin", cascade={"persist"})
+     */
+    private $note;
+
+    /**
+     * @var ArrayCollection|Questions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Questions", mappedBy="admin", cascade={"persist"})
+     */
+    private $questions;
+
+    public function __construct()
+    {
+        $this->note = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+    }
 
     // --------------------------------implements methods--------------------------------------------------------------
 
@@ -222,5 +243,73 @@ class Admin extends AbstractUser implements UserInterface
     public function getSerializedRole()
     {
         return $this->getRoles();
+    }
+
+    /**
+     * Add note.
+     *
+     * @param \AppBundle\Entity\Notes $note
+     *
+     * @return Admin
+     */
+    public function addNote(\AppBundle\Entity\Notes $note)
+    {
+        $this->note[] = $note;
+
+        return $this;
+    }
+
+    /**
+     * Remove note.
+     *
+     * @param \AppBundle\Entity\Notes $note
+     */
+    public function removeNote(\AppBundle\Entity\Notes $note)
+    {
+        $this->note->removeElement($note);
+    }
+
+    /**
+     * Get note.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Add question.
+     *
+     * @param \AppBundle\Entity\Notes $question
+     *
+     * @return Admin
+     */
+    public function addQuestion(\AppBundle\Entity\Notes $question)
+    {
+        $this->questions[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question.
+     *
+     * @param \AppBundle\Entity\Notes $question
+     */
+    public function removeQuestion(\AppBundle\Entity\Notes $question)
+    {
+        $this->questions->removeElement($question);
+    }
+
+    /**
+     * Get questions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 }

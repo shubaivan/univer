@@ -10,7 +10,6 @@ use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -116,14 +115,15 @@ class QuestionsController extends AbstractRestController
     /**
      * Create/Put question by admin.
      * <strong>Simple example:</strong><br />
-     * http://host/api/admins/question <br>.
+     * http://host/api/question <br>.
      *
-     * @Rest\Post("/api/admins/question/{id}")
+     * @Rest\Post("/api/question")
      * @ApiDoc(
      * resource = true,
      * description = "Create/Put question by admin",
      * authentication=true,
      *  parameters={
+     *      {"name"="id", "dataType"="string", "required"=false, "description"="question id"},
      *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
      *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id"},
      *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
@@ -140,19 +140,18 @@ class QuestionsController extends AbstractRestController
      *      200 = "Returned when successful",
      *      400 = "Bad request"
      * },
-     * section="Admins Question"
+     * section="Question"
      * )
      *
      * @RestView()
      *
      * @param Request $request
-     * @param Questions|null $questions
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function postAdminQuestionsAction(Request $request, Questions $questions = null)
+    public function postAdminQuestionsAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
@@ -161,6 +160,11 @@ class QuestionsController extends AbstractRestController
             $auth = $this->get('app.auth');
             $serializerGroup = 'post_question';
             $persist = true;
+            $questions = null;
+            if ($request->get('id')) {
+                $questions = $em->getRepository('AppBundle\Entity\Questions')
+                    ->findOneBy(['id' => $request->get('id')]);
+            }
             if ($questions instanceof Questions) {
                 $request->request->set('id', $questions->getId());
                 $serializerGroup = 'put_question';
@@ -177,10 +181,10 @@ class QuestionsController extends AbstractRestController
                     FileUploader::LOCAL_STORAGE
                 );
 
-                $questions->setImageUrl($this->getParameter('kernel.root_dir').'/../web/files/' . $fileName);
+                $questions->setImageUrl($this->getParameter('kernel.root_dir').'/../web/files/'.$fileName);
             }
 
-            !$persist ? :$em->persist($questions);
+            !$persist ?: $em->persist($questions);
             $em->flush();
 
             return $this->createSuccessResponse($questions, ['get_question'], true);

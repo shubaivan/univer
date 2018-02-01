@@ -3,9 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +23,7 @@ class Notes
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "custom"
      * })
      */
     private $id;
@@ -67,7 +67,7 @@ class Notes
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "post_note", "put_note"
+     *     "get_note", "get_notes", "post_note", "put_note", "custom"
      * })
      * @Assert\NotBlank(groups={"post_note", "put_note"})
      * @Assert\Length(
@@ -163,7 +163,7 @@ class Notes
     }
 
     /**
-     * Set admin
+     * Set admin.
      *
      * @param \AppBundle\Entity\Admin $admin
      *
@@ -177,7 +177,7 @@ class Notes
     }
 
     /**
-     * Get admin
+     * Get admin.
      *
      * @return \AppBundle\Entity\Admin
      */

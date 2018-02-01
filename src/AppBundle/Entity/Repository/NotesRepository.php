@@ -12,6 +12,30 @@ use FOS\RestBundle\Request\ParamFetcher;
 class NotesRepository extends EntityRepository
 {
     /**
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function getEntitiesByIds(array $ids)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+                ->select('
+                    n.id,
+                    n.text
+                ')
+                ->from('AppBundle:Notes', 'n')
+                ->where($qb->expr()->in('n.id', $ids));
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
      *
@@ -85,7 +109,6 @@ class NotesRepository extends EntityRepository
             $query = $qb->getQuery();
             $results = $query->getSingleScalarResult();
         } else {
-
             $query = $qb->getQuery();
             $results = $query->getResult();
         }

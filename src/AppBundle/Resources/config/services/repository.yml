@@ -1,0 +1,19 @@
+parameters:
+    app.repository.sub_courses.class: AppBundle\Entity\Repository\SubCoursesRepository
+    app.entity.sub_courses.class: AppBundle\Entity\SubCourses
+
+    app.repository.notes.class: AppBundle\Entity\Repository\NotesRepository
+    app.entity.notes.class: AppBundle\Entity\Notes
+
+services:
+    app.repository.sub_courses:
+        class: "%app.repository.sub_courses.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.sub_courses.class%"
+
+    app.repository.notes:
+        class: "%app.repository.notes.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.notes.class%"

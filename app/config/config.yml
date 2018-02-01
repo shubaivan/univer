@@ -57,6 +57,12 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+        dql:
+            string_functions:
+                IF: AppBundle\Doctrine\ORM\Query\AST\Functions\IfFunction
+                IFNULL: AppBundle\Doctrine\ORM\Query\AST\Functions\IfNull
+                GROUP_CONCAT: AppBundle\Doctrine\ORM\Query\AST\Functions\GroupConcat
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'

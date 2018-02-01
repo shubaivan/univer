@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\SubCourses;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -83,19 +84,35 @@ class SubCoursesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminSubCourseAction(ParamFetcher $paramFetcher)
+    public function getAdminSubCourseAction(Request $request, ParamFetcher $paramFetcher)
     {
         try {
+            /** @var AbstractUser $authUser */
+            $authUser = $this->getUser();
+            if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
+                $request->query->set('user', $this->getUser()->getId());
+                $param = new Rest\QueryParam();
+                $param->name = 'user';
+                $paramFetcher->addParam($param);
+            }
             $em = $this->getDoctrine()->getManager();
-
-            $subCourses = $em->getRepository('AppBundle:SubCourses');
+            $r = $em->getRepository('AppBundle:SubCourses');
+            $subCoursesIds = $r->getEntitiesByParams($paramFetcher);
+            $result = [];
+            foreach ($subCoursesIds as $coursesId) {
+                $result[] = $coursesId['sub_courses_id'];
+            }
+            $subCourses = $r->getEntitiesByIds($result);
+            $return = [];
+            foreach ($subCourses as $subCours) {
+                $return[$subCours->getName()] = $subCours;
+            }
+//            $subCourses = $this->getSubCoursesApplication()
+//                ->getSubCoursesCollection($paramFetcher);
 
             return $this->createSuccessResponse(
-                [
-                    'sub_courses' => $subCourses->getEntitiesByParams($paramFetcher),
-                    'total' => $subCourses->getEntitiesByParams($paramFetcher, true),
-                ],
-                ['get_sub_courses'],
+                $return,
+                ['custom'],
                 true
             );
         } catch (\Exception $e) {
@@ -182,7 +199,7 @@ class SubCoursesController extends AbstractRestController
      *
      * @RestView()
      *
-     * @param Request $request
+     * @param Request    $request
      * @param SubCourses $subCourses
      *
      * @throws NotFoundHttpException when not exist

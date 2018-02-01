@@ -5,10 +5,10 @@ namespace AppBundle\Entity;
 use AppBundle\Entity\Enum\QuestionsTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
+use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -25,7 +25,7 @@ class Questions
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_note", "get_notes"
+     *     "get_question", "get_questions", "get_note", "get_notes", "custom"
      * })
      */
     private $id;
@@ -43,12 +43,21 @@ class Questions
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="questions")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question"
      * })
      */
     private $user;
+
+    /**
+     * @var Admin
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="questions")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
+     */
+    private $admin;
 
     /**
      * @var int
@@ -113,6 +122,9 @@ class Questions
      * @var ArrayCollection|Notes[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="questions", cascade={"persist"})
+     * @Annotation\Groups({
+     *     "custom"
+     * })
      */
     private $note;
 
@@ -263,7 +275,7 @@ class Questions
     {
         if (!in_array($type, QuestionsTypeEnum::getAvailableTypes(), true)) {
             throw new \InvalidArgumentException(
-                'Invalid type. Available type: ' . implode(',', QuestionsTypeEnum::getAvailableTypes())
+                'Invalid type. Available type: '.implode(',', QuestionsTypeEnum::getAvailableTypes())
             );
         }
 
@@ -635,5 +647,29 @@ class Questions
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set admin.
+     *
+     * @param \AppBundle\Entity\Admin $admin
+     *
+     * @return Questions
+     */
+    public function setAdmin(\AppBundle\Entity\Admin $admin = null)
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * Get admin.
+     *
+     * @return \AppBundle\Entity\Admin
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
     }
 }

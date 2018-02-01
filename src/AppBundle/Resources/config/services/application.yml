@@ -1,0 +1,8 @@
+parameters:
+    app.application.sub_courses_application.class: AppBundle\Application\SubCourses\SubCoursesApplication
+
+services:
+    app.application.sub_courses_application:
+        class: "%app.application.sub_courses_application.class%"
+        arguments:
+            - "@app.domain.ebooks_domain"

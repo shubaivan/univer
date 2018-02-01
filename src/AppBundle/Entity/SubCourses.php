@@ -42,7 +42,8 @@ class SubCourses
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
-     *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study"
+     *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
+     *     "custom"
      * })
      */
     private $name;
@@ -63,6 +64,9 @@ class SubCourses
      * @var ArrayCollection|Questions[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Questions", mappedBy="subCourses", cascade={"persist"})
+     * @Annotation\Groups({
+     *     "custom"
+     * })
      */
     private $questions;
 

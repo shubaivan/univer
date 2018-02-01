@@ -12,10 +12,31 @@ use FOS\RestBundle\Request\ParamFetcher;
 class SubCoursesRepository extends EntityRepository
 {
     /**
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function getEntitiesByIds(array $ids)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('s')
+            ->from('AppBundle:SubCourses', 's')
+            ->where($qb->expr()->in('s.id', $ids));
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
      *
-     * @return SubCourses[]|int
+     * @return int|SubCourses[]
      */
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
@@ -30,11 +51,18 @@ class SubCoursesRepository extends EntityRepository
                 ');
         } else {
             $qb
-                ->select('s');
+                ->select('
+                    s.id as sub_courses_id,
+                    s.name as sub_courses_name,
+                    GROUP_CONCAT(q.id SEPARATOR \',\') as question_id,                      
+                    GROUP_CONCAT(n.id SEPARATOR \',\') as note_ids                     
+                ');
         }
 
         $qb
-            ->from('AppBundle:SubCourses', 's');
+            ->from('AppBundle:SubCourses', 's')
+            ->innerJoin('s.questions', 'q')
+            ->innerJoin('q.note', 'n');
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
@@ -57,7 +85,13 @@ class SubCoursesRepository extends EntityRepository
         if ($paramFetcher->get('courses')) {
             $qb
                 ->andWhere($qb->expr()->eq('s.courses', $paramFetcher->get('courses')));
+        }
 
+        $params = $paramFetcher->getParams();
+
+        if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
+            $qb
+                ->andWhere($qb->expr()->eq('n.user', $paramFetcher->get('user')));
         }
 
         if (!$count) {
@@ -67,11 +101,13 @@ class SubCoursesRepository extends EntityRepository
                 ->setMaxResults($paramFetcher->get('count'));
         }
 
-        $query = $qb->getQuery();
-
         if ($count) {
+            $query = $qb->getQuery();
             $results = $query->getSingleScalarResult();
         } else {
+            $qb
+                ->groupBy('sub_courses_id');
+            $query = $qb->getQuery();
             $results = $query->getResult();
         }
 

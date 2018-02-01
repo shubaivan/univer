@@ -88,4 +88,12 @@ class AbstractRestController extends FOSRestController
             $groups
         );
     }
+
+    /**
+     * @return \AppBundle\Application\SubCourses\SubCoursesApplication|object
+     */
+    protected function getSubCoursesApplication()
+    {
+        return $this->get('app.application.sub_courses_application');
+    }
 }
