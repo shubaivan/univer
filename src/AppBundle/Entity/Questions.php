@@ -112,6 +112,14 @@ class Questions
     private $notes;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     */
+    private $text;
+
+    /**
      * @var ArrayCollection|Reports[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reports", mappedBy="questions", cascade={"persist"})
@@ -369,6 +377,26 @@ class Questions
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param $text
+     *
+     * @return Questions
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
     }
 
     /**
