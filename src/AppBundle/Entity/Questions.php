@@ -54,7 +54,7 @@ class Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="questions")
      * @Annotation\Groups({
-     *     "get_question", "get_questions"
+     *     "get_question", "get_questions", "post_question", "put_question"
      * })
      */
     private $admin;
@@ -130,6 +130,9 @@ class Questions
      * @var ArrayCollection|Notes[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="questions", cascade={"persist"})
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
      */
     private $note;
 
@@ -464,6 +467,20 @@ class Questions
     public function addNote(\AppBundle\Entity\Notes $note)
     {
         $this->note[] = $note;
+
+        return $this;
+    }
+
+    /**
+     * @param Notes[] $notes
+     * @return $this
+     */
+    public function setNoteCollection(array $notes)
+    {
+        $this->getNote()->clear();
+        foreach ($notes as $note) {
+            $this->addNote($note);
+        }
 
         return $this;
     }

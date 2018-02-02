@@ -101,8 +101,9 @@ class AbstractRestController extends FOSRestController
         return $this->get('app.application.sub_courses_application');
     }
 
-    protected function prepareAuthor(Request $request)
+    protected function prepareAuthor()
     {
+        $request = $this->get('request_stack')->getCurrentRequest();
         /** @var AbstractUser $authUser */
         $authUser = $this->getUser();
 

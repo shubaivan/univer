@@ -23,7 +23,7 @@ class Notes
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_question", "get_questions"
      * })
      */
     private $id;
@@ -67,7 +67,7 @@ class Notes
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "post_note", "put_note"
+     *     "get_note", "get_notes", "post_note", "put_note", "get_question", "get_questions"
      * })
      * @Assert\NotBlank(groups={"post_note", "put_note"})
      * @Assert\Length(
@@ -212,7 +212,7 @@ class Notes
      * @Annotation\VirtualProperty
      * @Annotation\Type("array")
      * @Annotation\SerializedName("author")
-     * @Annotation\Groups({"get_note", "get_notes"})
+     * @Annotation\Groups({"get_note", "get_notes", "get_question", "get_questions"})
      */
     public function getSerializedAuthor()
     {

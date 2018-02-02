@@ -8,8 +8,16 @@ parameters:
     app.object_manager.class: AppBundle\Services\ObjectManager
     app.authentication_success_handler.class: AppBundle\Security\AuthenticationSuccessHandler
     app.file_uploader.class: AppBundle\Helper\FileUploader
+    app.serialization_listener.class: AppBundle\Listener\SerializationListener
 
 services:
+    app.listener.serializationlistener:
+        class: "%app.serialization_listener.class%"
+        arguments:
+            - "@security.token_storage"
+            - "@app.repository.notes"
+        tags:
+            - {name: jms_serializer.event_subscriber}
 
     app.jwt_token_authenticator:
         parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator

@@ -151,7 +151,7 @@ class NotesController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            $this->prepareAuthor($request);
+            $this->prepareAuthor();
 
             /** @var Notes $notes */
             $notes = $auth->validateEntites('request', Notes::class, ['post_note']);
