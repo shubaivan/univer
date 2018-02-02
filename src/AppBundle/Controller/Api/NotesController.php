@@ -3,7 +3,9 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\AbstractUser;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\Notes;
+use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -152,9 +154,9 @@ class NotesController extends AbstractRestController
             /** @var AbstractUser $authUser */
             $authUser = $this->getUser();
 
-            if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
+            if ($authUser instanceof User) {
                 $request->request->set('user', $this->getUser()->getId());
-            } elseif ($authUser->hasRole(AbstractUser::ROLE_ADMIN)) {
+            } elseif ($authUser instanceof Admin) {
                 $request->request->set('admin', $this->getUser()->getId());
             } else {
                 throw new AccessDeniedException();

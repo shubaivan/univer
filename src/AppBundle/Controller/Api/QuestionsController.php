@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\AbstractUser;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\Questions;
+use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -14,6 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class QuestionsController extends AbstractRestController
 {
@@ -92,7 +96,7 @@ class QuestionsController extends AbstractRestController
     public function getAdminQuestionAction(ParamFetcher $paramFetcher)
     {
         try {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine();
 
             $questions = $em->getRepository('AppBundle:Questions');
 
@@ -125,7 +129,6 @@ class QuestionsController extends AbstractRestController
      *  parameters={
      *      {"name"="id", "dataType"="string", "required"=false, "description"="question id"},
      *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
-     *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id"},
      *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
      *      {"name"="type", "dataType"="enum", "required"=true, "description"="open or test"},
      *      {"name"="question_number", "dataType"="integer", "required"=false, "description"="question number"},
@@ -171,6 +174,18 @@ class QuestionsController extends AbstractRestController
                 $serializerGroup = 'put_question';
                 $persist = false;
             }
+
+            /** @var AbstractUser $authUser */
+            $authUser = $this->getUser();
+
+            if ($authUser instanceof User) {
+                $request->request->set('user', $this->getUser()->getId());
+            } elseif ($authUser instanceof Admin) {
+                $request->request->set('admin', $this->getUser()->getId());
+            } else {
+                throw new AccessDeniedException();
+            }
+
             /** @var Questions $questions */
             $questions = $auth->validateEntites('request', Questions::class, [$serializerGroup]);
 
@@ -182,7 +197,7 @@ class QuestionsController extends AbstractRestController
                     FileUploader::LOCAL_STORAGE
                 );
 
-                $questions->setImageUrl($this->getParameter('kernel.root_dir').'/../web/files/'.$fileName);
+                $questions->setImageUrl('/files/'.$fileName);
             }
 
             !$persist ?: $em->persist($questions);
