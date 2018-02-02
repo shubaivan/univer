@@ -2,10 +2,14 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\AbstractUser;
+use AppBundle\Entity\Admin;
+use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AbstractRestController extends FOSRestController
 {
@@ -95,5 +99,19 @@ class AbstractRestController extends FOSRestController
     protected function getSubCoursesApplication()
     {
         return $this->get('app.application.sub_courses_application');
+    }
+
+    protected function prepareAuthor(Request $request)
+    {
+        /** @var AbstractUser $authUser */
+        $authUser = $this->getUser();
+
+        if ($authUser instanceof User) {
+            $request->request->set('user', $this->getUser()->getId());
+        } elseif ($authUser instanceof Admin) {
+            $request->request->set('admin', $this->getUser()->getId());
+        } else {
+            throw new AccessDeniedException();
+        }
     }
 }

@@ -151,16 +151,7 @@ class NotesController extends AbstractRestController
         try {
             $auth = $this->get('app.auth');
 
-            /** @var AbstractUser $authUser */
-            $authUser = $this->getUser();
-
-            if ($authUser instanceof User) {
-                $request->request->set('user', $this->getUser()->getId());
-            } elseif ($authUser instanceof Admin) {
-                $request->request->set('admin', $this->getUser()->getId());
-            } else {
-                throw new AccessDeniedException();
-            }
+            $this->prepareAuthor($request);
 
             /** @var Notes $notes */
             $notes = $auth->validateEntites('request', Notes::class, ['post_note']);
