@@ -45,7 +45,7 @@ class Notes
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="note")
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "post_note", "put_note"
+     *     "post_note", "put_note"
      * })
      * @Annotation\Type("AppBundle\Entity\User")
      * @Evence\onSoftDelete(type="SET NULL")
@@ -57,7 +57,7 @@ class Notes
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="note")
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "post_note", "put_note"
+     *     "post_note", "put_note"
      * })
      * @Annotation\Type("AppBundle\Entity\Admin")
      * @Evence\onSoftDelete(type="SET NULL")
@@ -206,5 +206,24 @@ class Notes
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("array")
+     * @Annotation\SerializedName("author")
+     * @Annotation\Groups({"get_note", "get_notes"})
+     */
+    public function getSerializedAuthor()
+    {
+        $result = [];
+        if ($this->getUser()) {
+            $result['user']['id'] = $this->getUser()->getId();
+            $result['user']['name'] = $this->getUser()->getUsername();
+        } else if ($this->getAdmin()) {
+            $result['admin']['id'] = $this->getAdmin()->getId();
+            $result['admin']['name'] = $this->getAdmin()->getUsername();
+        }
+        return $result;
     }
 }
