@@ -39,7 +39,8 @@ class Semesters
      * @var string
      * @ORM\Column(type="string", length=255, options={"fixed" = true}, nullable=false)
      * @Annotation\Groups({
-     *     "get_semester", "get_semesters", "post_semester", "put_semester"
+     *     "get_semester", "get_semesters", "post_semester", "put_semester",
+     *     "get_questions", "get_question"
      * })
      * @Assert\NotBlank(groups={"post_semester", "put_semester"})
      * @Assert\Length(

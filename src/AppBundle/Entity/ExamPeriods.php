@@ -39,7 +39,8 @@ class ExamPeriods
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
-     *     "get_exam_period", "get_exam_periods", "post_exam_period", "put_exam_period"
+     *     "get_exam_period", "get_exam_periods", "post_exam_period", "put_exam_period",
+     *     "get_questions", "get_question"
      * })
      * @Assert\NotBlank(groups={"post_exam_period", "put_exam_period"})
      * @Assert\Length(

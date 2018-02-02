@@ -42,7 +42,8 @@ class SubCourses
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
-     *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study"
+     *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
+     *     "get_questions", "get_question"
      * })
      */
     private $name;
@@ -52,7 +53,8 @@ class SubCourses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses")
      * @Annotation\Groups({
-     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course"
+     *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
+     *     "get_questions", "get_question"
      * })
      * @Annotation\Type("AppBundle\Entity\Courses")
      * @Assert\NotBlank(groups={"post_sub_course", "put_sub_course"})

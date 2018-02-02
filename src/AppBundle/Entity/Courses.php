@@ -32,7 +32,7 @@ class Courses
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_course", "get_courses", "get_sub_course", "get_sub_courses",
-     *     "get_course_of_study", "get_courses_of_study"
+     *     "get_course_of_study", "get_courses_of_study", "get_questions", "get_question"
      * })
      */
     private $id;
@@ -42,7 +42,8 @@ class Courses
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
      *     "post_course", "put_course", "get_course", "get_courses",
-     *     "get_sub_course", "get_sub_courses", "get_course_of_study", "get_courses_of_study"
+     *     "get_sub_course", "get_sub_courses", "get_course_of_study", "get_courses_of_study",
+     *     "get_questions", "get_question"
      * })
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Assert\Length(
@@ -60,7 +61,7 @@ class Courses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="courses")
      * @Annotation\Groups({
-     *     "post_course", "put_course", "get_course", "get_courses"
+     *     "post_course", "put_course", "get_course", "get_courses", "get_questions", "get_question"
      * })
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\SerializedName("courses_of_study")
