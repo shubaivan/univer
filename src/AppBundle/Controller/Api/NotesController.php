@@ -89,32 +89,21 @@ class NotesController extends AbstractRestController
     public function getNoteAction(Request $request, ParamFetcher $paramFetcher)
     {
         try {
-            $em = $this->getDoctrine()->getManager();
-
-            $notes = $em->getRepository('AppBundle:Notes');
             /** @var AbstractUser $authUser */
             $authUser = $this->getUser();
-
             if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
                 $request->query->set('user', $this->getUser()->getId());
                 $param = new Rest\QueryParam();
                 $param->name = 'user';
                 $paramFetcher->addParam($param);
-            } elseif($authUser->hasRole(AbstractUser::ROLE_ADMIN)) {
-                $request->query->set('admin', $this->getUser()->getId());
-                $param = new Rest\QueryParam();
-                $param->name = 'admin';
-                $paramFetcher->addParam($param);
-            } else {
-                throw new AccessDeniedException();
             }
 
+            $subCourses = $this->getSubCoursesApplication()
+                ->getSubCoursesCollection($paramFetcher);
+
             return $this->createSuccessResponse(
-                [
-                    'notes' => $notes->getEntitiesByParams($paramFetcher),
-                    'total' => $notes->getEntitiesByParams($paramFetcher, true),
-                ],
-                ['get_notes'],
+                $subCourses,
+                ['get_sub_courses'],
                 true
             );
         } catch (\Exception $e) {

@@ -25,7 +25,7 @@ class Questions
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_note", "get_notes", "custom"
+     *     "get_question", "get_questions", "get_note", "get_notes"
      * })
      */
     private $id;
@@ -122,9 +122,6 @@ class Questions
      * @var ArrayCollection|Notes[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="questions", cascade={"persist"})
-     * @Annotation\Groups({
-     *     "custom"
-     * })
      */
     private $note;
 

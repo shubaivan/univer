@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity\Collections\Notes;
+namespace AppBundle\Entity\Collections\SubCourses;
 
 use AppBundle\Entity\Collections\AbstractCollectionsInterface;
 use JMS\Serializer\Annotation;
@@ -8,10 +8,10 @@ use JMS\Serializer\Annotation;
 class SubCoursesCollection implements AbstractCollectionsInterface
 {
     /**
-     * @var array|NotesCollection[]
+     * @var array|SubCourseCollection[]
      * @Annotation\Groups({"get_sub_courses"})
      */
-    private $collection = [];
+    private $subCourses = [];
 
     /**
      * @var []
@@ -29,16 +29,17 @@ class SubCoursesCollection implements AbstractCollectionsInterface
     {
         $this->total = $total;
         foreach ($values as $value) {
-            $this->collection[$value['sub_courses_name']] = new NotesCollection($value);
+            $t = $value;
+            $this->subCourses[$value['sub_courses_name']] = new SubCourseCollection($value);
         }
     }
 
     /**
-     * @return array|NotesCollection[]
+     * @return array|SubCourseCollection[]
      */
     public function getCollection()
     {
-        return $this->collection;
+        return $this->subCourses;
     }
 
     /**

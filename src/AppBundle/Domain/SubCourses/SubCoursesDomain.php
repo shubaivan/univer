@@ -3,6 +3,7 @@
 namespace AppBundle\Domain\SubCourses;
 
 use AppBundle\Entity\Repository\NotesRepository;
+use AppBundle\Entity\Repository\QuestionsRepository;
 use AppBundle\Entity\Repository\SubCoursesRepository;
 use FOS\RestBundle\Request\ParamFetcher;
 
@@ -19,16 +20,25 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     private $notesRepository;
 
     /**
+     * @var QuestionsRepository
+     */
+    private $questionsRepository;
+
+    /**
      * SubCoursesDomain constructor.
      *
      * @param SubCoursesRepository $subCoursesRepository
+     * @param NotesRepository      $notesRepository
+     * @param QuestionsRepository  $questionsRepository
      */
     public function __construct(
         SubCoursesRepository $subCoursesRepository,
-        NotesRepository $notesRepository
+        NotesRepository $notesRepository,
+        QuestionsRepository $questionsRepository
     ) {
         $this->subCoursesRepository = $subCoursesRepository;
         $this->notesRepository = $notesRepository;
+        $this->questionsRepository = $questionsRepository;
     }
 
     /**
@@ -41,11 +51,31 @@ class SubCoursesDomain implements SubCoursesDomainInterface
 
         foreach ($subCourses as $key => $subCours) {
             $subCourses[$subCours['sub_courses_name']] = $subCourses[$key];
-            $ids = explode(',', $subCours['note_ids']);
-            $notes = $this->getNotesRepository()
+            $ids = [];
+            if ($subCours['question_ids']) {
+                $ids = array_unique(explode(',', $subCours['question_ids']));
+            }
+            $questions = $this->getQuestionsRepository()
                     ->getEntitiesByIds($ids);
-            $subCourses[$subCours['sub_courses_name']]['notes'] = $notes;
-            unset($subCourses[$key]);
+
+            foreach ($questions as $keyQuestion => $question) {
+                $noteIds = [];
+                if ($question['note_ids']) {
+                    $noteIds = array_unique(explode(',', $question['note_ids']));
+                }
+                $params = $paramFetcher->getParams();
+                $author = null;
+                if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
+                    $author = $paramFetcher->get('user');
+                }
+                $notes = $this->getNotesRepository()
+                    ->getEntitiesByIds($noteIds, $author);
+
+                $questions[$keyQuestion]['notes'] = $notes;
+                unset($questions[$keyQuestion]['note_ids']);
+            }
+            $subCourses[$subCours['sub_courses_name']]['questions'] = $questions;
+            unset($subCourses[$subCours['sub_courses_name']]['question_ids'], $subCourses[$key]);
         }
 
         return $subCourses;
@@ -74,5 +104,13 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     private function getNotesRepository()
     {
         return $this->notesRepository;
+    }
+
+    /**
+     * @return QuestionsRepository
+     */
+    private function getQuestionsRepository()
+    {
+        return $this->questionsRepository;
     }
 }

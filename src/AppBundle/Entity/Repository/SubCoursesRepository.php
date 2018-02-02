@@ -18,6 +18,9 @@ class SubCoursesRepository extends EntityRepository
      */
     public function getEntitiesByIds(array $ids)
     {
+        if (!$ids) {
+            return [];
+        }
         $em = $this->getEntityManager();
 
         $qb = $em->createQueryBuilder();
@@ -54,15 +57,14 @@ class SubCoursesRepository extends EntityRepository
                 ->select('
                     s.id as sub_courses_id,
                     s.name as sub_courses_name,
-                    GROUP_CONCAT(q.id SEPARATOR \',\') as question_id,                      
-                    GROUP_CONCAT(n.id SEPARATOR \',\') as note_ids                     
+                    GROUP_CONCAT(q.id SEPARATOR \',\') as question_ids                  
                 ');
         }
 
         $qb
             ->from('AppBundle:SubCourses', 's')
-            ->innerJoin('s.questions', 'q')
-            ->innerJoin('q.note', 'n');
+            ->leftJoin('s.questions', 'q')
+            ->leftJoin('q.note', 'n');
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();

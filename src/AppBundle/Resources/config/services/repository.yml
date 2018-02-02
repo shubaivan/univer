@@ -5,6 +5,9 @@ parameters:
     app.repository.notes.class: AppBundle\Entity\Repository\NotesRepository
     app.entity.notes.class: AppBundle\Entity\Notes
 
+    app.repository.questions.class: AppBundle\Entity\Repository\QuestionsRepository
+    app.entity.questions.class: AppBundle\Entity\Questions
+
 services:
     app.repository.sub_courses:
         class: "%app.repository.sub_courses.class%"
@@ -17,3 +20,9 @@ services:
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
             - "%app.entity.notes.class%"
+
+    app.repository.questions:
+        class: "%app.repository.questions.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.questions.class%"

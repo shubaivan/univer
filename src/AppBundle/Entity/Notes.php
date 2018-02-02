@@ -23,7 +23,7 @@ class Notes
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "custom"
+     *     "get_note", "get_notes"
      * })
      */
     private $id;
@@ -67,7 +67,7 @@ class Notes
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_note", "get_notes", "post_note", "put_note", "custom"
+     *     "get_note", "get_notes", "post_note", "put_note"
      * })
      * @Assert\NotBlank(groups={"post_note", "put_note"})
      * @Assert\Length(

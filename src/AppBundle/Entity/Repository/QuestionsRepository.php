@@ -12,10 +12,45 @@ use FOS\RestBundle\Request\ParamFetcher;
 class QuestionsRepository extends EntityRepository
 {
     /**
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function getEntitiesByIds(array $ids)
+    {
+        if (!$ids) {
+            return [];
+        }
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('
+                q.id,
+                q.customId,
+                q.year,
+                q.type,
+                q.questionNumber,
+                q.imageUrl,
+                q.notes as notes_text,                
+                GROUP_CONCAT(n.id SEPARATOR \',\') as note_ids
+            ')
+            ->from('AppBundle:Questions', 'q')
+            ->leftJoin('q.note', 'n')
+            ->where($qb->expr()->in('q.id', $ids))
+            ->groupBy('q.id');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
      *
-     * @return Questions[]|int
+     * @return int|Questions[]
      */
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
@@ -57,31 +92,26 @@ class QuestionsRepository extends EntityRepository
         if ($paramFetcher->get('user')) {
             $qb
                 ->andWhere($qb->expr()->eq('q.user', $paramFetcher->get('user')));
-
         }
 
         if ($paramFetcher->get('semesters')) {
             $qb
                 ->andWhere($qb->expr()->eq('q.semesters', $paramFetcher->get('semesters')));
-
         }
 
         if ($paramFetcher->get('exam_periods')) {
             $qb
                 ->andWhere($qb->expr()->eq('q.examPeriods', $paramFetcher->get('exam_periods')));
-
         }
 
         if ($paramFetcher->get('sub_courses')) {
             $qb
                 ->andWhere($qb->expr()->eq('q.subCourses', $paramFetcher->get('sub_courses')));
-
         }
 
         if ($paramFetcher->get('lectors')) {
             $qb
                 ->andWhere($qb->expr()->eq('q.lectors', $paramFetcher->get('lectors')));
-
         }
 
         if (!$count) {

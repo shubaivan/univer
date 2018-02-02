@@ -84,35 +84,19 @@ class SubCoursesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminSubCourseAction(Request $request, ParamFetcher $paramFetcher)
+    public function getAdminSubCourseAction(ParamFetcher $paramFetcher)
     {
         try {
-            /** @var AbstractUser $authUser */
-            $authUser = $this->getUser();
-            if ($authUser->hasRole(AbstractUser::ROLE_USER)) {
-                $request->query->set('user', $this->getUser()->getId());
-                $param = new Rest\QueryParam();
-                $param->name = 'user';
-                $paramFetcher->addParam($param);
-            }
             $em = $this->getDoctrine()->getManager();
-            $r = $em->getRepository('AppBundle:SubCourses');
-            $subCoursesIds = $r->getEntitiesByParams($paramFetcher);
-            $result = [];
-            foreach ($subCoursesIds as $coursesId) {
-                $result[] = $coursesId['sub_courses_id'];
-            }
-            $subCourses = $r->getEntitiesByIds($result);
-            $return = [];
-            foreach ($subCourses as $subCours) {
-                $return[$subCours->getName()] = $subCours;
-            }
-//            $subCourses = $this->getSubCoursesApplication()
-//                ->getSubCoursesCollection($paramFetcher);
+
+            $subCourses = $em->getRepository('AppBundle:SubCourses');
 
             return $this->createSuccessResponse(
-                $return,
-                ['custom'],
+                [
+                    'sub_courses' => $subCourses->getEntitiesByParams($paramFetcher),
+                    'total' => $subCourses->getEntitiesByParams($paramFetcher, true),
+                ],
+                ['get_sub_courses'],
                 true
             );
         } catch (\Exception $e) {
@@ -122,6 +106,7 @@ class SubCoursesController extends AbstractRestController
 
         return $this->handleView($view);
     }
+
 
     /**
      * Create sub course by admin.

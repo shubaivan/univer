@@ -3,7 +3,7 @@
 namespace AppBundle\Application\SubCourses;
 
 use AppBundle\Domain\SubCourses\SubCoursesDomainInterface;
-use AppBundle\Entity\Collections\Notes\SubCoursesCollection;
+use AppBundle\Entity\Collections\SubCourses\SubCoursesCollection;
 use FOS\RestBundle\Request\ParamFetcher;
 
 class SubCoursesApplication implements SubCoursesApplicationInterface

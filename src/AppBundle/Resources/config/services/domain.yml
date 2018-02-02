@@ -7,3 +7,4 @@ services:
          arguments:
              - "@app.repository.sub_courses"
              - "@app.repository.notes"
+             - "@app.repository.questions"
