@@ -43,6 +43,7 @@ class SubCoursesRepository extends EntityRepository
      */
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
+        $params = $paramFetcher->getParams();
         $em = $this->getEntityManager();
 
         $qb = $em->createQueryBuilder();
@@ -84,12 +85,10 @@ class SubCoursesRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-        if ($paramFetcher->get('courses')) {
+        if (array_key_exists('courses', $params) && $paramFetcher->get('courses')) {
             $qb
                 ->andWhere($qb->expr()->eq('s.courses', $paramFetcher->get('courses')));
         }
-
-        $params = $paramFetcher->getParams();
 
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
