@@ -64,8 +64,8 @@ class SubCoursesRepository extends EntityRepository
 
         $qb
             ->from('AppBundle:SubCourses', 's')
-            ->leftJoin('s.questions', 'q')
-            ->leftJoin('q.note', 'n');
+            ->innerJoin('s.questions', 'q')
+            ->innerJoin('q.note', 'n');
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();

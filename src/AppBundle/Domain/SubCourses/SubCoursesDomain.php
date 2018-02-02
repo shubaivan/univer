@@ -50,7 +50,6 @@ class SubCoursesDomain implements SubCoursesDomainInterface
             ->getEntitiesByParams($paramFetcher);
 
         foreach ($subCourses as $key => $subCours) {
-            $subCourses[$subCours['sub_courses_name']] = $subCourses[$key];
             $ids = [];
             if ($subCours['question_ids']) {
                 $ids = array_unique(explode(',', $subCours['question_ids']));
@@ -70,10 +69,19 @@ class SubCoursesDomain implements SubCoursesDomainInterface
                 }
                 $notes = $this->getNotesRepository()
                     ->getEntitiesByIds($noteIds, $author);
-
+                if (!$notes) {
+                    unset($questions[$keyQuestion]);
+                    continue;
+                }
                 $questions[$keyQuestion]['notes'] = $notes;
                 unset($questions[$keyQuestion]['note_ids']);
             }
+            if (!$questions) {
+                unset($subCourses[$key]);
+                continue;
+            }
+
+            $subCourses[$subCours['sub_courses_name']] = $subCourses[$key];
             $subCourses[$subCours['sub_courses_name']]['questions'] = $questions;
             unset($subCourses[$subCours['sub_courses_name']]['question_ids'], $subCourses[$key]);
         }
