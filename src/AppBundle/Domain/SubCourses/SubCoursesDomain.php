@@ -47,7 +47,7 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     public function getSubCourses(ParamFetcher $paramFetcher)
     {
         $subCourses = $this->getSubCoursesRepository()
-            ->getEntitiesByParams($paramFetcher);
+            ->getEntitiesByParamsRelation($paramFetcher);
 
         foreach ($subCourses as $key => $subCours) {
             $ids = [];

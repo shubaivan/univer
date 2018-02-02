@@ -41,7 +41,7 @@ class SubCoursesRepository extends EntityRepository
      *
      * @return int|SubCourses[]
      */
-    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
+    public function getEntitiesByParamsRelation(ParamFetcher $paramFetcher, $count = false)
     {
         $params = $paramFetcher->getParams();
         $em = $this->getEntityManager();
@@ -108,6 +108,80 @@ class SubCoursesRepository extends EntityRepository
         } else {
             $qb
                 ->groupBy('sub_courses_id');
+            $query = $qb->getQuery();
+            $results = $query->getResult();
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param ParamFetcher $paramFetcher
+     * @param bool         $count
+     *
+     * @return int|SubCourses[]
+     */
+    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
+    {
+        $params = $paramFetcher->getParams();
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        if ($count) {
+            $qb
+                ->select('
+                    COUNT(DISTINCT s.id)
+                ');
+        } else {
+            $qb
+                ->select('
+                    s                  
+                ');
+        }
+
+        $qb
+            ->from('AppBundle:SubCourses', 's');
+
+        if ($paramFetcher->get('search')) {
+            $andXSearch = $qb->expr()->andX();
+
+            foreach (explode(' ', $paramFetcher->get('search')) as $key => $word) {
+                if (!$word) {
+                    continue;
+                }
+
+                $orx = $qb->expr()->orX();
+                $orx
+                    ->add($qb->expr()->like('s.name', $qb->expr()->literal('%'.$word.'%')));
+
+                $andXSearch->add($orx);
+            }
+
+            $qb->andWhere($andXSearch);
+        }
+
+        if (array_key_exists('courses', $params) && $paramFetcher->get('courses')) {
+            $qb
+                ->andWhere($qb->expr()->eq('s.courses', $paramFetcher->get('courses')));
+        }
+
+        if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
+            $qb
+                ->andWhere($qb->expr()->eq('n.user', $paramFetcher->get('user')));
+        }
+
+        if (!$count) {
+            $qb
+                ->orderBy('s.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
+                ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
+                ->setMaxResults($paramFetcher->get('count'));
+        }
+
+        if ($count) {
+            $query = $qb->getQuery();
+            $results = $query->getSingleScalarResult();
+        } else {
             $query = $qb->getQuery();
             $results = $query->getResult();
         }
