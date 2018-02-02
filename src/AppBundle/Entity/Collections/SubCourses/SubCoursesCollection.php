@@ -29,7 +29,6 @@ class SubCoursesCollection implements AbstractCollectionsInterface
     {
         $this->total = $total;
         foreach ($values as $value) {
-            $t = $value;
             $this->subCourses[$value['sub_courses_name']] = new SubCourseCollection($value);
         }
     }

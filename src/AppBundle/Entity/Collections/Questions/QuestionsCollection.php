@@ -57,6 +57,13 @@ class QuestionsCollection
     private $notesText;
 
     /**
+     * @var string
+     * @Annotation\Groups({"get_sub_courses"})
+     * @Annotation\Type("string")
+     */
+    private $text;
+
+    /**
      * @var array|NotesDTO[]
      * @Annotation\Groups({"get_sub_courses"})
      */
@@ -76,6 +83,7 @@ class QuestionsCollection
         $this->questionNumber = $values['questionNumber'];
         $this->imageUrl = $values['imageUrl'];
         $this->notesText = $values['notes_text'];
+        $this->text = $values['text'];
 
         foreach ($values['notes'] as $value) {
             $this->notes[] = new NotesDTO($value);

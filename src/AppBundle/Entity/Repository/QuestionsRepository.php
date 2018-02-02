@@ -33,7 +33,8 @@ class QuestionsRepository extends EntityRepository
                 q.type,
                 q.questionNumber,
                 q.imageUrl,
-                q.notes as notes_text,                
+                q.notes as notes_text,
+                q.text as text,                
                 GROUP_CONCAT(n.id SEPARATOR \',\') as note_ids
             ')
             ->from('AppBundle:Questions', 'q')
