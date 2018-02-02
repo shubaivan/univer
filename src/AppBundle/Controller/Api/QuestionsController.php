@@ -130,6 +130,7 @@ class QuestionsController extends AbstractRestController
      *      {"name"="type", "dataType"="enum", "required"=true, "description"="open or test"},
      *      {"name"="question_number", "dataType"="integer", "required"=false, "description"="question number"},
      *      {"name"="notes", "dataType"="text", "required"=false, "description"="notes"},
+     *      {"name"="text", "dataType"="text", "required"=true, "description"="notes"},
      *      {"name"="semesters", "dataType"="integer", "required"=true, "description"="semesters id"},
      *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
      *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
