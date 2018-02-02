@@ -83,6 +83,28 @@ class ObjectManager
                     )
                 );
             }
+
+            if ($paramRequest->request->get('admin')) {
+                $authData = $this->getSerializer()
+                    ->serialize(['admin' => $paramRequest->request->get('admin')], 'json');
+                $dataJson = json_encode(
+                    array_merge(
+                        (array) json_decode($authData),
+                        (array) json_decode($dataJson)
+                    )
+                );
+            }
+
+            if ($paramRequest->request->get('user')) {
+                $authData = $this->getSerializer()
+                    ->serialize(['user' => $paramRequest->request->get('user')], 'json');
+                $dataJson = json_encode(
+                    array_merge(
+                        (array) json_decode($authData),
+                        (array) json_decode($dataJson)
+                    )
+                );
+            }
             $serializedData = $dataJson;
         } else {
             $data = $this->requestStack->getCurrentRequest()->$requestType->all();
