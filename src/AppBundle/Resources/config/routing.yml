@@ -58,3 +58,8 @@ api_notes:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/NotesController.php"
+
+api_favorites:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/FavoritesController.php"

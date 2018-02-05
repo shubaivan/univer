@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints\ConditionAuthor;
 use Doctrine\ORM\Mapping as ORM;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="notes")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\NotesRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionAuthor(groups={"post_note", "put_note"})
  */
 class Notes
 {

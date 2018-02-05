@@ -18,12 +18,26 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SerializationListener implements EventSubscriberInterface
 {
+    /**
+     * @var TokenStorageInterface
+     */
     private $tokenStorage;
 
+    /**
+     * @var User
+     */
     private $user;
 
+    /**
+     * @var NotesRepository
+     */
     private $notesRepository;
 
+    /**
+     * SerializationListener constructor.
+     * @param TokenStorageInterface $tokenStorage
+     * @param NotesRepository $notesRepository
+     */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         NotesRepository $notesRepository

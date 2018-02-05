@@ -74,36 +74,15 @@ class ObjectManager
             $dataJson = $paramRequest->getContent();
 
             if ($paramRequest->request->get('id')) {
-                $authData = $this->getSerializer()
-                    ->serialize(['id' => $paramRequest->request->get('id')], 'json');
-                $dataJson = json_encode(
-                    array_merge(
-                        (array) json_decode($authData),
-                        (array) json_decode($dataJson)
-                    )
-                );
+                $dataJson = $this->mergeData('id', $dataJson);
             }
 
             if ($paramRequest->request->get('admin')) {
-                $authData = $this->getSerializer()
-                    ->serialize(['admin' => $paramRequest->request->get('admin')], 'json');
-                $dataJson = json_encode(
-                    array_merge(
-                        (array) json_decode($authData),
-                        (array) json_decode($dataJson)
-                    )
-                );
+                $dataJson = $this->mergeData('admin', $dataJson);
             }
 
             if ($paramRequest->request->get('user')) {
-                $authData = $this->getSerializer()
-                    ->serialize(['user' => $paramRequest->request->get('user')], 'json');
-                $dataJson = json_encode(
-                    array_merge(
-                        (array) json_decode($authData),
-                        (array) json_decode($dataJson)
-                    )
-                );
+                $dataJson = $this->mergeData('user', $dataJson);
             }
             $serializedData = $dataJson;
         } else {
@@ -130,6 +109,29 @@ class ObjectManager
         $this->validateEntity($dataValidate, $validateGroups);
 
         return $dataValidate;
+    }
+
+    /**
+     * @param $data
+     * @param $dataJson
+     * @return string
+     */
+    private function mergeData($data, $dataJson)
+    {
+        $authData = $this->getSerializer()
+            ->serialize(
+                [
+                    $data => $this->requestStack
+                        ->getCurrentRequest()->request->get($data)
+                ],
+                'json'
+            );
+        return json_encode(
+            array_merge(
+                (array) json_decode($authData),
+                (array) json_decode($dataJson)
+            )
+        );
     }
 
     /**

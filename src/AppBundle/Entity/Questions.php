@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Enum\QuestionsTypeEnum;
+use AppBundle\Validator\Constraints\ConditionAuthor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="questions")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\QuestionsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionAuthor(groups={"post_question", "put_question"})
  */
 class Questions
 {
@@ -25,7 +27,8 @@ class Questions
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_note", "get_notes"
+     *     "get_question", "get_questions", "get_note", "get_notes",
+     *     "get_favorite", "get_favorites"
      * })
      */
     private $id;
@@ -139,7 +142,7 @@ class Questions
     /**
      * @var ArrayCollection|Favorites[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="questions", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="questions", cascade={"persist", "remove"})
      */
     private $favorites;
 
@@ -506,7 +509,6 @@ class Questions
         if (!$this->note) {
             return $this->note = new ArrayCollection();
         }
-
         return $this->note;
     }
 

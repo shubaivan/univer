@@ -74,7 +74,7 @@ class QuestionsController extends AbstractRestController
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search field")
+     * @Rest\QueryParam(name="search", description="search fields - text, notes")
      * @Rest\QueryParam(name="user", requirements="\d+", description="user id")
      * @Rest\QueryParam(name="semesters", requirements="\d+", description="semesters id")
      * @Rest\QueryParam(name="exam_periods", requirements="\d+", description="exam_periods id")
@@ -173,7 +173,7 @@ class QuestionsController extends AbstractRestController
                 $persist = false;
             }
 
-            $this->prepareAuthor($request);
+            $this->prepareAuthor();
 
             /** @var Questions $questions */
             $questions = $auth->validateEntites('request', Questions::class, [$serializerGroup]);

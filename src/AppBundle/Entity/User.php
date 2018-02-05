@@ -35,7 +35,8 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *      "profile", "get_question", "get_questions", "get_notes"
+     *      "profile", "get_question", "get_questions", "get_notes",
+     *     "get_favorite", "get_favorites"
      * })
      */
     private $id;
@@ -168,7 +169,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @var ArrayCollection|Favorites[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="user", cascade={"persist", "remove"})
      */
     private $favorites;
 

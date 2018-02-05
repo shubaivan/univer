@@ -82,7 +82,8 @@ class QuestionsRepository extends EntityRepository
 
                 $orx = $qb->expr()->orX();
                 $orx
-                    ->add($qb->expr()->like('q.notes', $qb->expr()->literal('%'.$word.'%')));
+                    ->add($qb->expr()->like('q.notes', $qb->expr()->literal('%'.$word.'%')))
+                    ->add($qb->expr()->like('q.text', $qb->expr()->literal('%'.$word.'%')));
 
                 $andXSearch->add($orx);
             }
