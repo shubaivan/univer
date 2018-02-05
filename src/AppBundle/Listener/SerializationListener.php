@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Questions;
 
 use AppBundle\Entity\Repository\NotesRepository;
@@ -12,6 +13,9 @@ use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
+use Symfony\Component\Validator\Exception\ValidatorException;
+
 
 /**
  * Add data after serialization
@@ -40,21 +44,28 @@ class SerializationListener implements EventSubscriberInterface
     {
         return array(
             array(
-                'event' => 'serializer.post_serialize',
-                'class' => Questions::class,
-                'method' => 'onPostSerialize'
-            ),
-            array(
                 'event' => 'serializer.pre_serialize',
                 'class' => Questions::class,
                 'method' => 'onPreSerialize'
             ),
+            array(
+                'event' => 'serializer.post_deserialize',
+                'class' => User::class,
+                'method' => 'onPostDeserialize'
+            ),
         );
     }
 
-    public function onPostSerialize(ObjectEvent $event)
+    public function onPostDeserialize(ObjectEvent $event)
     {
+        /** @var User $user */
+        $user = $event->getObject();
 
+        $user->getUserRoles()->filter(function ($entry) {
+            if ($entry->getName() == AbstractUser::ROLE_ADMIN) {
+                throw new ValidatorException('forbidden role for user');
+            }
+        });
     }
 
     public function onPreSerialize(PreSerializeEvent $event)
