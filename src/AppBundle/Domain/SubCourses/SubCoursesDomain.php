@@ -95,7 +95,7 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     public function getSubCoursesCount(ParamFetcher $paramFetcher)
     {
         return $this->getSubCoursesRepository()
-            ->getEntitiesByParams($paramFetcher, true);
+            ->getEntitiesByParamsRelation($paramFetcher, true);
     }
 
     /**
