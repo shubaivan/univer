@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Favorites;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
@@ -90,6 +89,7 @@ class FavoritesController extends AbstractRestController
             $em = $this->getDoctrine()->getManager();
 
             $favorites = $em->getRepository('AppBundle:Favorites');
+            $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
 
             return $this->createSuccessResponse(
                 [
@@ -183,7 +183,7 @@ class FavoritesController extends AbstractRestController
      *
      * @RestView()
      *
-     * @param Request $request
+     * @param Request   $request
      * @param Favorites $favorites
      *
      * @throws NotFoundHttpException when not exist

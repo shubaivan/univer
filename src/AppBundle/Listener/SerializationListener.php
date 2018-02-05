@@ -35,8 +35,9 @@ class SerializationListener implements EventSubscriberInterface
 
     /**
      * SerializationListener constructor.
+     *
      * @param TokenStorageInterface $tokenStorage
-     * @param NotesRepository $notesRepository
+     * @param NotesRepository       $notesRepository
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,

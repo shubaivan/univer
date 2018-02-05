@@ -509,6 +509,7 @@ class Questions
         if (!$this->note) {
             return $this->note = new ArrayCollection();
         }
+
         return $this->note;
     }
 

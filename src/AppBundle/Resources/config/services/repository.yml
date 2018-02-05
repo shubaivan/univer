@@ -8,7 +8,16 @@ parameters:
     app.repository.questions.class: AppBundle\Entity\Repository\QuestionsRepository
     app.entity.questions.class: AppBundle\Entity\Questions
 
+    app.repository.favorites.class: AppBundle\Entity\Repository\FavoritesRepository
+    app.entity.favorites.class: AppBundle\Entity\Favorites
+
 services:
+    app.repository.favorites:
+        class: "%app.repository.favorites.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.favorites.class%"
+
     app.repository.sub_courses:
         class: "%app.repository.sub_courses.class%"
         factory: ["@doctrine.orm.default_entity_manager", getRepository]

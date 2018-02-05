@@ -114,6 +114,7 @@ class ObjectManager
     /**
      * @param $data
      * @param $dataJson
+     *
      * @return string
      */
     private function mergeData($data, $dataJson)
@@ -122,10 +123,11 @@ class ObjectManager
             ->serialize(
                 [
                     $data => $this->requestStack
-                        ->getCurrentRequest()->request->get($data)
+                        ->getCurrentRequest()->request->get($data),
                 ],
                 'json'
             );
+
         return json_encode(
             array_merge(
                 (array) json_decode($authData),

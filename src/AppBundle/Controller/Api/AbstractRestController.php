@@ -5,7 +5,9 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\User;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,5 +116,26 @@ class AbstractRestController extends FOSRestController
         } else {
             throw new AccessDeniedException();
         }
+    }
+
+    /**
+     * @param ParamFetcher $paramFetcher
+     *
+     * @return ParamFetcher
+     */
+    protected function responsePrepareAuthor(ParamFetcher $paramFetcher)
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        /** @var AbstractUser $authUser */
+        $authUser = $this->getUser();
+
+        if ($authUser instanceof User) {
+            $request->query->set('user', $this->getUser()->getId());
+            $param = new QueryParam();
+            $param->name = 'user';
+            $paramFetcher->addParam($param);
+        }
+
+        return $paramFetcher;
     }
 }

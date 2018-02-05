@@ -15,10 +15,12 @@ class FavoritesRepository extends EntityRepository
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
      *
-     * @return int|Favorites[]
+     * @return Favorites[]|int
      */
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
+        $params = $paramFetcher->getParams();
+
         $em = $this->getEntityManager();
 
         $qb = $em->createQueryBuilder();
@@ -60,6 +62,11 @@ class FavoritesRepository extends EntityRepository
             }
 
             $qb->andWhere($andXSearch);
+        }
+
+        if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
+            $qb
+                ->andWhere($qb->expr()->eq('f.user', $paramFetcher->get('user')));
         }
 
         if (!$count) {
