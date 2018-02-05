@@ -4,10 +4,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

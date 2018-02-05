@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
@@ -17,7 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class QuestionsController extends AbstractRestController
 {

@@ -3,8 +3,8 @@
 namespace AppBundle\Helper;
 
 use Gaufrette\Adapter;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gaufrette\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
@@ -13,34 +13,33 @@ class FileUploader
     /**
      * @var array
      */
-    private static $allowedMimeTypes = array(
+    private static $allowedMimeTypes = [
         'image/jpeg',
         'image/png',
-        'image/gif'
-    );
+        'image/gif',
+    ];
 
     /**
      * @var array
      */
     private $filesystem;
 
-
     /**
      * FileUploader constructor.
+     *
      * @param Filesystem $localStorage
      */
     public function __construct(
         Filesystem $localStorage
     ) {
         $this->filesystem[self::LOCAL_STORAGE] = $localStorage;
-
-
     }
 
     /**
      * @param UploadedFile $file
      * @param $target
      * @param null $allowedMimeTypesArray
+     *
      * @return mixed
      */
     public function upload(
@@ -52,7 +51,7 @@ class FileUploader
             $allowedMimeTypesArray = self::$allowedMimeTypes;
         }
         // Check if the file's mime type is in the list of allowed mime types.
-        if (!in_array($file->getClientMimeType(), $allowedMimeTypesArray)) {
+        if (!in_array($file->getClientMimeType(), $allowedMimeTypesArray, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Files of type %s are not allowed.',
@@ -79,6 +78,7 @@ class FileUploader
     /**
      * @param $path
      * @param $target
+     *
      * @return bool|string
      */
     public function read(

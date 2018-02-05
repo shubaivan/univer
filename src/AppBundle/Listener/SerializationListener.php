@@ -4,21 +4,17 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Questions;
-
 use AppBundle\Entity\Repository\NotesRepository;
+use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManager;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
-
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
-
 /**
- * Add data after serialization
+ * Add data after serialization.
  */
 class SerializationListener implements EventSubscriberInterface
 {
@@ -38,22 +34,22 @@ class SerializationListener implements EventSubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    static public function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.pre_serialize',
                 'class' => Questions::class,
-                'method' => 'onPreSerialize'
-            ),
-            array(
+                'method' => 'onPreSerialize',
+            ],
+            [
                 'event' => 'serializer.post_deserialize',
                 'class' => User::class,
-                'method' => 'onPostDeserialize'
-            ),
-        );
+                'method' => 'onPostDeserialize',
+            ],
+        ];
     }
 
     public function onPostDeserialize(ObjectEvent $event)
@@ -62,7 +58,8 @@ class SerializationListener implements EventSubscriberInterface
         $user = $event->getObject();
 
         $user->getUserRoles()->filter(function ($entry) {
-            if ($entry->getName() == AbstractUser::ROLE_ADMIN) {
+            /** @var Role $entry */
+            if (AbstractUser::ROLE_ADMIN === $entry->getName()) {
                 throw new ValidatorException('forbidden role for user');
             }
         });

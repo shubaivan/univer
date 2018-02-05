@@ -57,7 +57,6 @@ class CoursesRepository extends EntityRepository
         if ($paramFetcher->get('courses_of_study')) {
             $qb
                 ->andWhere($qb->expr()->eq('c.coursesOfStudy', $paramFetcher->get('courses_of_study')));
-
         }
 
         if (!$count) {

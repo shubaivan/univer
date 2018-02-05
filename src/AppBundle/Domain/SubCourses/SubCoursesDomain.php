@@ -71,6 +71,7 @@ class SubCoursesDomain implements SubCoursesDomainInterface
                     ->getEntitiesByIds($noteIds, $author);
                 if (!$notes) {
                     unset($questions[$keyQuestion]);
+
                     continue;
                 }
                 $questions[$keyQuestion]['notes'] = $notes;
@@ -78,6 +79,7 @@ class SubCoursesDomain implements SubCoursesDomainInterface
             }
             if (!$questions) {
                 unset($subCourses[$key]);
+
                 continue;
             }
 

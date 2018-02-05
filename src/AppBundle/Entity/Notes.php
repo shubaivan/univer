@@ -220,10 +220,11 @@ class Notes
         if ($this->getUser()) {
             $result['user']['id'] = $this->getUser()->getId();
             $result['user']['name'] = $this->getUser()->getUsername();
-        } else if ($this->getAdmin()) {
+        } elseif ($this->getAdmin()) {
             $result['admin']['id'] = $this->getAdmin()->getId();
             $result['admin']['name'] = $this->getAdmin()->getUsername();
         }
+
         return $result;
     }
 }

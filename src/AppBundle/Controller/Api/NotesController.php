@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\AbstractUser;
-use AppBundle\Entity\Admin;
 use AppBundle\Entity\Notes;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
@@ -15,8 +14,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class NotesController extends AbstractRestController
 {
@@ -195,7 +192,7 @@ class NotesController extends AbstractRestController
      * @RestView()
      *
      * @param Request $request
-     * @param Notes $notes
+     * @param Notes   $notes
      *
      * @throws NotFoundHttpException when not exist
      *

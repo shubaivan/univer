@@ -179,7 +179,7 @@ class CoursesOfStudyController extends AbstractRestController
      *
      * @RestView()
      *
-     * @param Request $request
+     * @param Request        $request
      * @param CoursesOfStudy $coursesOfStudy
      *
      * @throws NotFoundHttpException when not exist

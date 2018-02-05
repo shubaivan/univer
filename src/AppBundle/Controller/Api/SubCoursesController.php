@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\SubCourses;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -106,7 +105,6 @@ class SubCoursesController extends AbstractRestController
 
         return $this->handleView($view);
     }
-
 
     /**
      * Create sub course by admin.

@@ -45,9 +45,9 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
     /**
      * Constructor.
      *
-     * @param ManagerRegistry $managerRegistry Manager registry
+     * @param ManagerRegistry            $managerRegistry     Manager registry
      * @param ObjectConstructorInterface $fallbackConstructor Fallback object constructor
-     * @param string $fallbackStrategy
+     * @param string                     $fallbackStrategy
      */
     public function __construct(ManagerRegistry $managerRegistry, ObjectConstructorInterface $fallbackConstructor, $fallbackStrategy = self::ON_MISSING_NULL)
     {
@@ -81,16 +81,17 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
         if (!is_array($data)) {
             // Single identifier, load proxy
             $entityProxy = $objectManager->getReference($metadata->name, $data);
-            $softdeleteable = property_exists ( $metadata->name, 'deletedAt' );
+            $softdeleteable = property_exists($metadata->name, 'deletedAt');
             if ($softdeleteable && $entityProxy->getDeletedAt()) {
                 return null;
             }
+
             return $objectManager->getReference($metadata->name, $data);
         }
 
         // Fallback to default constructor if missing identifier(s)
         $classMetadata = $objectManager->getClassMetadata($metadata->name);
-        $identifierList = array();
+        $identifierList = [];
 
         foreach ($classMetadata->getIdentifierFieldNames() as $name) {
             if (!array_key_exists($name, $data)) {
@@ -108,11 +109,11 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
                 case self::ON_MISSING_NULL:
                     return null;
                 case self::ON_MISSING_EXCEPTION:
-                    throw new ObjectConstructionException(sprintf("Entity %s can not be found", $metadata->name));
+                    throw new ObjectConstructionException(sprintf('Entity %s can not be found', $metadata->name));
                 case self::ON_MISSING_FALLBACK:
                     return $this->fallbackConstructor->construct($visitor, $metadata, $data, $type, $context);
                 default:
-                    throw new InvalidArgumentException("The provided fallback strategy for the object constructor is not valid");
+                    throw new InvalidArgumentException('The provided fallback strategy for the object constructor is not valid');
             }
         }
 

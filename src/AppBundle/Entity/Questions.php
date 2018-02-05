@@ -473,6 +473,7 @@ class Questions
 
     /**
      * @param Notes[] $notes
+     *
      * @return $this
      */
     public function setNoteCollection(array $notes)
