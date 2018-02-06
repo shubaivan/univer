@@ -57,22 +57,25 @@ class Courses
     private $name;
 
     /**
-     * @var CoursesOfStudy
+     * @var ArrayCollection|CoursesOfStudy[]
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="courses")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="courses", cascade={"persist", "remove"})
      * @Annotation\Groups({
      *     "post_course", "put_course", "get_course", "get_courses", "get_questions", "get_question"
      * })
-     * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
+     * @ORM\JoinTable(name="courses_courses_of_study",
+     *      joinColumns={@ORM\JoinColumn(name="courses_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="courses_of_study_id", referencedColumnName="id")}
+     *      )
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\CoursesOfStudy>")
      * @Annotation\SerializedName("courses_of_study")
-     * @Evence\onSoftDelete(type="SET NULL")
      */
     private $coursesOfStudy;
 
     /**
      * @var ArrayCollection|SubCourses[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SubCourses", mappedBy="courses", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SubCourses", mappedBy="courses", cascade={"persist"})
      * @Annotation\Groups({
      *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study"
      * })
@@ -85,6 +88,7 @@ class Courses
     public function __construct()
     {
         $this->subCourses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coursesOfStudy = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -122,38 +126,14 @@ class Courses
     }
 
     /**
-     * Set coursesOfStudy.
-     *
-     * @param \AppBundle\Entity\CoursesOfStudy $coursesOfStudy
-     *
-     * @return Courses
-     */
-    public function setCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy = null)
-    {
-        $this->coursesOfStudy = $coursesOfStudy;
-
-        return $this;
-    }
-
-    /**
-     * Get coursesOfStudy.
-     *
-     * @return \AppBundle\Entity\CoursesOfStudy
-     */
-    public function getCoursesOfStudy()
-    {
-        return $this->coursesOfStudy;
-    }
-
-    /**
-     * Add subCourse.
-     *
-     * @param \AppBundle\Entity\SubCourses $subCourse
-     *
-     * @return Courses
+     * @param SubCourses $subCourse
+     * @return $this|bool
      */
     public function addSubCourse(\AppBundle\Entity\SubCourses $subCourse)
     {
+        if ($this->getSubCourses()->contains($subCourse)) {
+            return false;
+        }
         $this->subCourses[] = $subCourse;
 
         return $this;
@@ -176,6 +156,10 @@ class Courses
      */
     public function getSubCourses()
     {
+        if (!$this->subCourses) {
+            $this->subCourses = new ArrayCollection();
+        }
+
         return $this->subCourses;
     }
 
@@ -199,5 +183,44 @@ class Courses
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @param CoursesOfStudy $coursesOfStudy
+     * @return $this|bool
+     */
+    public function addCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy)
+    {
+        if ($this->getCoursesOfStudy()->contains($coursesOfStudy)) {
+            return false;
+        }
+        $this->coursesOfStudy[] = $coursesOfStudy;
+        $coursesOfStudy->addCourse($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove coursesOfStudy
+     *
+     * @param \AppBundle\Entity\CoursesOfStudy $coursesOfStudy
+     */
+    public function removeCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy)
+    {
+        $this->coursesOfStudy->removeElement($coursesOfStudy);
+    }
+
+    /**
+     * Get coursesOfStudy
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCoursesOfStudy()
+    {
+        if (!$this->coursesOfStudy) {
+            $this->coursesOfStudy = new ArrayCollection();
+        }
+
+        return $this->coursesOfStudy;
     }
 }

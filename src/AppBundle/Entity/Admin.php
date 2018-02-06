@@ -21,6 +21,9 @@ class Admin extends AbstractUser implements UserInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *      "profile"
+     * })
      */
     private $id;
 

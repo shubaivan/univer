@@ -57,7 +57,7 @@ class CoursesOfStudy
     /**
      * @var ArrayCollection|Courses[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Courses", mappedBy="coursesOfStudy", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", mappedBy="coursesOfStudy", cascade={"persist"})
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study"
      * })
@@ -107,14 +107,14 @@ class CoursesOfStudy
     }
 
     /**
-     * Add course.
-     *
-     * @param \AppBundle\Entity\Courses $course
-     *
-     * @return CoursesOfStudy
+     * @param Courses $course
+     * @return $this|bool
      */
     public function addCourse(\AppBundle\Entity\Courses $course)
     {
+        if ($this->getCourses()->contains($course)) {
+            return false;
+        }
         $this->courses[] = $course;
 
         return $this;
@@ -137,6 +137,10 @@ class CoursesOfStudy
      */
     public function getCourses()
     {
+        if (!$this->courses) {
+            $this->courses = new ArrayCollection();
+        }
+
         return $this->courses;
     }
 
