@@ -34,7 +34,7 @@ class Favorites
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_favorite", "get_favorites"
+     *     "get_favorite", "get_favorites", "get_question", "get_questions"
      * })
      */
     private $id;
@@ -119,5 +119,43 @@ class Favorites
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_favorite", "get_favorites"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_favorite", "get_favorites"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("array")
+     * @Annotation\SerializedName("user")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedUserObject()
+    {
+        $result = [];
+        if ($this->getUser()) {
+            $result['id'] = $this->getUser()->getId();
+        }
+
+        return $result;
     }
 }
