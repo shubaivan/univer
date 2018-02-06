@@ -169,6 +169,7 @@ class SubCourses
 
     /**
      * @param Courses $course
+     *
      * @return $this|bool
      */
     public function addCourse(\AppBundle\Entity\Courses $course)
@@ -183,7 +184,7 @@ class SubCourses
     }
 
     /**
-     * Remove course
+     * Remove course.
      *
      * @param \AppBundle\Entity\Courses $course
      */
@@ -193,7 +194,7 @@ class SubCourses
     }
 
     /**
-     * Get courses
+     * Get courses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

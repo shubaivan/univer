@@ -108,6 +108,7 @@ class CoursesOfStudy
 
     /**
      * @param Courses $course
+     *
      * @return $this|bool
      */
     public function addCourse(\AppBundle\Entity\Courses $course)

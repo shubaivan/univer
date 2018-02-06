@@ -5,13 +5,8 @@ namespace AppBundle\Listener;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class DoctrineListener implements EventSubscriber
 {
@@ -30,9 +25,9 @@ class DoctrineListener implements EventSubscriber
 
     public function getSubscribedEvents()
     {
-        return array(
-            'preRemove'
-        );
+        return [
+            'preRemove',
+        ];
     }
 
     public function preRemove(LifecycleEventArgs $args)

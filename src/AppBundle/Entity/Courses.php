@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
@@ -127,6 +126,7 @@ class Courses
 
     /**
      * @param SubCourses $subCourse
+     *
      * @return $this|bool
      */
     public function addSubCourse(\AppBundle\Entity\SubCourses $subCourse)
@@ -187,6 +187,7 @@ class Courses
 
     /**
      * @param CoursesOfStudy $coursesOfStudy
+     *
      * @return $this|bool
      */
     public function addCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy)
@@ -201,7 +202,7 @@ class Courses
     }
 
     /**
-     * Remove coursesOfStudy
+     * Remove coursesOfStudy.
      *
      * @param \AppBundle\Entity\CoursesOfStudy $coursesOfStudy
      */
@@ -211,7 +212,7 @@ class Courses
     }
 
     /**
-     * Get coursesOfStudy
+     * Get coursesOfStudy.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
