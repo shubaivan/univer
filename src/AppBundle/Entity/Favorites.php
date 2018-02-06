@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *            columns={"questions_id", "user_id"})
  *    })
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\FavoritesRepository")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @UniqueEntity(
  *     groups={"post_favorite", "put_favorite"},
  *     fields={"questions", "user"},
