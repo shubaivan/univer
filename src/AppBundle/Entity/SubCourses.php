@@ -49,14 +49,14 @@ class SubCourses
     private $name;
 
     /**
-     * @var Courses
+     * @var ArrayCollection|Courses[]
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses", cascade={"persist", "remove"})
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
      *     "get_questions", "get_question"
      * })
-     * @Annotation\Type("AppBundle\Entity\Courses")
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Courses>")
      * @Assert\NotBlank(groups={"post_sub_course", "put_sub_course"})
      */
     private $courses;
@@ -74,6 +74,7 @@ class SubCourses
     public function __construct()
     {
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -108,30 +109,6 @@ class SubCourses
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set courses.
-     *
-     * @param \AppBundle\Entity\Courses $courses
-     *
-     * @return SubCourses
-     */
-    public function setCourses(\AppBundle\Entity\Courses $courses = null)
-    {
-        $this->courses = $courses;
-
-        return $this;
-    }
-
-    /**
-     * Get courses.
-     *
-     * @return \AppBundle\Entity\Courses
-     */
-    public function getCourses()
-    {
-        return $this->courses;
     }
 
     /**
@@ -188,5 +165,44 @@ class SubCourses
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @param Courses $course
+     * @return $this|bool
+     */
+    public function addCourse(\AppBundle\Entity\Courses $course)
+    {
+        if ($this->getCourses()->contains($course)) {
+            return false;
+        }
+        $this->courses[] = $course;
+        $course->addSubCourse($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove course
+     *
+     * @param \AppBundle\Entity\Courses $course
+     */
+    public function removeCourse(\AppBundle\Entity\Courses $course)
+    {
+        $this->courses->removeElement($course);
+    }
+
+    /**
+     * Get courses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCourses()
+    {
+        if (!$this->courses) {
+            $this->courses = new ArrayCollection();
+        }
+
+        return $this->courses;
     }
 }
