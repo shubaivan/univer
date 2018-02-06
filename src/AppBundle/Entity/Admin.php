@@ -86,10 +86,18 @@ class Admin extends AbstractUser implements UserInterface
      */
     private $questions;
 
+    /**
+     * @var ArrayCollection|Comments[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="admin", cascade={"persist"})
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->note = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     // --------------------------------implements methods--------------------------------------------------------------
@@ -314,5 +322,39 @@ class Admin extends AbstractUser implements UserInterface
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Add comment.
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     *
+     * @return Admin
+     */
+    public function addComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment.
+     *
+     * @param \AppBundle\Entity\Comments $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comments $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

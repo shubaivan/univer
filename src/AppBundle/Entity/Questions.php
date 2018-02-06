@@ -28,7 +28,7 @@ class Questions
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "get_note", "get_notes",
-     *     "get_favorite", "get_favorites"
+     *     "get_favorite", "get_favorites", "get_comment", "get_comments"
      * })
      */
     private $id;
@@ -132,7 +132,7 @@ class Questions
     /**
      * @var ArrayCollection|Notes[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="questions", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes", mappedBy="questions", cascade={"persist" , "remove"})
      * @Annotation\Groups({
      *     "get_question", "get_questions"
      * })
@@ -152,7 +152,7 @@ class Questions
     /**
      * @var ArrayCollection|Comments[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="questions", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="questions", cascade={"persist", "remove"})
      */
     private $comments;
 

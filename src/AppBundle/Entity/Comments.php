@@ -2,14 +2,20 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints\ConditionAuthor;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\CommentsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionAuthor(groups={"post_comment", "put_comment"})
  */
 class Comments
 {
@@ -19,6 +25,9 @@ class Comments
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments"
+     * })
      */
     private $id;
 
@@ -26,6 +35,11 @@ class Comments
      * @var Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="comments")
+     * @Assert\NotBlank(groups={"post_comment", "put_comment"})
+     * @Annotation\Type("AppBundle\Entity\Questions")
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments", "post_comment", "put_comment"
+     * })
      */
     private $questions;
 
@@ -33,11 +47,32 @@ class Comments
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="comments")
+     * @Evence\onSoftDelete(type="SET NULL")
+     * @Assert\NotBlank(groups={"post_favorite", "put_favorite"})
+     * @Annotation\Type("AppBundle\Entity\User")
+     * @Annotation\Groups({
+     *     "post_comment", "put_comment"
+     * })
      */
     private $user;
 
     /**
+     * @var Admin
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="comments")
+     * @Annotation\Groups({
+     *     "post_comment", "put_comment"
+     * })
+     * @Annotation\Type("AppBundle\Entity\Admin")
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $admin;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments", "post_comment", "put_comment"
+     * })
      */
     private $text;
 
@@ -48,14 +83,22 @@ class Comments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="reply_id", referencedColumnName="id", onDelete="CASCADE")
      * })
+     * @Annotation\Type("AppBundle\Entity\Comments")
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments", "post_comment", "put_comment"
+     * })
+     * @Annotation\SerializedName("reply_comments")
      */
     private $reply;
 
     /**
-     * @var Comments
+     * @var ArrayCollection|Comments[]
      *
-     * @ORM\OneToMany(targetEntity="Comments", mappedBy="reply")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Comments", mappedBy="reply", cascade={"persist"})
+     * @ORM\OrderBy({"updatedAt" = "DESC"})
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments"
+     * })
      */
     private $children;
 
@@ -205,5 +248,49 @@ class Comments
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("array")
+     * @Annotation\SerializedName("author")
+     * @Annotation\Groups({"get_comment", "get_comments"})
+     */
+    public function getSerializedAuthor()
+    {
+        $result = [];
+        if ($this->getUser()) {
+            $result['user']['id'] = $this->getUser()->getId();
+            $result['user']['name'] = $this->getUser()->getUsername();
+        } elseif ($this->getAdmin()) {
+            $result['admin']['id'] = $this->getAdmin()->getId();
+            $result['admin']['name'] = $this->getAdmin()->getUsername();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Set admin.
+     *
+     * @param \AppBundle\Entity\Admin $admin
+     *
+     * @return Comments
+     */
+    public function setAdmin(\AppBundle\Entity\Admin $admin = null)
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * Get admin.
+     *
+     * @return \AppBundle\Entity\Admin
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
     }
 }
