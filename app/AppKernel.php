@@ -26,6 +26,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Evence\Bundle\SoftDeleteableExtensionBundle\EvenceSoftDeleteableExtensionBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle(),
+            new JMS\AopBundle\JMSAopBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

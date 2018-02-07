@@ -12,6 +12,8 @@ services:
         resource: '../../src/AppBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
+        calls:
+            - [setContainer, ["@service_container"]]
 
     app_serialize.object_constructor:
         class: AppBundle\Serializer\Construction\DoctrineObjectConstructor

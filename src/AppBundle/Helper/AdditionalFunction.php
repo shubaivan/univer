@@ -11,12 +11,12 @@ class AdditionalFunction
      *
      * @return \DateTime|false
      */
-    public function validateDateTime($date)
+    public function validateDateTime($date, $format)
     {
         $checkResult = false;
-        $dateTimeClass = \DateTime::createFromFormat('d.m.Y', $date);
+        $dateTimeClass = \DateTime::createFromFormat($format, $date);
         if ($dateTimeClass) {
-            $checkResult = $dateTimeClass->format('d.m.Y') == $date;
+            $checkResult = $dateTimeClass->format($format) == $date;
         }
 
         if (!$dateTimeClass instanceof \DateTime || !$checkResult) {

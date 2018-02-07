@@ -3,14 +3,31 @@
 namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\Comments;
+use AppBundle\Helper\AdditionalFunction;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Request\ParamFetcher;
+use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * CommentsRepository.
  */
 class CommentsRepository extends EntityRepository
 {
+    /**
+     * @var AdditionalFunction
+     */
+    private  $additionalFunction;
+
+    /**
+     * @DI\InjectParams({
+     *     "additionalFunction" = @DI\Inject("app.additional_function"),
+     * })
+     */
+    public function setParam(AdditionalFunction $additionalFunction)
+    {
+        $this->additionalFunction = $additionalFunction;
+    }
+
     /**
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
@@ -72,8 +89,7 @@ class CommentsRepository extends EntityRepository
         }
 
         if (array_key_exists('year', $params) && $paramFetcher->get('year')) {
-
-            $date = $this->validateDateTime($paramFetcher->get('year'), 'Y');
+            $date = $this->additionalFunction->validateDateTime($paramFetcher->get('year'), 'Y');
             $first = clone $date;
             $first->setDate($date->format('Y'), 1, 1);
             $first->setTime(0, 0, 0);
@@ -103,27 +119,5 @@ class CommentsRepository extends EntityRepository
         }
 
         return $results;
-    }
-
-    /**
-     * @param $date
-     *
-     * @throws \Exception
-     *
-     * @return \DateTime|false
-     */
-    public function validateDateTime($date, $format)
-    {
-        $checkResult = false;
-        $dateTimeClass = \DateTime::createFromFormat($format, $date);
-        if ($dateTimeClass) {
-            $checkResult = $dateTimeClass->format($format) == $date;
-        }
-
-        if (!$dateTimeClass instanceof \DateTime || !$checkResult) {
-            throw new \Exception('Date fields must be format \'dd.mm.yy\'');
-        }
-
-        return $dateTimeClass;
     }
 }
