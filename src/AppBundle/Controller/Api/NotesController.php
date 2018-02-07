@@ -83,7 +83,7 @@ class NotesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getNoteAction(Request $request, ParamFetcher $paramFetcher)
+    public function getNoteAction(ParamFetcher $paramFetcher)
     {
         try {
             $paramFetcher = $this->responsePrepareAuthor($paramFetcher);

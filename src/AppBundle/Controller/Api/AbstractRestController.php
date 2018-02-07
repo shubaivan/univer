@@ -125,16 +125,30 @@ class AbstractRestController extends FOSRestController
      */
     protected function responsePrepareAuthor(ParamFetcher $paramFetcher)
     {
-        $request = $this->get('request_stack')->getCurrentRequest();
-        /** @var AbstractUser $authUser */
-        $authUser = $this->getUser();
-
-        if ($authUser instanceof User) {
-            $request->query->set('user', $this->getUser()->getId());
-            $param = new QueryParam();
-            $param->name = 'user';
-            $paramFetcher->addParam($param);
+        if ($this->getUser() instanceof User) {
+            /** @var AbstractUser $authUser */
+            $authUser = $this->getUser();
+            if ($authUser instanceof User) {
+                $paramFetcher = $this->setParamFetcherData($paramFetcher, 'user', $this->getUser()->getId());
+            }
         }
+
+        return $paramFetcher;
+    }
+
+    /**
+     * @param ParamFetcher $paramFetcher
+     * @param $key
+     * @param $data
+     * @return ParamFetcher
+     */
+    protected function setParamFetcherData(ParamFetcher $paramFetcher, $key, $data)
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $request->query->set($key, $data);
+        $param = new QueryParam();
+        $param->name = $key;
+        $paramFetcher->addParam($param);
 
         return $paramFetcher;
     }

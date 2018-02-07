@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Comments;
+use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -88,6 +89,64 @@ class CommentsController extends AbstractRestController
             $em = $this->getDoctrine()->getManager();
             $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
             $comments = $em->getRepository('AppBundle:Comments');
+
+            return $this->createSuccessResponse(
+                [
+                    'comments' => $comments->getEntitiesByParams($paramFetcher),
+                    'total' => $comments->getEntitiesByParams($paramFetcher, true),
+                ],
+                ['get_comments'],
+                true
+            );
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Get list comments by question.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/question/{id}/comments <br>.
+     *
+     * @Rest\Get("/api/question/{id}/comments")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get list comments by question",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Comment"
+     * )
+     *
+     * @RestView()
+     *
+     * @Rest\QueryParam(name="year", requirements="\d+", description="year of establishment")
+     * @Rest\QueryParam(name="search", description="search fields - text")
+     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
+     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
+     * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
+     * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getQuestionCommentsAction(ParamFetcher $paramFetcher, Questions $questions)
+    {
+        try {
+            $em = $this->getDoctrine();
+            $comments = $em->getRepository('AppBundle:Comments');
+            $this->setParamFetcherData($paramFetcher, 'questions', $questions->getId());
 
             return $this->createSuccessResponse(
                 [

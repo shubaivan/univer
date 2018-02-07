@@ -9,6 +9,7 @@ parameters:
     app.authentication_success_handler.class: AppBundle\Security\AuthenticationSuccessHandler
     app.file_uploader.class: AppBundle\Helper\FileUploader
     app.serialization_listener.class: AppBundle\Listener\SerializationListener
+    app.additional_function.class:  AppBundle\Helper\AdditionalFunction
 
 services:
     app.listener.serializationlistener:
@@ -43,3 +44,6 @@ services:
         class: "%app.file_uploader.class%"
         arguments:
             - "@gaufrette.local_storage_filesystem"
+
+    app.additional_function:
+        class: "%app.additional_function.class%"
