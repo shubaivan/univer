@@ -293,4 +293,26 @@ class Comments
     {
         return $this->admin;
     }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_comment", "get_comments"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_comment", "get_comments"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }
