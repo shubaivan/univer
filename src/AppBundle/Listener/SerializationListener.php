@@ -115,7 +115,7 @@ class SerializationListener implements EventSubscriberInterface
         }
 
         $authorFavorites = $this->favoritesRepository
-            ->findOneBy(['user' => $this->user]);
+            ->findOneBy(['user' => $this->user, 'questions' => $question]);
         $this->favoriteObject[self::FAVORITES_COUNT] = $question->getFavorites()->count();
         if ($authorFavorites) {
             $this->favoriteObject[self::FAVORITES_AUTH_MARK] = true;
