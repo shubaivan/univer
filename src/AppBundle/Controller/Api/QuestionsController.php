@@ -136,7 +136,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="exam_periods", "dataType"="integer", "required"=true, "description"="exam periods id"},
      *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
      *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"},
-     *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"}
+     *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"},
+     *      {"name"="question_answers", "dataType"="array", "required"=false, "description"="question answers array objects"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",

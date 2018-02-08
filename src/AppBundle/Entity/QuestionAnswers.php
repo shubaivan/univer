@@ -5,10 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="auestion_answers")
+ * @ORM\Table(name="question_answers")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\QuestionAnswersRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -20,26 +22,42 @@ class QuestionAnswers
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", length=65000, nullable=true)
+     * @ORM\Column(type="text", length=65000, nullable=false)
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $answer;
 
     /**
-     * @ORM\Column(name="is_true", type="boolean", nullable=true)
+     * @ORM\Column(name="is_true", type="boolean", nullable=false)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
-    private $isTrue;
+    private $isTrue = false;
 
     /**
-     * @ORM\Column(name="point_eng", type="string", length=10, options={"fixed" = true})
+     * @ORM\Column(name="point_eng", type="string", length=10, options={"fixed" = true}, nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $pointEng;
 
     /**
-     * @ORM\Column(name="point_heb", type="string", length=10, options={"fixed" = true})
+     * @ORM\Column(name="point_heb", type="string", length=10, options={"fixed" = true}, nullable=true)
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
      */
     private $pointHeb;
 
@@ -53,7 +71,8 @@ class QuestionAnswers
     /**
      * @var Questions
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="note")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="questionAnswers")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
      */
     private $questions;
 

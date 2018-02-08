@@ -140,6 +140,19 @@ class Questions
     private $note;
 
     /**
+     * @var ArrayCollection|QuestionAnswers[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswers", mappedBy="questions", cascade={"persist" , "remove"})
+     * @Assert\Valid
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswers>")
+     * @Annotation\Accessor(setter="setAccessorQuestionAnswers")
+     */
+    private $questionAnswers;
+
+    /**
      * @var ArrayCollection|Favorites[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="questions", cascade={"persist", "remove"})
@@ -218,6 +231,7 @@ class Questions
         $this->note = new \Doctrine\Common\Collections\ArrayCollection();
         $this->favorites = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionAnswers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -724,5 +738,54 @@ class Questions
     public function getAdmin()
     {
         return $this->admin;
+    }
+
+    /**
+     * Add questionAnswer.
+     *
+     * @param \AppBundle\Entity\QuestionAnswers $questionAnswer
+     *
+     * @return Questions
+     */
+    public function addQuestionAnswer(\AppBundle\Entity\QuestionAnswers $questionAnswer)
+    {
+        $this->questionAnswers[] = $questionAnswer;
+        $questionAnswer->setQuestions($this);
+
+        return $this;
+    }
+
+    public function setAccessorQuestionAnswers($questionAnswers)
+    {
+        $this->getQuestionAnswers()->clear();
+        foreach ($questionAnswers as $questionAnswer) {
+            $this->addQuestionAnswer($questionAnswer);
+        }
+    }
+
+    /**
+     * Remove questionAnswer.
+     *
+     * @param \AppBundle\Entity\QuestionAnswers $questionAnswer
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeQuestionAnswer(\AppBundle\Entity\QuestionAnswers $questionAnswer)
+    {
+        return $this->questionAnswers->removeElement($questionAnswer);
+    }
+
+    /**
+     * Get questionAnswers.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionAnswers()
+    {
+        if (!$this->questionAnswers) {
+            $this->questionAnswers = new ArrayCollection();
+        }
+
+        return $this->questionAnswers;
     }
 }

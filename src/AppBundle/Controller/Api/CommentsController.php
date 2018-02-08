@@ -178,7 +178,7 @@ class CommentsController extends AbstractRestController
      *      {"name"="questions", "dataType"="integer", "required"=true, "description"="questions id or object"},
      *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id or object"},
      *      {"name"="text", "dataType"="text", "required"=true, "description"="text"},
-     *      {"name"="reply_comments", "dataType"="text", "required"=false, "description"="reply comment (!only) object"}
+     *      {"name"="reply_comments", "dataType"="array", "required"=false, "description"="reply comment (!only) object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",

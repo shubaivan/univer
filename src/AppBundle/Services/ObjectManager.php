@@ -55,11 +55,11 @@ class ObjectManager
     }
 
     /**
-     * @param string $requestType
-     * @param string $class
-     * @param array  $groups
-     *
-     * @return array|\JMS\Serializer\scalar|mixed|object|View
+     * @param $requestType
+     * @param $class
+     * @param array $groups
+     * @return object
+     * @throws ValidatorException|\Exception
      */
     public function validateEntites($requestType, $class, array $groups = [])
     {
