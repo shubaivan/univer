@@ -3,6 +3,7 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Entity\AbstractUser;
+use AppBundle\Entity\Favorites;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 class SerializationListener implements EventSubscriberInterface
 {
     const FAVORITES_COUNT = 'count';
-    const FAVORITES_AUTH_MARK = 'auth_mark';
+    const FAVORITES_AUTH_MARK = 'favorite_id';
 
     /**
      * @var TokenStorageInterface
@@ -64,7 +65,7 @@ class SerializationListener implements EventSubscriberInterface
         $this->user = $tokenStorage->getToken()->getUser();
         $this->favoriteObject = [
             self::FAVORITES_COUNT => 0,
-            self::FAVORITES_AUTH_MARK => false
+            self::FAVORITES_AUTH_MARK => null
         ];
     }
 
@@ -113,14 +114,14 @@ class SerializationListener implements EventSubscriberInterface
             $authorNotes = $this->notesRepository->findBy(['user' => $this->user, 'questions' => $question]);
             $question->setNoteCollection($authorNotes);
         }
-
+        /** @var Favorites $authorFavorites */
         $authorFavorites = $this->favoritesRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
         $this->favoriteObject[self::FAVORITES_COUNT] = $question->getFavorites()->count();
         if ($authorFavorites) {
-            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = true;
+            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = $authorFavorites->getId();
         } else {
-            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = false;
+            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = null;
         }
     }
 
