@@ -17,6 +17,7 @@ services:
         arguments:
             - "@security.token_storage"
             - "@app.repository.notes"
+            - "@app.repository.favorites"
         tags:
             - {name: jms_serializer.event_subscriber}
 

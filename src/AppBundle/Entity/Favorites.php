@@ -32,7 +32,7 @@ class Favorites
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_favorite", "get_favorites", "get_question", "get_questions"
+     *     "get_favorite", "get_favorites"
      * })
      */
     private $id;
@@ -145,7 +145,7 @@ class Favorites
      * @Annotation\VirtualProperty
      * @Annotation\Type("array")
      * @Annotation\SerializedName("user")
-     * @Annotation\Groups({"get_question", "get_questions"})
+     * @Annotation\Groups({"get_favorite", "get_favorites"})
      */
     public function getSerializedUserObject()
     {

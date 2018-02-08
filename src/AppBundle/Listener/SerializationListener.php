@@ -4,6 +4,7 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Questions;
+use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
@@ -18,6 +19,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SerializationListener implements EventSubscriberInterface
 {
+    const FAVORITES_COUNT = 'count';
+    const FAVORITES_AUTH_MARK = 'auth_mark';
+
     /**
      * @var TokenStorageInterface
      */
@@ -34,6 +38,16 @@ class SerializationListener implements EventSubscriberInterface
     private $notesRepository;
 
     /**
+     * @var FavoritesRepository
+     */
+    private $favoritesRepository;
+
+    /**
+     * @var array
+     */
+    private $favoriteObject;
+
+    /**
      * SerializationListener constructor.
      *
      * @param TokenStorageInterface $tokenStorage
@@ -41,11 +55,17 @@ class SerializationListener implements EventSubscriberInterface
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        NotesRepository $notesRepository
+        NotesRepository $notesRepository,
+        FavoritesRepository $favoritesRepository
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
+        $this->favoritesRepository = $favoritesRepository;
         $this->user = $tokenStorage->getToken()->getUser();
+        $this->favoriteObject = [
+            self::FAVORITES_COUNT => 0,
+            self::FAVORITES_AUTH_MARK => false
+        ];
     }
 
     /**
@@ -58,6 +78,11 @@ class SerializationListener implements EventSubscriberInterface
                 'event' => 'serializer.pre_serialize',
                 'class' => Questions::class,
                 'method' => 'onPreSerialize',
+            ],
+            [
+                'event' => 'serializer.post_serialize',
+                'class' => Questions::class,
+                'method' => 'onPreSerializeQuestions',
             ],
             [
                 'event' => 'serializer.post_deserialize',
@@ -88,5 +113,19 @@ class SerializationListener implements EventSubscriberInterface
             $authorNotes = $this->notesRepository->findBy(['user' => $this->user, 'questions' => $question]);
             $question->setNoteCollection($authorNotes);
         }
+
+        $authorFavorites = $this->favoritesRepository
+            ->findOneBy(['user' => $this->user]);
+        $this->favoriteObject[self::FAVORITES_COUNT] = $question->getFavorites()->count();
+        if ($authorFavorites) {
+            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = true;
+        } else {
+            $this->favoriteObject[self::FAVORITES_AUTH_MARK] = false;
+        }
+    }
+
+    public function onPreSerializeQuestions(ObjectEvent $event)
+    {
+        $event->getVisitor()->addData('favorites', $this->favoriteObject);
     }
 }

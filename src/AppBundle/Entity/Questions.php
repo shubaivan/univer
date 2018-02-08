@@ -156,9 +156,6 @@ class Questions
      * @var ArrayCollection|Favorites[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="questions", cascade={"persist", "remove"})
-     * @Annotation\Groups({
-     *     "get_question", "get_questions"
-     * })
      */
     private $favorites;
 
