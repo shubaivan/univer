@@ -54,15 +54,8 @@ class CommentsRepository extends EntityRepository
         }
 
         $qb
-            ->from('AppBundle:Comments', 'c');
-
-        $subQb = $this->getEntityManager()->createQueryBuilder();
-        $subQb
-            ->select('reply.id')
-            ->from('AppBundle:Comments', 'sub_c')
-            ->innerJoin('sub_c.reply', 'reply');
-
-        $qb->orWhere($qb->expr()->notIn('c.id', $subQb->getDQL()));
+            ->from('AppBundle:Comments', 'c')
+            ->where('c.reply IS NULL');
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
