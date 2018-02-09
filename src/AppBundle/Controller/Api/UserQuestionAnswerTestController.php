@@ -18,6 +18,43 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UserQuestionAnswerTestController extends AbstractRestController
 {
     /**
+     * Get user_question_answer_test by id.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/user_question_answer_test/{id} <br>.
+     *
+     * @Rest\Get("/api/user_question_answer_test/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get user_question_answer_test by id",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="UserQuestionAnswerTest"
+     * )
+     *
+     * @RestView()
+     *
+     * @param UserQuestionAnswerTest $questionAnswerTest
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getFavoritesAction(UserQuestionAnswerTest $questionAnswerTest)
+    {
+        return $this->createSuccessResponse(
+            $questionAnswerTest,
+            ['get_user_question_answer_test'],
+            true
+        );
+    }
+
+    /**
      * Create user_question_answer_test.
      * <strong>Simple example:</strong><br />
      * http://host/api/user_question_answer_test <br>.
