@@ -36,7 +36,7 @@ class User extends AbstractUser implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
-     *     "get_favorite", "get_favorites"
+     *     "get_favorite", "get_favorites", "get_user_question_answer_test"
      * })
      */
     private $id;
@@ -134,7 +134,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @var ArrayCollection|UserQuestionAnswerTest[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="user", cascade={"persist", "remove"})
      */
     private $userQuestionAnswerTest;
 

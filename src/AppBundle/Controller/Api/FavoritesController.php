@@ -136,7 +136,7 @@ class FavoritesController extends AbstractRestController
      */
     public function postFavoritesAction()
     {
-        $em = $this->get('doctrine')->getManager();
+        $em = $this->getDoctrine()->getManager();
         $logger = $this->container->get('logger');
 
         try {

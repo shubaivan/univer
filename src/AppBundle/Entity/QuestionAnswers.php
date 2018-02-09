@@ -23,7 +23,7 @@ class QuestionAnswers
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions"
+     *     "get_question", "get_questions", "get_user_question_answer_test"
      * })
      */
     private $id;
@@ -64,7 +64,7 @@ class QuestionAnswers
     /**
      * @var ArrayCollection|UserQuestionAnswerTest[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="questionAnswers", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="questionAnswers", cascade={"persist", "remove"})
      */
     private $userQuestionAnswerTest;
 

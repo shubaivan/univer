@@ -5,6 +5,7 @@ namespace AppBundle\Entity\Repository;
 use AppBundle\Entity\Comments;
 use AppBundle\Helper\AdditionalFunction;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -47,11 +48,21 @@ class CommentsRepository extends EntityRepository
                 ');
         } else {
             $qb
-                ->select('c');
+                ->select('
+                    c
+                ');
         }
 
         $qb
             ->from('AppBundle:Comments', 'c');
+
+        $subQb = $this->getEntityManager()->createQueryBuilder();
+        $subQb
+            ->select('reply.id')
+            ->from('AppBundle:Comments', 'sub_c')
+            ->innerJoin('sub_c.reply', 'reply');
+
+        $qb->orWhere($qb->expr()->notIn('c.id', $subQb->getDQL()));
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
