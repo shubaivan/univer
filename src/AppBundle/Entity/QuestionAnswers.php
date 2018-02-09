@@ -65,6 +65,9 @@ class QuestionAnswers
      * @var ArrayCollection|UserQuestionAnswerTest[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerTest", mappedBy="questionAnswers", cascade={"persist", "remove"})
+     * @Annotation\Groups({
+     *     "get_question", "get_questions"
+     * })
      */
     private $userQuestionAnswerTest;
 

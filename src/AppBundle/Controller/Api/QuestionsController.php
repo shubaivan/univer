@@ -49,7 +49,11 @@ class QuestionsController extends AbstractRestController
      */
     public function getQuestionsAction(Questions $questions)
     {
-        return $this->createSuccessResponse($questions, ['get_question'], true);
+        return $this->createSuccessResponse(
+            $questions,
+            ['get_question', 'get_user_question_answer_test'],
+            true
+        );
     }
 
     /**
@@ -103,7 +107,7 @@ class QuestionsController extends AbstractRestController
                     'questions' => $questions->getEntitiesByParams($paramFetcher),
                     'total' => $questions->getEntitiesByParams($paramFetcher, true),
                 ],
-                ['get_questions'],
+                ['get_questions', 'get_user_question_answer_test'],
                 true
             );
         } catch (\Exception $e) {
