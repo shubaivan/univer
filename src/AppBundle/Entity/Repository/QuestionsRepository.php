@@ -168,9 +168,13 @@ class QuestionsRepository extends EntityRepository
                 $orXSearch
                     ->add($qb->expr()->between(
                         'q.createdAt',
-                        $qb->expr()->literal($first->format('Y-m-d H:i:s')),
-                        $qb->expr()->literal($last->format('Y-m-d H:i:s')))
-                    );
+                        ':x'.$key.'dateFrom',
+                        ':x'.$key.'dateTo'
+                    ));
+
+                $qb
+                    ->setParameter('x'.$key.'dateFrom', $first->format('Y-m-d H:i:s'))
+                    ->setParameter('x'.$key.'dateTo', $last->format('Y-m-d H:i:s'));
             }
             $qb->andWhere($orXSearch);
         }
