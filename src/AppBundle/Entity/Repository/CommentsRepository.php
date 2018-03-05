@@ -35,7 +35,7 @@ class CommentsRepository extends EntityRepository
      *
      * @return Comments[]|int
      */
-    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
+    public function getEntitiesByFieldApprove(ParamFetcher $paramFetcher, $count = false)
     {
         $em = $this->getEntityManager();
 
@@ -55,7 +55,59 @@ class CommentsRepository extends EntityRepository
 
         $qb
             ->from('AppBundle:Comments', 'c')
-            ->where('c.reply IS NULL');
+            ->where('c.reply IS NULL')
+            ->where('c.approve = FALSE');
+
+
+
+        if (!$count) {
+            $qb
+                ->orderBy('c.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
+                ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
+                ->setMaxResults($paramFetcher->get('count'));
+        }
+
+        $query = $qb->getQuery();
+
+        if ($count) {
+            $results = $query->getSingleScalarResult();
+        } else {
+            $results = $query->getResult();
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param ParamFetcher $paramFetcher
+     * @param bool         $count
+     *
+     * @return Comments[]|int
+     */
+    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        if ($count) {
+            $qb
+                ->select('
+                    COUNT(DISTINCT c.id)
+                ');
+        } else {
+            $qb
+                ->select('
+                    c
+                ');
+        }
+
+            $qb
+                ->from('AppBundle:Comments', 'c')
+                ->where('c.reply IS NULL')
+                ->where('c.approve = TRUE');
+
+
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();

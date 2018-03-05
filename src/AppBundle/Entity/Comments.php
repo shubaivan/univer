@@ -77,6 +77,14 @@ class Comments
     private $text;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     * @Annotation\Groups({
+     *     "get_comment", "get_comments", "post_comment", "put_comment"
+     * })
+     */
+    private $approve = false;
+
+    /**
      * @var Comments
      *
      * @ORM\ManyToOne(targetEntity="Comments", inversedBy="children")
@@ -143,6 +151,32 @@ class Comments
     {
         return $this->text;
     }
+
+    /**
+     * Set approve.
+     *
+     * @param boolean $approve
+     *
+     * @return Comments
+     */
+    public function setApprove($approve)
+    {
+        $this->approve = $approve;
+
+        return $this;
+    }
+
+    /**
+     * Get approve.
+     *
+     * @return boolean
+     */
+    public function getApprove()
+    {
+        return $this->approve;
+    }
+
+
 
     /**
      * Set questions.
