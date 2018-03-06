@@ -49,7 +49,6 @@ class CommentsController extends AbstractRestController
         return $this->createSuccessResponse($comments, ['get_comment'], true);
     }
 
-
     /**
      * Get not approve list comments.
      * <strong>Simple example:</strong><br />
@@ -88,13 +87,13 @@ class CommentsController extends AbstractRestController
     {
         try {
             $em = $this->getDoctrine()->getManager();
-//            $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
+            $paramFetcher = $this->setParamFetcherData($paramFetcher, 'approve', false);
             $comments = $em->getRepository('AppBundle:Comments');
 
             return $this->createSuccessResponse(
                 [
-                    'comments' => $comments->getEntitiesByFieldApprove($paramFetcher),
-                    'total' => $comments->getEntitiesByFieldApprove($paramFetcher, true),
+                    'comments' => $comments->getEntitiesByParams($paramFetcher),
+                    'total' => $comments->getEntitiesByParams($paramFetcher, true),
                 ],
                 ['get_comments'],
                 true
@@ -146,6 +145,7 @@ class CommentsController extends AbstractRestController
         try {
             $em = $this->getDoctrine()->getManager();
             $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
+            $paramFetcher = $this->setParamFetcherData($paramFetcher, 'approve', true);
             $comments = $em->getRepository('AppBundle:Comments');
 
             return $this->createSuccessResponse(

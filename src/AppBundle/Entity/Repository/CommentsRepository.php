@@ -5,7 +5,6 @@ namespace AppBundle\Entity\Repository;
 use AppBundle\Entity\Comments;
 use AppBundle\Helper\AdditionalFunction;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -17,7 +16,7 @@ class CommentsRepository extends EntityRepository
     /**
      * @var AdditionalFunction
      */
-    private  $additionalFunction;
+    private $additionalFunction;
 
     /**
      * @DI\InjectParams({
@@ -35,10 +34,10 @@ class CommentsRepository extends EntityRepository
      *
      * @return Comments[]|int
      */
-    public function getEntitiesByFieldApprove(ParamFetcher $paramFetcher, $count = false)
+    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
         $em = $this->getEntityManager();
-
+        $params = $paramFetcher->getParams();
         $qb = $em->createQueryBuilder();
 
         if ($count) {
@@ -54,60 +53,14 @@ class CommentsRepository extends EntityRepository
         }
 
         $qb
-            ->from('AppBundle:Comments', 'c')
-            ->where('c.reply IS NULL')
-            ->where('c.approve = FALSE');
-
-
-
-        if (!$count) {
-            $qb
-                ->orderBy('c.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
-                ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
-                ->setMaxResults($paramFetcher->get('count'));
-        }
-
-        $query = $qb->getQuery();
-
-        if ($count) {
-            $results = $query->getSingleScalarResult();
-        } else {
-            $results = $query->getResult();
-        }
-
-        return $results;
-    }
-
-    /**
-     * @param ParamFetcher $paramFetcher
-     * @param bool         $count
-     *
-     * @return Comments[]|int
-     */
-    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
-    {
-        $em = $this->getEntityManager();
-
-        $qb = $em->createQueryBuilder();
-
-        if ($count) {
-            $qb
-                ->select('
-                    COUNT(DISTINCT c.id)
-                ');
-        } else {
-            $qb
-                ->select('
-                    c
-                ');
-        }
-
-            $qb
                 ->from('AppBundle:Comments', 'c')
-                ->where('c.reply IS NULL')
-                ->where('c.approve = TRUE');
+                ->where('c.reply IS NULL');
 
-
+        if (array_key_exists('approve', $params) && $paramFetcher->get('approve')) {
+            $qb
+                ->andWhere('c.approve = :approve')
+                ->setParameter('approve', $paramFetcher->get('approve'));
+        }
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
@@ -126,8 +79,6 @@ class CommentsRepository extends EntityRepository
 
             $qb->andWhere($andXSearch);
         }
-
-        $params = $paramFetcher->getParams();
 
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
@@ -151,7 +102,7 @@ class CommentsRepository extends EntityRepository
             $first->setTime(0, 0, 0);
             $last = clone $date;
             $last->setDate($date->format('Y'), 12, 31);
-            $last->setTime(23, 59   , 59);
+            $last->setTime(23, 59, 59);
 
             $qb
                 ->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
