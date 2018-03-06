@@ -50,6 +50,63 @@ class CommentsController extends AbstractRestController
     }
 
     /**
+     * Get not approve list comments.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/admins/unconfirmed/comments <br>.
+     *
+     * @Rest\Get("/api/admins/unconfirmed/comments")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get not approve list comments",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Comment"
+     * )
+     *
+     * @RestView()
+     *
+     * @Rest\QueryParam(name="search", description="search fields - text")
+     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
+     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
+     * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
+     * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getNotApproveCommentAction(ParamFetcher $paramFetcher)
+    {
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $paramFetcher = $this->setParamFetcherData($paramFetcher, 'approve', false);
+            $comments = $em->getRepository('AppBundle:Comments');
+
+            return $this->createSuccessResponse(
+                [
+                    'comments' => $comments->getEntitiesByParams($paramFetcher),
+                    'total' => $comments->getEntitiesByParams($paramFetcher, true),
+                ],
+                ['get_comments'],
+                true
+            );
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Get list comments.
      * <strong>Simple example:</strong><br />
      * http://host/api/comments <br>.
@@ -88,6 +145,7 @@ class CommentsController extends AbstractRestController
         try {
             $em = $this->getDoctrine()->getManager();
             $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
+            $paramFetcher = $this->setParamFetcherData($paramFetcher, 'approve', true);
             $comments = $em->getRepository('AppBundle:Comments');
 
             return $this->createSuccessResponse(

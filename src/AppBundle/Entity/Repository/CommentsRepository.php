@@ -5,7 +5,6 @@ namespace AppBundle\Entity\Repository;
 use AppBundle\Entity\Comments;
 use AppBundle\Helper\AdditionalFunction;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -17,7 +16,7 @@ class CommentsRepository extends EntityRepository
     /**
      * @var AdditionalFunction
      */
-    private  $additionalFunction;
+    private $additionalFunction;
 
     /**
      * @DI\InjectParams({
@@ -38,7 +37,7 @@ class CommentsRepository extends EntityRepository
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {
         $em = $this->getEntityManager();
-
+        $params = $paramFetcher->getParams();
         $qb = $em->createQueryBuilder();
 
         if ($count) {
@@ -54,8 +53,14 @@ class CommentsRepository extends EntityRepository
         }
 
         $qb
-            ->from('AppBundle:Comments', 'c')
-            ->where('c.reply IS NULL');
+                ->from('AppBundle:Comments', 'c')
+                ->where('c.reply IS NULL');
+
+        if (array_key_exists('approve', $params) && $paramFetcher->get('approve')) {
+            $qb
+                ->andWhere('c.approve = :approve')
+                ->setParameter('approve', $paramFetcher->get('approve'));
+        }
 
         if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
@@ -74,8 +79,6 @@ class CommentsRepository extends EntityRepository
 
             $qb->andWhere($andXSearch);
         }
-
-        $params = $paramFetcher->getParams();
 
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
@@ -99,7 +102,7 @@ class CommentsRepository extends EntityRepository
             $first->setTime(0, 0, 0);
             $last = clone $date;
             $last->setDate($date->format('Y'), 12, 31);
-            $last->setTime(23, 59   , 59);
+            $last->setTime(23, 59, 59);
 
             $qb
                 ->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
