@@ -2,13 +2,10 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Favorites;
-use AppBundle\Entity\User;
 use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,7 +102,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
                 true
             );
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);

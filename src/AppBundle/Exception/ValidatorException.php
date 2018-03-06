@@ -3,6 +3,8 @@
 namespace AppBundle\Exception;
 
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class ValidatorException extends \Exception implements \JsonSerializable
 {
@@ -10,6 +12,11 @@ class ValidatorException extends \Exception implements \JsonSerializable
      * @var array
      */
     private $errorsArray = [];
+
+    /**
+     * @var ConstraintViolationList
+     */
+    private $constraintViolatinosList;
 
     /**
      * @param array           $errors
@@ -52,11 +59,23 @@ class ValidatorException extends \Exception implements \JsonSerializable
     /**
      * @param array $message
      *
-     * @return array
+     * @return $this
      */
     public function addError(array $message)
     {
         $this->errorsArray[] = $message;
+
+        return $this;
+    }
+
+    public function setConstraintViolatinosList(ConstraintViolationListInterface $list)
+    {
+        $this->constraintViolatinosList = $list;
+    }
+
+    public function getConstraintViolatinosList()
+    {
+        return $this->constraintViolatinosList;
     }
 
     public function jsonSerialize()

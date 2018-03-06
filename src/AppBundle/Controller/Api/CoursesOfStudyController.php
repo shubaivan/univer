@@ -147,7 +147,7 @@ class CoursesOfStudyController extends AbstractRestController
 
             return $this->createSuccessResponse($coursesOfStudy, ['get_course_of_study'], true);
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
@@ -201,7 +201,7 @@ class CoursesOfStudyController extends AbstractRestController
 
             return $this->createSuccessResponse($coursesOfStudy, ['get_course_of_study'], true);
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);

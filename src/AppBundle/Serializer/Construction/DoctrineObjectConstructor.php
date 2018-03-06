@@ -107,7 +107,8 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
         if (null === $object) {
             switch ($this->fallbackStrategy) {
                 case self::ON_MISSING_NULL:
-                    return null;
+//                    return null;
+                    throw new ObjectConstructionException(sprintf('Entity %s with %s can not be found', $metadata->name, implode(',', $identifierList)));
                 case self::ON_MISSING_EXCEPTION:
                     throw new ObjectConstructionException(sprintf('Entity %s can not be found', $metadata->name));
                 case self::ON_MISSING_FALLBACK:

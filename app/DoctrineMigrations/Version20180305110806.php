@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Bbt\Migrations;
 
@@ -15,14 +17,13 @@ class Version20180305110806 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE comments ADD approve BIT DEFAULT FALSE ');
-
+        $this->addSql('ALTER TABLE comments ADD approve TINYINT(1) DEFAULT NULL');
     }
 
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql('ALTER TABLE comments DROP approve');
     }
 }

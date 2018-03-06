@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\User;
+use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -84,7 +85,9 @@ class AbstractRestController extends FOSRestController
      * @param $class
      * @param array $groups
      *
-     * @return array|\JMS\Serializer\scalar|mixed|object|\Symfony\Component\HttpFoundation\Response|View
+     * @throws \Exception|ValidatorException
+     *
+     * @return object
      */
     protected function validateEntites(Request $request, $requestType, $class, array $groups = [])
     {
@@ -140,6 +143,7 @@ class AbstractRestController extends FOSRestController
      * @param ParamFetcher $paramFetcher
      * @param $key
      * @param $data
+     *
      * @return ParamFetcher
      */
     protected function setParamFetcherData(ParamFetcher $paramFetcher, $key, $data)

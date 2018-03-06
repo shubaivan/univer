@@ -5,7 +5,6 @@ namespace AppBundle\Services;
 use AppBundle\Controller\Api\AbstractRestController;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
-use FOS\RestBundle\View\View;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -58,8 +57,10 @@ class ObjectManager
      * @param $requestType
      * @param $class
      * @param array $groups
+     *
+     * @throws \Exception|ValidatorException
+     *
      * @return object
-     * @throws ValidatorException|\Exception
      */
     public function validateEntites($requestType, $class, array $groups = [])
     {
@@ -151,7 +152,7 @@ class ObjectManager
             ->validate($entity, null, $validateGroups);
         if (count($errors)) {
             $validatorException = new ValidatorException();
-            $validatorException->addError([$errors]);
+            $validatorException->setConstraintViolatinosList($errors);
 
             throw $validatorException;
         }

@@ -18,14 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @AssertBridge\UniqueEntity(
  *     groups={"registration", "admin_post_user"},
  *     fields="username",
- *     errorPath="not valid",
- *     message="This username is already in use."
+ *     errorPath="not valid"
  * )
  * @AssertBridge\UniqueEntity(
  *     groups={"registration", "admin_post_user"},
  *     fields="email",
- *     errorPath="not valid",
- *     message="This email is already in use."
+ *     errorPath="not valid"
  * )
  */
 class User extends AbstractUser implements UserInterface
@@ -65,9 +63,12 @@ class User extends AbstractUser implements UserInterface
      * @Annotation\Groups({
      *      "profile", "registration", "put_user", "admin_post_user", "admin_put_user"
      * })
-     * @Assert\NotBlank(groups={"registration", "put_user", "admin_post_user"})
      * @Annotation\SerializedName("_email")
      * @Annotation\Accessor(setter="setEmailAccessor")
+     * @Assert\Email(
+     *     groups={"registration", "put_user", "admin_post_user"},
+     *     checkMX = false
+     * )
      */
     private $email;
 
@@ -78,6 +79,11 @@ class User extends AbstractUser implements UserInterface
      *      "registration", "admin_post_user", "admin_put_user"
      * })
      * @Annotation\SerializedName("_password")
+     * @Assert\Length(
+     *     groups={"registration", "put_user"},
+     *      min = 5,
+     *      max = 100
+     * )
      */
     private $password;
 

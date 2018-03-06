@@ -3,10 +3,12 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Admin;
+use AppBundle\Entity\Events;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
+use AppBundle\Services\ObjectManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -59,15 +61,20 @@ class QuestionsController extends AbstractRestController
     /**
      * Get list questions.
      * <strong>Simple example:</strong><br />
-     * http://host/api/questions <br>.
+     * http://host/api/list/questions <br>.
      *
-     * @Rest\Get("/api/questions")
+     * @Rest\Post("/api/list/questions")
      * @ApiDoc(
      * resource = true,
      * description = "Get list questions",
      * authentication=true,
      *  parameters={
-     *
+     *      {"name"="courses_of_study", "dataType"="object", "required"=false, "description"="courses_of_study object"},
+     *      {"name"="courses", "dataType"="array<object>", "required"=false, "description"="courses array object"},
+     *      {"name"="sub_courses", "dataType"="array<object>", "required"=false, "description"="sub_courses array object"},
+     *      {"name"="lectors", "dataType"="array<object>", "required"=false, "description"="lecturer array object"},
+     *      {"name"="exam_periods", "dataType"="array<object>", "required"=false, "description"="exam_periods array object"},
+     *      {"name"="semesters", "dataType"="array<object>", "required"=false, "description"="semesters array object"},
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -98,12 +105,19 @@ class QuestionsController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminQuestionAction(ParamFetcher $paramFetcher)
+    public function getQuestionsListAction(Request $request, ParamFetcher $paramFetcher)
     {
         try {
-            $em = $this->getDoctrine();
+            $em = $this->getDoctrine()->getManager();
+            /** @var ObjectManager $auth */
+            $auth = $this->get('app.auth');
+            $this->prepareAuthor();
+            /** @var Events $events */
+            $events = $auth->validateEntites('request', Events::class, ['post_event']);
+            $em->persist($events);
+            $em->flush();
 
-            $questions = $em->getRepository('AppBundle:Questions');
+            $questions = $em->getRepository(Questions::class);
 
             return $this->createSuccessResponse(
                 [
@@ -202,7 +216,7 @@ class QuestionsController extends AbstractRestController
 
             return $this->createSuccessResponse($questions, ['get_question'], true);
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);

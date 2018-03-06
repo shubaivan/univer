@@ -148,7 +148,7 @@ class UserController extends AbstractRestController
 
             return $this->createSuccessResponse($user, ['profile'], true);
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
@@ -230,7 +230,7 @@ class UserController extends AbstractRestController
 
             return $this->createSuccessResponse($user, ['profile'], true);
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);

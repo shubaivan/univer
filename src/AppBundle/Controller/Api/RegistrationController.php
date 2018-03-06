@@ -5,6 +5,8 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Security\AuthenticationSuccessHandler;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -44,6 +46,7 @@ class RegistrationController extends AbstractRestController
      */
     public function postRegistrationAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $encoder = $this->container->get('security.password_encoder');
         $logger = $this->container->get('logger');
@@ -68,13 +71,13 @@ class RegistrationController extends AbstractRestController
                 ->setPassword($encoder->encodePassword($user, $password));
             $em->persist($user);
             $em->flush();
-
+            /** @var AuthenticationSuccessHandler $lexikJwtAuthentication */
             $lexikJwtAuthentication = $this->get('custom');
             $event = $lexikJwtAuthentication->handleAuthenticationSuccess($user, null, true);
 
             return $this->createSuccessResponse($event->getData());
         } catch (ValidatorException $e) {
-            $view = $this->view(['message' => $e->getErrorsMessage()], self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
