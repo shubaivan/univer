@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * QuestionsRepository.
@@ -66,12 +67,11 @@ class QuestionsRepository extends EntityRepository
     }
 
     /**
-     * @param ParamFetcher $paramFetcher
-     * @param bool         $count
-     *
+     * @param ParameterBag $parameterBag
+     * @param bool $count
      * @return int|Questions[]
      */
-    public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
+    public function getEntitiesByParams(ParameterBag $parameterBag, $count = false)
     {
         $em = $this->getEntityManager();
 
@@ -90,10 +90,10 @@ class QuestionsRepository extends EntityRepository
         $qb
             ->from('AppBundle:Questions', 'q');
 
-        if ($paramFetcher->get('search')) {
+        if ($parameterBag->get('search')) {
             $andXSearch = $qb->expr()->andX();
 
-            foreach (explode(' ', $paramFetcher->get('search')) as $key => $word) {
+            foreach (explode(' ', $parameterBag->get('search')) as $key => $word) {
                 if (!$word) {
                     continue;
                 }
@@ -109,37 +109,37 @@ class QuestionsRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-        if ($paramFetcher->get('user')) {
+        if ($parameterBag->get('user')) {
             $qb
-                ->andWhere($qb->expr()->eq('q.user', $paramFetcher->get('user')));
+                ->andWhere($qb->expr()->eq('q.user', $parameterBag->get('user')));
         }
 
-        if ($paramFetcher->get('semesters')) {
-            $this->queryAndXHelper($qb, $paramFetcher, 'semesters', 'semesters');
+        if ($parameterBag->get('semesters')) {
+            $this->queryAndXHelper($qb, $parameterBag, 'semesters', 'semesters');
         }
 
-        if ($paramFetcher->get('exam_periods')) {
-            $this->queryAndXHelper($qb, $paramFetcher, 'exam_periods', 'examPeriods');
+        if ($parameterBag->get('exam_periods')) {
+            $this->queryAndXHelper($qb, $parameterBag, 'exam_periods', 'examPeriods');
         }
 
-        if ($paramFetcher->get('sub_courses')) {
-            $this->queryAndXHelper($qb, $paramFetcher, 'sub_courses', 'subCourses');
+        if ($parameterBag->get('sub_courses')) {
+            $this->queryAndXHelper($qb, $parameterBag, 'sub_courses', 'subCourses');
         }
 
-        if ($paramFetcher->get('lectors')) {
-            $this->queryAndXHelper($qb, $paramFetcher, 'lectors', 'lectors');
+        if ($parameterBag->get('lectors')) {
+            $this->queryAndXHelper($qb, $parameterBag, 'lectors', 'lectors');
         }
 
-        if ($paramFetcher->get('courses') || $paramFetcher->get('courses_of_study')) {
+        if ($parameterBag->get('courses') || $parameterBag->get('courses_of_study')) {
             $qb
                 ->leftJoin('q.subCourses', 'subCourses')
                 ->leftJoin('subCourses.courses', 'courses');
         }
 
-        if ($paramFetcher->get('courses')) {
+        if ($parameterBag->get('courses')) {
             $orXSearch = $qb->expr()->orX();
-            $semestersData = trim($paramFetcher->get('courses'));
-            foreach (explode(',', $semestersData) as $key => $id) {
+
+            foreach ($parameterBag->get('courses') as $key => $id) {
                 if (!$id) {
                     continue;
                 }
@@ -149,10 +149,10 @@ class QuestionsRepository extends EntityRepository
             $qb->andWhere($orXSearch);
         }
 
-        if ($paramFetcher->get('years')) {
+        if ($parameterBag->get('years')) {
 
             $orXSearch = $qb->expr()->orX();
-            $yearData = trim($paramFetcher->get('years'));
+            $yearData = trim($parameterBag->get('years'));
             foreach (explode(',', $yearData) as $key => $id) {
                 if (!$id) {
                     continue;
@@ -179,18 +179,18 @@ class QuestionsRepository extends EntityRepository
             $qb->andWhere($orXSearch);
         }
 
-        if ($paramFetcher->get('courses_of_study')) {
+        if ($parameterBag->get('courses_of_study')) {
             $qb
                 ->leftJoin('courses.coursesOfStudy', 'courses_of_study')
                 ->andWhere('courses_of_study.id = :courses_of_study_id')
-                ->setParameter('courses_of_study_id', $paramFetcher->get('courses_of_study'));
+                ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
         }
 
         if (!$count) {
             $qb
-                ->orderBy('q.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
-                ->setFirstResult($paramFetcher->get('count') * ($paramFetcher->get('page') - 1))
-                ->setMaxResults($paramFetcher->get('count'));
+                ->orderBy('q.'.$parameterBag->get('sort_by'), $parameterBag->get('sort_order'))
+                ->setFirstResult($parameterBag->get('count') * ($parameterBag->get('page') - 1))
+                ->setMaxResults($parameterBag->get('count'));
         }
 
         $query = $qb->getQuery();
@@ -204,16 +204,22 @@ class QuestionsRepository extends EntityRepository
         return $results;
     }
 
+    /**
+     * @param QueryBuilder $qb
+     * @param ParameterBag $parameterBag
+     * @param $paramKey
+     * @param $mappingName
+     */
     private function queryAndXHelper(
         QueryBuilder $qb,
-        ParamFetcher $paramFetcher,
+        ParameterBag $parameterBag,
         $paramKey,
         $mappingName
     )
     {
         $orXSearch = $qb->expr()->orX();
-        $data = trim($paramFetcher->get($paramKey));
-        foreach (explode(',', $data) as $key => $id) {
+
+        foreach ($parameterBag->get($paramKey) as $key => $id) {
             if (!$id) {
                 continue;
             }

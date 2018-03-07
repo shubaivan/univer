@@ -7,12 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
+use AppBundle\Validator\Constraints\ConditionAuthor;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="events")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\EventsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionAuthor(groups={"post_event"})
  */
 class Events
 {
@@ -40,7 +43,7 @@ class Events
      *     "post_event"
      * })
      */
-    private $type;
+    private $type = 'question';
 
     /**
      * @var CoursesOfStudy
@@ -127,6 +130,54 @@ class Events
      * })
      */
     private $admin;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $count = 10;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $page = 1;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $sortBy = 'createdAt';
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $sortOrder = 'DESC';
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $years;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     */
+    private $search;
 
     /**
      * Constructor.
@@ -249,13 +300,11 @@ class Events
     }
 
     /**
-     * Get courses.
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Courses[]|ArrayCollection
      */
     public function getCourses()
     {
-        return $this->courses;
+        return $this->courses ? $this->courses : new ArrayCollection();
     }
 
     /**
@@ -291,7 +340,7 @@ class Events
      */
     public function getSubCourses()
     {
-        return $this->subCourses;
+        return $this->subCourses ? $this->subCourses : new ArrayCollection();
     }
 
     /**
@@ -327,7 +376,7 @@ class Events
      */
     public function getLectors()
     {
-        return $this->lectors;
+        return $this->lectors ? $this->lectors : new ArrayCollection();
     }
 
     /**
@@ -363,7 +412,7 @@ class Events
      */
     public function getExamPeriods()
     {
-        return $this->examPeriods;
+        return $this->examPeriods ? $this->examPeriods : new ArrayCollection();
     }
 
     /**
@@ -399,7 +448,7 @@ class Events
      */
     public function getSemesters()
     {
-        return $this->semesters;
+        return $this->semesters ? $this->semesters : new ArrayCollection();
     }
 
     /**
@@ -450,7 +499,218 @@ class Events
         return $this->admin;
     }
 
+    /**
+     * @return ParameterBag
+     */
     public function checkCondition()
     {
+        $parameters = new ParameterBag();
+
+        if ($this->getUser()) {
+            $parameters->set('user', $this->getUser()->getId());
+        }
+
+        if ($this->getSearch()) {
+            $parameters->set('search', $this->getSearch());
+        }
+
+        if ($this->getYears()) {
+            $parameters->set('years', $this->getYears());
+        }
+
+        if ($this->getCoursesOfStudy()) {
+            $parameters->set('courses_of_study', $this->getCoursesOfStudy()->getId());
+        }
+
+        if ($this->getCourses()->count()) {
+            $coursData = [];
+            foreach ($this->getCourses() as $cours) {
+                $coursData[]=$cours->getId();
+            }
+        $parameters->set('courses', $coursData);
+        }
+
+        if ($this->getSubCourses()->count()) {
+            $subCoursData = [];
+            foreach ($this->getSubCourses() as $subCours) {
+                $subCoursData[]=$subCours->getId();
+            }
+            $parameters->set('sub_courses', $subCoursData);
+        }
+
+        if ($this->getLectors()->count()) {
+            $lectorData = [];
+            foreach ($this->getLectors() as $lector) {
+                $lectorData[]=$lector->getId();
+            }
+            $parameters->set('lectors', $lectorData);
+        }
+
+        if ($this->getExamPeriods()->count()) {
+            $examPeriodData = [];
+            foreach ($this->getExamPeriods() as $examPeriod) {
+                $examPeriodData[]=$examPeriod->getId();
+            }
+            $parameters->set('exam_periods', $examPeriodData);
+        }
+
+        if ($this->getSemesters()->count()) {
+            $semesterData = [];
+            foreach ($this->getSemesters() as $semester) {
+                $semesterData[]=$semester->getId();
+            }
+            $parameters->set('semesters', $semesterData);
+        }
+
+        $parameters->set('sort_by', $this->getSortBy());
+        $parameters->set('sort_order', $this->getSortOrder());
+        $parameters->set('count', $this->getCount());
+        $parameters->set('page', $this->getPage());
+
+        return $parameters;
+    }
+
+    /**
+     * Set count.
+     *
+     * @param int $count
+     *
+     * @return Events
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
+    /**
+     * Get count.
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Set page.
+     *
+     * @param int $page
+     *
+     * @return Events
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Get page.
+     *
+     * @return int
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Set sortBy.
+     *
+     * @param string $sortBy
+     *
+     * @return Events
+     */
+    public function setSortBy($sortBy)
+    {
+        $this->sortBy = $sortBy;
+
+        return $this;
+    }
+
+    /**
+     * Get sortBy.
+     *
+     * @return string
+     */
+    public function getSortBy()
+    {
+        return $this->sortBy;
+    }
+
+    /**
+     * Set sortOrder.
+     *
+     * @param string $sortOrder
+     *
+     * @return Events
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get sortOrder.
+     *
+     * @return string
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set years.
+     *
+     * @param string $years
+     *
+     * @return Events
+     */
+    public function setYears($years)
+    {
+        $this->years = $years;
+
+        return $this;
+    }
+
+    /**
+     * Get years.
+     *
+     * @return string
+     */
+    public function getYears()
+    {
+        return $this->years;
+    }
+
+    /**
+     * Set search.
+     *
+     * @param string $search
+     *
+     * @return Events
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+
+        return $this;
+    }
+
+    /**
+     * Get search.
+     *
+     * @return string
+     */
+    public function getSearch()
+    {
+        return $this->search;
     }
 }

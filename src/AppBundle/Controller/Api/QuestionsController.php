@@ -75,6 +75,13 @@ class QuestionsController extends AbstractRestController
      *      {"name"="lectors", "dataType"="array<object>", "required"=false, "description"="lecturer array object"},
      *      {"name"="exam_periods", "dataType"="array<object>", "required"=false, "description"="exam_periods array object"},
      *      {"name"="semesters", "dataType"="array<object>", "required"=false, "description"="semesters array object"},
+     *      {"name"="count", "dataType"="integer", "required"=false, "description"="count"},
+     *      {"name"="page", "dataType"="integer", "required"=false, "description"="page"},
+     *      {"name"="sort_by", "dataType"="text", "required"=false, "description"="sort_by"},
+     *      {"name"="sort_order", "dataType"="text", "required"=false, "description"="sort_by"},
+     *      {"name"="years", "dataType"="text", "required"=false, "description"="years, delimiter (,)"},
+     *      {"name"="search", "dataType"="text", "required"=false, "description"="search fields - text, notes"},
+     *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -85,27 +92,14 @@ class QuestionsController extends AbstractRestController
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="search", description="search fields - text, notes")
-     * @Rest\QueryParam(name="user", requirements="\d+", description="user id")
-     * @Rest\QueryParam(name="semesters", requirements="^[0-9,-]*", description="semesters id, delimiter (,)")
-     * @Rest\QueryParam(name="exam_periods", requirements="^[0-9,-]*", description="exam_periods id, delimiter (,)")
-     * @Rest\QueryParam(name="sub_courses", requirements="^[0-9,-]*", description="sub_courses id, delimiter (,)")
-     * @Rest\QueryParam(name="lectors", requirements="^[0-9,-]*", description="lectors id, delimiter (,)")
-     * @Rest\QueryParam(name="years", requirements="^[0-9,-]*", description="years, delimiter (,)")
-     * @Rest\QueryParam(name="courses_of_study", requirements="\d+", description="courses_of_study")
-     * @Rest\QueryParam(name="courses", requirements="^[0-9,-]*", description="courses id, delimiter (,)")
-     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
-     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
-     * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
-     * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
      *
-     * @param ParamFetcher $paramFetcher
+     * @param Request $request
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getQuestionsListAction(Request $request, ParamFetcher $paramFetcher)
+    public function getQuestionsListAction(Request $request)
     {
         try {
             $em = $this->getDoctrine()->getManager();
@@ -116,13 +110,13 @@ class QuestionsController extends AbstractRestController
             $events = $auth->validateEntites('request', Events::class, ['post_event']);
             $em->persist($events);
             $em->flush();
-
+            $parameterBag  = $events->checkCondition();
             $questions = $em->getRepository(Questions::class);
 
             return $this->createSuccessResponse(
                 [
-                    'questions' => $questions->getEntitiesByParams($paramFetcher),
-                    'total' => $questions->getEntitiesByParams($paramFetcher, true),
+                    'questions' => $questions->getEntitiesByParams($parameterBag),
+                    'total' => $questions->getEntitiesByParams($parameterBag, true),
                 ],
                 ['get_questions', 'get_user_question_answer_test'],
                 true
