@@ -11,7 +11,6 @@ use AppBundle\Helper\FileUploader;
 use AppBundle\Services\ObjectManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -81,7 +80,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="sort_order", "dataType"="text", "required"=false, "description"="sort_by"},
      *      {"name"="years", "dataType"="text", "required"=false, "description"="years, delimiter (,)"},
      *      {"name"="search", "dataType"="text", "required"=false, "description"="search fields - text, notes"},
-     *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"}
+     *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"},
+     *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -91,7 +91,6 @@ class QuestionsController extends AbstractRestController
      * )
      *
      * @RestView()
-     *
      *
      * @param Request $request
      *
@@ -110,7 +109,7 @@ class QuestionsController extends AbstractRestController
             $events = $auth->validateEntites('request', Events::class, ['post_event']);
             $em->persist($events);
             $em->flush();
-            $parameterBag  = $events->checkCondition();
+            $parameterBag = $events->checkCondition();
             $questions = $em->getRepository(Questions::class);
 
             return $this->createSuccessResponse(

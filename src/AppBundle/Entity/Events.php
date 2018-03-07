@@ -2,12 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Enum\EventStateEnum;
+use AppBundle\Validator\Constraints\ConditionAuthor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
-use AppBundle\Validator\Constraints\ConditionAuthor;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -59,7 +60,8 @@ class Events
     /**
      * @var ArrayCollection|Courses[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Courses", mappedBy="events", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", inversedBy="events", cascade={"persist"})
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Courses>")
      * @Annotation\Groups({
      *     "post_event"
      * })
@@ -69,7 +71,8 @@ class Events
     /**
      * @var ArrayCollection|SubCourses[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SubCourses", mappedBy="events", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SubCourses", inversedBy="events", cascade={"persist"})
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\SubCourses>")
      * @Annotation\Groups({
      *     "post_event"
      * })
@@ -79,7 +82,8 @@ class Events
     /**
      * @var ArrayCollection|Lectors[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Lectors", mappedBy="events", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Lectors", inversedBy="events", cascade={"persist"})
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\Lectors>")
      * @Annotation\Groups({
      *     "post_event"
      * })
@@ -89,7 +93,8 @@ class Events
     /**
      * @var ArrayCollection|ExamPeriods[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExamPeriods", mappedBy="events", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="events", cascade={"persist"})
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\ExamPeriods>")
      * @Annotation\Groups({
      *     "post_event"
      * })
@@ -99,7 +104,7 @@ class Events
     /**
      * @var ArrayCollection|Semesters[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Semesters", mappedBy="events", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Semesters", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Semesters>")
      * @Annotation\Groups({
      *     "post_event"
@@ -178,6 +183,15 @@ class Events
      * })
      */
     private $search;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Annotation\Groups({
+     *     "post_event"
+     * })
+     * @Annotation\Accessor(setter="setSerializedAccessorUserState")
+     */
+    private $userState;
 
     /**
      * Constructor.
@@ -300,7 +314,7 @@ class Events
     }
 
     /**
-     * @return Courses[]|ArrayCollection
+     * @return ArrayCollection|Courses[]
      */
     public function getCourses()
     {
@@ -506,6 +520,10 @@ class Events
     {
         $parameters = new ParameterBag();
 
+        if ($this->getUserState()) {
+            $parameters->set('user_state', $this->getUserState());
+        }
+
         if ($this->getUser()) {
             $parameters->set('user', $this->getUser()->getId());
         }
@@ -525,15 +543,15 @@ class Events
         if ($this->getCourses()->count()) {
             $coursData = [];
             foreach ($this->getCourses() as $cours) {
-                $coursData[]=$cours->getId();
+                $coursData[] = $cours->getId();
             }
-        $parameters->set('courses', $coursData);
+            $parameters->set('courses', $coursData);
         }
 
         if ($this->getSubCourses()->count()) {
             $subCoursData = [];
             foreach ($this->getSubCourses() as $subCours) {
-                $subCoursData[]=$subCours->getId();
+                $subCoursData[] = $subCours->getId();
             }
             $parameters->set('sub_courses', $subCoursData);
         }
@@ -541,7 +559,7 @@ class Events
         if ($this->getLectors()->count()) {
             $lectorData = [];
             foreach ($this->getLectors() as $lector) {
-                $lectorData[]=$lector->getId();
+                $lectorData[] = $lector->getId();
             }
             $parameters->set('lectors', $lectorData);
         }
@@ -549,7 +567,7 @@ class Events
         if ($this->getExamPeriods()->count()) {
             $examPeriodData = [];
             foreach ($this->getExamPeriods() as $examPeriod) {
-                $examPeriodData[]=$examPeriod->getId();
+                $examPeriodData[] = $examPeriod->getId();
             }
             $parameters->set('exam_periods', $examPeriodData);
         }
@@ -557,7 +575,7 @@ class Events
         if ($this->getSemesters()->count()) {
             $semesterData = [];
             foreach ($this->getSemesters() as $semester) {
-                $semesterData[]=$semester->getId();
+                $semesterData[] = $semester->getId();
             }
             $parameters->set('semesters', $semesterData);
         }
@@ -712,5 +730,43 @@ class Events
     public function getSearch()
     {
         return $this->search;
+    }
+
+    /**
+     * @param string $userState
+     */
+    public function setSerializedAccessorUserState($userState)
+    {
+        $this->setUserState($userState);
+    }
+
+    /**
+     * Set userState.
+     *
+     * @param null|string $userState
+     *
+     * @return Events
+     */
+    public function setUserState($userState = null)
+    {
+        if (!in_array($userState, EventStateEnum::getAvailableTypes(), true)) {
+            throw new \InvalidArgumentException(
+                'Invalid type. Available type: '.implode(',', EventStateEnum::getAvailableTypes())
+            );
+        }
+
+        $this->userState = $userState;
+
+        return $this;
+    }
+
+    /**
+     * Get userState.
+     *
+     * @return null|string
+     */
+    public function getUserState()
+    {
+        return $this->userState;
     }
 }

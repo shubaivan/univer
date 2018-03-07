@@ -153,6 +153,13 @@ class Questions
     private $questionAnswers;
 
     /**
+     * @var ArrayCollection|UserQuestionAnswerOpen[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerOpen", mappedBy="questions", cascade={"persist" , "remove"})
+     */
+    private $questionAnswersOpen;
+
+    /**
      * @var ArrayCollection|Favorites[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favorites", mappedBy="questions", cascade={"persist", "remove"})
@@ -229,6 +236,7 @@ class Questions
         $this->favorites = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionAnswers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionAnswersOpen = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -765,7 +773,7 @@ class Questions
      *
      * @param \AppBundle\Entity\QuestionAnswers $questionAnswer
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeQuestionAnswer(\AppBundle\Entity\QuestionAnswers $questionAnswer)
     {
@@ -784,5 +792,41 @@ class Questions
         }
 
         return $this->questionAnswers;
+    }
+
+    /**
+     * Add questionAnswersOpen.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerOpen $questionAnswersOpen
+     *
+     * @return Questions
+     */
+    public function addQuestionAnswersOpen(\AppBundle\Entity\UserQuestionAnswerOpen $questionAnswersOpen)
+    {
+        $this->questionAnswersOpen[] = $questionAnswersOpen;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionAnswersOpen.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerOpen $questionAnswersOpen
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionAnswersOpen(\AppBundle\Entity\UserQuestionAnswerOpen $questionAnswersOpen)
+    {
+        return $this->questionAnswersOpen->removeElement($questionAnswersOpen);
+    }
+
+    /**
+     * Get questionAnswersOpen.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionAnswersOpen()
+    {
+        return $this->questionAnswersOpen;
     }
 }

@@ -35,6 +35,13 @@ class UserQuestionAnswerOpen
     private $text;
 
     /**
+     * @var Questions
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="questionAnswersOpen")
+     */
+    private $questions;
+
+    /**
      * Get id.
      *
      * @return int
@@ -90,5 +97,29 @@ class UserQuestionAnswerOpen
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set questions.
+     *
+     * @param null|\AppBundle\Entity\Questions $questions
+     *
+     * @return UserQuestionAnswerOpen
+     */
+    public function setQuestions(\AppBundle\Entity\Questions $questions = null)
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+    /**
+     * Get questions.
+     *
+     * @return null|\AppBundle\Entity\Questions
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 }

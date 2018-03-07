@@ -2,11 +2,11 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\Enum\EventStateEnum;
 use AppBundle\Entity\Questions;
 use AppBundle\Helper\AdditionalFunction;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use FOS\RestBundle\Request\ParamFetcher;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -18,7 +18,7 @@ class QuestionsRepository extends EntityRepository
     /**
      * @var AdditionalFunction
      */
-    private  $additionalFunction;
+    private $additionalFunction;
 
     /**
      * @DI\InjectParams({
@@ -68,7 +68,8 @@ class QuestionsRepository extends EntityRepository
 
     /**
      * @param ParameterBag $parameterBag
-     * @param bool $count
+     * @param bool         $count
+     *
      * @return int|Questions[]
      */
     public function getEntitiesByParams(ParameterBag $parameterBag, $count = false)
@@ -84,7 +85,9 @@ class QuestionsRepository extends EntityRepository
                 ');
         } else {
             $qb
-                ->select('q');
+                ->select('
+                    q
+                ');
         }
 
         $qb
@@ -150,7 +153,6 @@ class QuestionsRepository extends EntityRepository
         }
 
         if ($parameterBag->get('years')) {
-
             $orXSearch = $qb->expr()->orX();
             $yearData = trim($parameterBag->get('years'));
             foreach (explode(',', $yearData) as $key => $id) {
@@ -163,7 +165,7 @@ class QuestionsRepository extends EntityRepository
                 $first->setTime(0, 0, 0);
                 $last = clone $date;
                 $last->setDate($date->format('Y'), 12, 31);
-                $last->setTime(23, 59   , 59);
+                $last->setTime(23, 59, 59);
 
                 $orXSearch
                     ->add($qb->expr()->between(
@@ -184,6 +186,32 @@ class QuestionsRepository extends EntityRepository
                 ->leftJoin('courses.coursesOfStudy', 'courses_of_study')
                 ->andWhere('courses_of_study.id = :courses_of_study_id')
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
+        }
+
+        if ($parameterBag->get('user_state')) {
+            if (EventStateEnum::UNRESOLVED === $parameterBag->get('user_state')) {
+                $andX = $qb->expr()->andX();
+
+                $qbExcludedTest = $em->createQueryBuilder();
+                $qbExcludedTest
+                    ->select('IDENTITY(qa.questions)')
+                    ->from('AppBundle:UserQuestionAnswerTest', 'uqat')
+                    ->leftJoin('uqat.questionAnswers', 'qa')
+                    ->where($qbExcludedTest->expr()->eq('uqat.user', $parameterBag->get('user')))
+                    ->groupBy('qa.questions');
+
+                $andX->add($qb->expr()->notIn('q.id', $qbExcludedTest->getDQL()));
+
+                $qbExcludedOpen = $em->createQueryBuilder();
+                $qbExcludedOpen
+                    ->select('IDENTITY(uqao.questions)')
+                    ->from('AppBundle:UserQuestionAnswerOpen', 'uqao')
+                    ->where($qbExcludedOpen->expr()->eq('uqao.user', $parameterBag->get('user')));
+
+                $andX->add($qb->expr()->notIn('q.id', $qbExcludedOpen->getDQL()));
+
+                $qb->andWhere($andX);
+            }
         }
 
         if (!$count) {
@@ -215,8 +243,7 @@ class QuestionsRepository extends EntityRepository
         ParameterBag $parameterBag,
         $paramKey,
         $mappingName
-    )
-    {
+    ) {
         $orXSearch = $qb->expr()->orX();
 
         foreach ($parameterBag->get($paramKey) as $key => $id) {
