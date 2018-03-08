@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\UserQuestionAnswerResult;
 use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
@@ -99,6 +100,44 @@ class UserQuestionAnswerTestController extends AbstractRestController
             );
             foreach ($model->getAnswers() as $answer) {
                 $em->persist($answer);
+            }
+
+            $em->flush();
+
+            $user = $this->getUser();
+            $question = $answer->getQuestionAnswers()->getQuestions();
+
+            $questionAnswers = $em->getRepository('AppBundle:QuestionAnswers')
+                ->findBy(['questions' => $question]);
+            $data = [];
+
+            foreach ($questionAnswers as $questionAnswer) {
+                $data[] = $questionAnswer->getId();
+            }
+
+            $userQuestionAnswerTests = $em->getRepository('AppBundle:UserQuestionAnswerTest')
+                ->getUserQuestionAnswerTests($data, $user);
+            $result = [];
+            foreach ($userQuestionAnswerTests as $test) {
+                $result[] = $test->getCompareResult();
+            }
+            /** @var UserQuestionAnswerResult $userQuestionAnswerResult */
+            $userQuestionAnswerResult = $em->getRepository('AppBundle:UserQuestionAnswerResult')
+                ->findOneBy(['user' => $user, 'questions' => $question]);
+            if (!$userQuestionAnswerResult) {
+                $userQuestionAnswerResult = new UserQuestionAnswerResult();
+
+                $userQuestionAnswerResult
+                    ->setQuestions($question)
+                    ->setUser($user);
+
+                $em->persist($userQuestionAnswerResult);
+            }
+
+            if (array_search(false, $result) === false) {
+                $userQuestionAnswerResult->setResult(true);
+            } else {
+                $userQuestionAnswerResult->setResult(false);
             }
 
             $em->flush();

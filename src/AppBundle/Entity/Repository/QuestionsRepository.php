@@ -211,6 +211,18 @@ class QuestionsRepository extends EntityRepository
                 $andX->add($qb->expr()->notIn('q.id', $qbExcludedOpen->getDQL()));
 
                 $qb->andWhere($andX);
+            } elseif (EventStateEnum::NOT_SUCCESSED === $parameterBag->get('user_state')) {
+                $qbExcludedResult = $em->createQueryBuilder();
+                $qbExcludedResult
+                    ->select('IDENTITY(uqar.questions)')
+                    ->from('AppBundle:UserQuestionAnswerResult', 'uqar')
+                    ->where('uqar.result = :uqar_result')
+                    ->setParameter('uqar_result', false)
+                    ->andWhere($qbExcludedResult->expr()->eq('uqar.user', $parameterBag->get('user')));
+
+                $qb
+                    ->setParameter('uqar_result', false)
+                    ->andWhere($qb->expr()->in('q.id', $qbExcludedResult->getDQL()));
             }
         }
 
