@@ -22,8 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @UniqueEntity(
  *     groups={"post_lector", "put_lector"},
- *     fields={"firstName", "lastName"},
- *     message="lastName_already_set"
+ *     fields={"firstName", "lastName"}
  * )
  */
 class Lectors

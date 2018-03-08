@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\View\View;
@@ -62,8 +63,12 @@ class UserQuestionAnswerTestController extends AbstractRestController
      * description = "Create user_question_answer_test",
      * authentication=true,
      *  parameters={
-     *      {"name"="question_answers", "dataType"="integer", "required"=true, "description"="question_answers id or object"},
-     *      {"name"="result", "dataType"="boolean", "required"=true, "description"="result"}
+     *      {"name"="answers",
+     *       "dataType"="array",
+     *       "required"=true,
+     *       "format" = "[{question_answers: {id: integer}, result: boolean}]",
+     *       "description"="array objects"
+     *      }
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -85,19 +90,21 @@ class UserQuestionAnswerTestController extends AbstractRestController
 
         try {
             $auth = $this->get('app.auth');
-            $this->prepareAuthor();
-            /** @var UserQuestionAnswerTest $userQuestionAnswerTest */
-            $userQuestionAnswerTest = $auth->validateEntites(
+
+            /** @var UserQuestionAnswerTestRequestModel $model */
+            $model = $auth->validateEntites(
                 'request',
-                UserQuestionAnswerTest::class,
+                UserQuestionAnswerTestRequestModel::class,
                 ['post_user_question_answer_test']
             );
+            foreach ($model->getAnswers() as $answer) {
+                $em->persist($answer);
+            }
 
-            $em->persist($userQuestionAnswerTest);
             $em->flush();
 
             return $this->createSuccessResponse(
-                $userQuestionAnswerTest,
+                $model,
                 ['get_user_question_answer_test'],
                 true
             );

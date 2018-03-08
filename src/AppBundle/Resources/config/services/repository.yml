@@ -11,7 +11,16 @@ parameters:
     app.repository.favorites.class: AppBundle\Entity\Repository\FavoritesRepository
     app.entity.favorites.class: AppBundle\Entity\Favorites
 
+    app.repository.user_question_answer_test.class: AppBundle\Entity\Repository\UserQuestionAnswerTestRepository
+    app.entity.user_question_answer_test.class: AppBundle\Entity\UserQuestionAnswerTest
+
 services:
+    app.repository.user_question_answer_test:
+        class: "%app.repository.user_question_answer_test.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.user_question_answer_test.class%"
+
     app.repository.favorites:
         class: "%app.repository.favorites.class%"
         factory: ["@doctrine.orm.default_entity_manager", getRepository]

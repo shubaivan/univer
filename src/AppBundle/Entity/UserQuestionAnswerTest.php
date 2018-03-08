@@ -7,12 +7,25 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Component\Validator\Constraints as Assert;
 use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="user_question_answer_test")
+ *
+ * @ORM\Table(name="user_question_answer_test",
+ *    uniqueConstraints={
+ *        @UniqueConstraint(name="answer_unique",
+ *            columns={"question_answers_id", "user_id"})
+ *    }
+ * )
+ *
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserQuestionAnswerTestRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @UniqueEntity(
+ *     groups={"post_user_question_answer_test"},
+ *     fields={"questionAnswers", "user"}
+ * )
  */
 class UserQuestionAnswerTest
 {
@@ -54,7 +67,7 @@ class UserQuestionAnswerTest
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
-     * @Assert\NotBlank(groups={"post_user_question_answer_test"})
+     * @Assert\NotNull(groups={"post_user_question_answer_test"})
      * @Annotation\Groups({
      *     "post_user_question_answer_test", "get_user_question_answer_test"
      * })
@@ -181,6 +194,14 @@ class UserQuestionAnswerTest
      * @ORM\PrePersist()
      */
     public function PrePersist()
+    {
+        $this->compareResult = $this->result == $this->getQuestionAnswers()->getIsTrue();
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function PreFlush()
     {
         $this->compareResult = $this->result == $this->getQuestionAnswers()->getIsTrue();
     }
