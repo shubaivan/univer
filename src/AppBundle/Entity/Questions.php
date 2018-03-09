@@ -566,7 +566,7 @@ class Questions
      */
     public function getFavorites()
     {
-        return $this->favorites;
+        return $this->favorites ? $this->favorites : new ArrayCollection();
     }
 
     /**
