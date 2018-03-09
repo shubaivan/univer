@@ -103,7 +103,7 @@ class SerializationListener implements EventSubscriberInterface
         ];
 
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
-        $this->repeatedQuestionObject = $repeatedQuestionsRepository;
+        $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
     }
 
     /**
