@@ -6,8 +6,10 @@ use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\Favorites;
 use AppBundle\Entity\Questions;
+use AppBundle\Entity\RepeatedQuestions;
 use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
+use AppBundle\Entity\Repository\RepeatedQuestionsRepository;
 use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
@@ -15,19 +17,20 @@ use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
+use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 
 /**
  * Add data after serialization.
  */
 class SerializationListener implements EventSubscriberInterface
 {
-    const FAVORITES_COUNT = 'count';
+    const COUNT = 'count';
     const FAVORITES_AUTH_MARK = 'favorite_id';
+    const REPEATED_QUESTION_AUTH_MARK = 'repeated_question_id';
 
     /**
      * @var TokenStorageInterface
@@ -55,32 +58,52 @@ class SerializationListener implements EventSubscriberInterface
     private $favoriteObject;
 
     /**
+     * @var array
+     */
+    private $repeatedQuestionObject;
+
+    /**
      * @var UserQuestionAnswerTestRepository
      */
     private $userQuestionAnswerTestRepository;
 
     /**
+     * @var RepeatedQuestionsRepository
+     */
+    private $repeatedQuestionsRepository;
+
+    /**
      * SerializationListener constructor.
-     * @param TokenStorageInterface $tokenStorage
-     * @param NotesRepository $notesRepository
-     * @param FavoritesRepository $favoritesRepository
+     *
+     * @param TokenStorageInterface            $tokenStorage
+     * @param NotesRepository                  $notesRepository
+     * @param FavoritesRepository              $favoritesRepository
      * @param UserQuestionAnswerTestRepository $answerTestRepository
+     * @param RepeatedQuestionsRepository      $repeatedQuestionsRepository
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         NotesRepository $notesRepository,
         FavoritesRepository $favoritesRepository,
-        UserQuestionAnswerTestRepository $answerTestRepository
+        UserQuestionAnswerTestRepository $answerTestRepository,
+        RepeatedQuestionsRepository $repeatedQuestionsRepository
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
         $this->favoritesRepository = $favoritesRepository;
         $this->user = $tokenStorage->getToken()->getUser();
         $this->favoriteObject = [
-            self::FAVORITES_COUNT => 0,
-            self::FAVORITES_AUTH_MARK => null
+            self::COUNT => 0,
+            self::FAVORITES_AUTH_MARK => null,
         ];
+
+        $this->repeatedQuestionObject = [
+            self::COUNT => 0,
+            self::REPEATED_QUESTION_AUTH_MARK => null,
+        ];
+
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
+        $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
     }
 
     /**
@@ -108,7 +131,7 @@ class SerializationListener implements EventSubscriberInterface
                 'event' => 'serializer.pre_deserialize',
                 'class' => UserQuestionAnswerTestRequestModel::class,
                 'method' => 'onPreDeserializeUQATRM',
-            ]
+            ],
         ];
     }
 
@@ -129,8 +152,8 @@ class SerializationListener implements EventSubscriberInterface
         }
 
         if ($this->user instanceof User) {
-            foreach ($models['answers'] as $key=>$model) {
-                if (!array_key_exists('id', $model['question_answers'])) {
+            foreach ($models['answers'] as $key => $model) {
+                if (!is_array($model['question_answers']) || !array_key_exists('id', $model['question_answers'])) {
                     continue;
                 }
                 $id = [];
@@ -171,17 +194,28 @@ class SerializationListener implements EventSubscriberInterface
         /** @var Favorites $authorFavorites */
         $authorFavorites = $this->favoritesRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
-        $this->favoriteObject[self::FAVORITES_COUNT] = $question->getFavorites()->count();
+        /** @var RepeatedQuestions $authorRepeatedQuestions */
+        $authorRepeatedQuestions = $this->repeatedQuestionsRepository
+            ->findOneBy(['user' => $this->user, 'questions' => $question]);
+        $this->favoriteObject[self::COUNT] = $question->getFavorites()->count();
+        $this->repeatedQuestionObject[self::COUNT] = $question->getRepeatedQuestions()->count();
         if ($authorFavorites) {
             $this->favoriteObject[self::FAVORITES_AUTH_MARK] = $authorFavorites->getId();
         } else {
             $this->favoriteObject[self::FAVORITES_AUTH_MARK] = null;
+        }
+
+        if ($authorRepeatedQuestions) {
+            $this->repeatedQuestionObject[self::REPEATED_QUESTION_AUTH_MARK] = $authorRepeatedQuestions->getId();
+        } else {
+            $this->repeatedQuestionObject[self::REPEATED_QUESTION_AUTH_MARK] = null;
         }
     }
 
     public function onPreSerializeQuestions(ObjectEvent $event)
     {
         $event->getVisitor()->addData('favorites', $this->favoriteObject);
+        $event->getVisitor()->addData('repeated_questions', $this->repeatedQuestionObject);
     }
 
     /**

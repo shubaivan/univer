@@ -93,11 +93,19 @@ class Admin extends AbstractUser implements UserInterface
      */
     private $comments;
 
+    /**
+     * @var ArrayCollection|Events[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Events", mappedBy="admin", cascade={"persist", "remove"})
+     */
+    private $events;
+
     public function __construct()
     {
         $this->note = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     // --------------------------------implements methods--------------------------------------------------------------
@@ -356,5 +364,41 @@ class Admin extends AbstractUser implements UserInterface
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Add event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return Admin
+     */
+    public function addEvent(\AppBundle\Entity\Events $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeEvent(\AppBundle\Entity\Events $event)
+    {
+        return $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

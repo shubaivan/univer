@@ -34,7 +34,8 @@ class User extends AbstractUser implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
-     *     "get_favorite", "get_favorites", "get_user_question_answer_test"
+     *     "get_favorite", "get_favorites", "get_user_question_answer_test",
+     *     "get_events", "get_repeated_questions", "get_improvement_suggestions"
      * })
      */
     private $id;
@@ -201,6 +202,34 @@ class User extends AbstractUser implements UserInterface
     private $userRoles;
 
     /**
+     * @var ArrayCollection|RepeatedQuestions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $repeatedQuestions;
+
+    /**
+     * @var ArrayCollection|UserQuestionAnswerResult[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerResult", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $userQuestionAnswerResult;
+
+    /**
+     * @var ArrayCollection|Events[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Events", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $events;
+
+    /**
+     * @var ArrayCollection|ImprovementSuggestions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ImprovementSuggestions", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $improvementSuggestions;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -219,6 +248,9 @@ class User extends AbstractUser implements UserInterface
         $this->favorites = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->userRoles = new ArrayCollection();
+        $this->repeatedQuestions = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->improvementSuggestions = new ArrayCollection();
     }
 
     /**
@@ -798,5 +830,113 @@ class User extends AbstractUser implements UserInterface
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add repeatedQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
+     *
+     * @return User
+     */
+    public function addRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
+    {
+        $this->repeatedQuestions[] = $repeatedQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove repeatedQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
+    {
+        return $this->repeatedQuestions->removeElement($repeatedQuestion);
+    }
+
+    /**
+     * Get repeatedQuestions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRepeatedQuestions()
+    {
+        return $this->repeatedQuestions;
+    }
+
+    /**
+     * Add userQuestionAnswerResult.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
+     *
+     * @return User
+     */
+    public function addUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
+    {
+        $this->userQuestionAnswerResult[] = $userQuestionAnswerResult;
+
+        return $this;
+    }
+
+    /**
+     * Remove userQuestionAnswerResult.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
+    {
+        return $this->userQuestionAnswerResult->removeElement($userQuestionAnswerResult);
+    }
+
+    /**
+     * Get userQuestionAnswerResult.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserQuestionAnswerResult()
+    {
+        return $this->userQuestionAnswerResult;
+    }
+
+    /**
+     * Add event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return User
+     */
+    public function addEvent(\AppBundle\Entity\Events $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeEvent(\AppBundle\Entity\Events $event)
+    {
+        return $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

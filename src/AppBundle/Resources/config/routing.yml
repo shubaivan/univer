@@ -49,6 +49,7 @@ api_sub_courses:
     prefix:   /
     resource: "@AppBundle/Controller/Api/SubCoursesController.php"
 
+
 api_questions:
     type: rest
     prefix:   /
@@ -74,7 +75,23 @@ api_user_question_answer_test:
     prefix:   /
     resource: "@AppBundle/Controller/Api/UserQuestionAnswerTestController.php"
 
+
 api_question_corrections:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/QuestionCorrectionsController.php"
+api_events:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/EventsController.php"
+
+api_repeated_questions:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/RepeatedQuestionsController.php"
+
+api_improvement_suggestion:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/ImprovementSuggestionController.php"
+

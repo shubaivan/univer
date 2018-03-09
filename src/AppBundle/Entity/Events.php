@@ -26,13 +26,16 @@ class Events
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Annotation\Groups({
+     *     "get_events"
+     * })
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", length=65000, nullable=true)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $text;
@@ -41,7 +44,7 @@ class Events
      * @var string
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $type = 'question';
@@ -52,7 +55,7 @@ class Events
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="events")
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $coursesOfStudy;
@@ -63,7 +66,7 @@ class Events
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Courses>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $courses;
@@ -74,7 +77,7 @@ class Events
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SubCourses", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\SubCourses>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $subCourses;
@@ -85,7 +88,7 @@ class Events
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Lectors", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Lectors>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $lectors;
@@ -96,7 +99,7 @@ class Events
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\ExamPeriods>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $examPeriods;
@@ -107,7 +110,7 @@ class Events
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Semesters", inversedBy="events", cascade={"persist"})
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Semesters>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $semesters;
@@ -119,7 +122,7 @@ class Events
      * @Evence\onSoftDelete(type="SET NULL")
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $user;
@@ -139,7 +142,7 @@ class Events
     /**
      * @ORM\Column(type="integer", nullable=false)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $count = 10;
@@ -147,7 +150,7 @@ class Events
     /**
      * @ORM\Column(type="integer", nullable=false)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $page = 1;
@@ -155,7 +158,7 @@ class Events
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $sortBy = 'createdAt';
@@ -163,7 +166,7 @@ class Events
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $sortOrder = 'DESC';
@@ -172,7 +175,7 @@ class Events
      * @ORM\Column(type="array", nullable=true)
      * @Annotation\Type("array<integer>")
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $years = [];
@@ -180,7 +183,7 @@ class Events
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      */
     private $search;
@@ -188,11 +191,20 @@ class Events
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Annotation\Groups({
-     *     "post_event"
+     *     "post_event", "get_events"
      * })
      * @Annotation\Accessor(setter="setSerializedAccessorUserState")
      */
     private $userState;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Annotation\Type("array<boolean>")
+     * @Annotation\Groups({
+     *     "post_event", "get_events"
+     * })
+     */
+    private $repeated = [];
 
     /**
      * Constructor.
@@ -521,6 +533,10 @@ class Events
     {
         $parameters = new ParameterBag();
 
+        if ($this->getRepeated()) {
+            $parameters->set('repeated', $this->getRepeated()[0]);
+        }
+
         if ($this->getUserState()) {
             $parameters->set('user_state', $this->getUserState());
         }
@@ -711,11 +727,12 @@ class Events
 
     /**
      * @param $userState
+     *
      * @return bool
      */
     public function setSerializedAccessorUserState($userState)
     {
-        if ($userState === "") {
+        if ('' === $userState) {
             return false;
         }
         $this->setUserState($userState);
@@ -754,7 +771,7 @@ class Events
     /**
      * Set years.
      *
-     * @param array|null $years
+     * @param null|array $years
      *
      * @return Events
      */
@@ -768,10 +785,34 @@ class Events
     /**
      * Get years.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getYears()
     {
         return $this->years;
+    }
+
+    /**
+     * Set repeated.
+     *
+     * @param array|null $repeated
+     *
+     * @return Events
+     */
+    public function setRepeated($repeated = null)
+    {
+        $this->repeated = $repeated;
+
+        return $this;
+    }
+
+    /**
+     * Get repeated.
+     *
+     * @return array|null
+     */
+    public function getRepeated()
+    {
+        return $this->repeated;
     }
 }

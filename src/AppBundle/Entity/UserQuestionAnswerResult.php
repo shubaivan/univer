@@ -3,12 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -111,7 +110,7 @@ class UserQuestionAnswerResult
     /**
      * Set questions.
      *
-     * @param \AppBundle\Entity\Questions|null $questions
+     * @param null|\AppBundle\Entity\Questions $questions
      *
      * @return UserQuestionAnswerResult
      */
@@ -125,7 +124,7 @@ class UserQuestionAnswerResult
     /**
      * Get questions.
      *
-     * @return \AppBundle\Entity\Questions|null
+     * @return null|\AppBundle\Entity\Questions
      */
     public function getQuestions()
     {
@@ -135,7 +134,7 @@ class UserQuestionAnswerResult
     /**
      * Set user.
      *
-     * @param \AppBundle\Entity\User|null $user
+     * @param null|\AppBundle\Entity\User $user
      *
      * @return UserQuestionAnswerResult
      */
@@ -149,7 +148,7 @@ class UserQuestionAnswerResult
     /**
      * Get user.
      *
-     * @return \AppBundle\Entity\User|null
+     * @return null|\AppBundle\Entity\User
      */
     public function getUser()
     {

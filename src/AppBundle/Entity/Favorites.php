@@ -19,8 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(
  *     groups={"post_favorite", "put_favorite"},
  *     fields={"questions", "user"},
- *     errorPath="user, questions",
- *     message="favorite question exist."
+ *     errorPath="user, questions"
  * )
  */
 class Favorites

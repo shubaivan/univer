@@ -31,7 +31,7 @@ class CoursesOfStudy
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "get_course", "get_courses",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_events"
      * })
      */
     private $id;
@@ -65,11 +65,19 @@ class CoursesOfStudy
     private $courses;
 
     /**
+     * @var ArrayCollection|Events[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Events", mappedBy="coursesOfStudy", cascade={"persist", "remove"})
+     */
+    private $events;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->courses = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -165,5 +173,41 @@ class CoursesOfStudy
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return CoursesOfStudy
+     */
+    public function addEvent(\AppBundle\Entity\Events $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeEvent(\AppBundle\Entity\Events $event)
+    {
+        return $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

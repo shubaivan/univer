@@ -105,7 +105,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
             $em->flush();
 
             $user = $this->getUser();
-            $question = $answer->getQuestionAnswers()->getQuestions();
+            $question = $model->getAnswers()->first()->getQuestionAnswers()->getQuestions();
 
             $questionAnswers = $em->getRepository('AppBundle:QuestionAnswers')
                 ->findBy(['questions' => $question]);
@@ -134,7 +134,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
                 $em->persist($userQuestionAnswerResult);
             }
 
-            if (array_search(false, $result) === false) {
+            if (false === array_search(false, $result, true)) {
                 $userQuestionAnswerResult->setResult(true);
             } else {
                 $userQuestionAnswerResult->setResult(false);
@@ -143,7 +143,10 @@ class UserQuestionAnswerTestController extends AbstractRestController
             $em->flush();
 
             return $this->createSuccessResponse(
-                $model,
+                [
+                    'answers' => $model,
+                    'result' => $userQuestionAnswerResult
+                ],
                 ['get_user_question_answer_test'],
                 true
             );

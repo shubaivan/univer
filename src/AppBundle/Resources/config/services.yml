@@ -19,6 +19,7 @@ services:
             - "@app.repository.notes"
             - "@app.repository.favorites"
             - "@app.repository.user_question_answer_test"
+            - "@app.repository.repeated_questions"
         tags:
             - {name: jms_serializer.event_subscriber}
 

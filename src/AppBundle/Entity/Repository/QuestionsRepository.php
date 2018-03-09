@@ -159,24 +159,15 @@ class QuestionsRepository extends EntityRepository
                 if (!$id) {
                     continue;
                 }
-                $date = $this->additionalFunction->validateDateTime($id, 'Y');
-                $first = clone $date;
-                $first->setDate($date->format('Y'), 1, 1);
-                $first->setTime(0, 0, 0);
-                $last = clone $date;
-                $last->setDate($date->format('Y'), 12, 31);
-                $last->setTime(23, 59, 59);
 
                 $orXSearch
-                    ->add($qb->expr()->between(
-                        'q.createdAt',
-                        ':x'.$key.'dateFrom',
-                        ':x'.$key.'dateTo'
+                    ->add($qb->expr()->eq(
+                        'q.year',
+                        ':x'.$key.'year'
                     ));
 
                 $qb
-                    ->setParameter('x'.$key.'dateFrom', $first->format('Y-m-d H:i:s'))
-                    ->setParameter('x'.$key.'dateTo', $last->format('Y-m-d H:i:s'));
+                    ->setParameter('x'.$key.'year', $id);
             }
             $qb->andWhere($orXSearch);
         }
@@ -186,6 +177,17 @@ class QuestionsRepository extends EntityRepository
                 ->leftJoin('courses.coursesOfStudy', 'courses_of_study')
                 ->andWhere('courses_of_study.id = :courses_of_study_id')
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
+        }
+
+        if ($parameterBag->get('repeated') && $parameterBag->get('repeated') === true) {
+            $qbIncludedRepeatResult = $em->createQueryBuilder();
+            $qbIncludedRepeatResult
+                ->select('IDENTITY(rq.questions)')
+                ->from('AppBundle:RepeatedQuestions', 'rq')
+                ->andWhere($qbIncludedRepeatResult->expr()->eq('rq.user', $parameterBag->get('user')));
+
+            $qb
+                ->andWhere($qb->expr()->in('q.id', $qbIncludedRepeatResult->getDQL()));
         }
 
         if ($parameterBag->get('user_state')) {

@@ -28,7 +28,8 @@ class Questions
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "get_note", "get_notes",
-     *     "get_favorite", "get_favorites", "get_comment", "get_comments"
+     *     "get_favorite", "get_favorites", "get_comment", "get_comments",
+     *     "get_repeated_questions"
      * })
      */
     private $id;
@@ -167,6 +168,20 @@ class Questions
     private $favorites;
 
     /**
+     * @var ArrayCollection|RepeatedQuestions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="questions", cascade={"persist", "remove"})
+     */
+    private $repeatedQuestions;
+
+    /**
+     * @var ArrayCollection|UserQuestionAnswerResult[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserQuestionAnswerResult", mappedBy="questions", cascade={"persist", "remove"})
+     */
+    private $userQuestionAnswerResult;
+
+    /**
      * @var ArrayCollection|Comments[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comments", mappedBy="questions", cascade={"persist", "remove"})
@@ -237,6 +252,7 @@ class Questions
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionAnswers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionAnswersOpen = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->repeatedQuestions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -828,5 +844,41 @@ class Questions
     public function getQuestionAnswersOpen()
     {
         return $this->questionAnswersOpen;
+    }
+
+    /**
+     * Add repeatedQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
+     *
+     * @return Questions
+     */
+    public function addRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
+    {
+        $this->repeatedQuestions[] = $repeatedQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove repeatedQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
+    {
+        return $this->repeatedQuestions->removeElement($repeatedQuestion);
+    }
+
+    /**
+     * Get repeatedQuestions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRepeatedQuestions()
+    {
+        return $this->repeatedQuestions;
     }
 }
