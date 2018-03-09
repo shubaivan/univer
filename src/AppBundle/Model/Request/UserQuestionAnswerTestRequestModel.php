@@ -3,6 +3,7 @@
 namespace AppBundle\Model\Request;
 
 use AppBundle\Entity\UserQuestionAnswerTest;
+use AppBundle\Validator\Constraints\ConditionAnswers;
 use AppBundle\Validator\Constraints\ConditionQuestion;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class UserQuestionAnswerTestRequestModel.
  *
  * @ConditionQuestion(value="question id", groups={"post_user_question_answer_test"})
+ * @ConditionAnswers(groups={"post_user_question_answer_test"})
  */
 class UserQuestionAnswerTestRequestModel
 {
