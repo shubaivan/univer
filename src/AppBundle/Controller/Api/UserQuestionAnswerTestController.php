@@ -105,7 +105,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
             $em->flush();
 
             $user = $this->getUser();
-            $question = $answer->getQuestionAnswers()->getQuestions();
+            $question = $model->getAnswers()->first()->getQuestionAnswers()->getQuestions();
 
             $questionAnswers = $em->getRepository('AppBundle:QuestionAnswers')
                 ->findBy(['questions' => $question]);
