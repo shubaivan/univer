@@ -73,3 +73,8 @@ api_user_question_answer_test:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/UserQuestionAnswerTestController.php"
+
+api_question_corrections:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/QuestionCorrectionsController.php"
