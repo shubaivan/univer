@@ -143,7 +143,10 @@ class UserQuestionAnswerTestController extends AbstractRestController
             $em->flush();
 
             return $this->createSuccessResponse(
-                $model,
+                [
+                    'answers' => $model,
+                    'result' => $userQuestionAnswerResult
+                ],
                 ['get_user_question_answer_test'],
                 true
             );
