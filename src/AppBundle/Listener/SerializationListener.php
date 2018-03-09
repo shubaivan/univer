@@ -153,7 +153,7 @@ class SerializationListener implements EventSubscriberInterface
 
         if ($this->user instanceof User) {
             foreach ($models['answers'] as $key => $model) {
-                if (!array_key_exists('id', $model['question_answers'])) {
+                if (!is_array($model['question_answers']) || !array_key_exists('id', $model['question_answers'])) {
                     continue;
                 }
                 $id = [];
