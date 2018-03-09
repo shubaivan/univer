@@ -34,7 +34,8 @@ class User extends AbstractUser implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
-     *     "get_favorite", "get_favorites", "get_user_question_answer_test"
+     *     "get_favorite", "get_favorites", "get_user_question_answer_test",
+     *     "get_events"
      * })
      */
     private $id;

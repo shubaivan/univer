@@ -6,6 +6,7 @@ class AdditionalFunction
 {
     /**
      * @param $date
+     * @param mixed $format
      *
      * @throws \Exception
      *
@@ -16,7 +17,7 @@ class AdditionalFunction
         $checkResult = false;
         $dateTimeClass = \DateTime::createFromFormat($format, $date);
         if ($dateTimeClass) {
-            $checkResult = $dateTimeClass->format($format) == $date;
+            $checkResult = $dateTimeClass->format($format) === $date;
         }
 
         if (!$dateTimeClass instanceof \DateTime || !$checkResult) {

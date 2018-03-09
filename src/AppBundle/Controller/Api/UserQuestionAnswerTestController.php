@@ -134,7 +134,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
                 $em->persist($userQuestionAnswerResult);
             }
 
-            if (array_search(false, $result) === false) {
+            if (false === array_search(false, $result, true)) {
                 $userQuestionAnswerResult->setResult(true);
             } else {
                 $userQuestionAnswerResult->setResult(false);

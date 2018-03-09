@@ -159,24 +159,15 @@ class QuestionsRepository extends EntityRepository
                 if (!$id) {
                     continue;
                 }
-                $date = $this->additionalFunction->validateDateTime($id, 'Y');
-                $first = clone $date;
-                $first->setDate($date->format('Y'), 1, 1);
-                $first->setTime(0, 0, 0);
-                $last = clone $date;
-                $last->setDate($date->format('Y'), 12, 31);
-                $last->setTime(23, 59, 59);
 
                 $orXSearch
-                    ->add($qb->expr()->between(
-                        'q.createdAt',
-                        ':x'.$key.'dateFrom',
-                        ':x'.$key.'dateTo'
+                    ->add($qb->expr()->eq(
+                        'q.year',
+                        ':x'.$key.'year'
                     ));
 
                 $qb
-                    ->setParameter('x'.$key.'dateFrom', $first->format('Y-m-d H:i:s'))
-                    ->setParameter('x'.$key.'dateTo', $last->format('Y-m-d H:i:s'));
+                    ->setParameter('x'.$key.'year', $id);
             }
             $qb->andWhere($orXSearch);
         }

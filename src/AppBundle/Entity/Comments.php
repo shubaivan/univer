@@ -155,7 +155,7 @@ class Comments
     /**
      * Set approve.
      *
-     * @param boolean $approve
+     * @param bool $approve
      *
      * @return Comments
      */
@@ -169,14 +169,12 @@ class Comments
     /**
      * Get approve.
      *
-     * @return boolean
+     * @return bool
      */
     public function getApprove()
     {
         return $this->approve;
     }
-
-
 
     /**
      * Set questions.

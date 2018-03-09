@@ -31,7 +31,7 @@ class CoursesOfStudy
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "get_course", "get_courses",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_events"
      * })
      */
     private $id;

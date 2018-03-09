@@ -5,12 +5,12 @@ namespace AppBundle\Model\Request;
 use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Validator\Constraints\ConditionQuestion;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class UserQuestionAnswerTestRequestModel
- * @package AppBundle\Model\Request
+ * Class UserQuestionAnswerTestRequestModel.
+ *
  * @ConditionQuestion(value="question id", groups={"post_user_question_answer_test"})
  */
 class UserQuestionAnswerTestRequestModel
@@ -27,7 +27,7 @@ class UserQuestionAnswerTestRequestModel
     private $answers;
 
     /**
-     * @return UserQuestionAnswerTest[]|ArrayCollection
+     * @return ArrayCollection|UserQuestionAnswerTest[]
      */
     public function getAnswers()
     {
@@ -35,7 +35,8 @@ class UserQuestionAnswerTestRequestModel
     }
 
     /**
-     * @param UserQuestionAnswerTest[]|ArrayCollection $answers
+     * @param ArrayCollection|UserQuestionAnswerTest[] $answers
+     *
      * @return $this
      */
     public function setAnswers($answers)
@@ -51,7 +52,7 @@ class UserQuestionAnswerTestRequestModel
     public function addAnswers(UserQuestionAnswerTest $answerTest)
     {
         if (!$this->getAnswers()->contains($answerTest)) {
-            $this->answers[]=$answerTest;
+            $this->answers[] = $answerTest;
         }
     }
 }

@@ -30,7 +30,8 @@ class Semesters
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_semester", "get_semesters", "get_question", "get_questions"
+     *     "get_semester", "get_semesters", "get_question", "get_questions",
+     *     "get_events"
      * })
      */
     private $id;

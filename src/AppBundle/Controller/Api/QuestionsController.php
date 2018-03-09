@@ -168,7 +168,7 @@ class QuestionsController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function postAdminQuestionsAction(Request $request)
+    public function postQuestionsAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');

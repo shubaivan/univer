@@ -34,7 +34,8 @@ class Lectors
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_lector", "get_lectors", "get_question", "get_questions"
+     *     "get_lector", "get_lectors", "get_question", "get_questions",
+     *     "get_events"
      * })
      */
     private $id;

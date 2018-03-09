@@ -32,7 +32,7 @@ class SubCourses
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "get_question", "get_questions",
      *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_notes"
+     *     "get_notes", "get_events"
      * })
      */
     private $id;

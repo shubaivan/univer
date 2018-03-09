@@ -15,11 +15,11 @@ use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
+use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 
 /**
  * Add data after serialization.
@@ -61,9 +61,10 @@ class SerializationListener implements EventSubscriberInterface
 
     /**
      * SerializationListener constructor.
-     * @param TokenStorageInterface $tokenStorage
-     * @param NotesRepository $notesRepository
-     * @param FavoritesRepository $favoritesRepository
+     *
+     * @param TokenStorageInterface            $tokenStorage
+     * @param NotesRepository                  $notesRepository
+     * @param FavoritesRepository              $favoritesRepository
      * @param UserQuestionAnswerTestRepository $answerTestRepository
      */
     public function __construct(
@@ -78,7 +79,7 @@ class SerializationListener implements EventSubscriberInterface
         $this->user = $tokenStorage->getToken()->getUser();
         $this->favoriteObject = [
             self::FAVORITES_COUNT => 0,
-            self::FAVORITES_AUTH_MARK => null
+            self::FAVORITES_AUTH_MARK => null,
         ];
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
     }
@@ -108,7 +109,7 @@ class SerializationListener implements EventSubscriberInterface
                 'event' => 'serializer.pre_deserialize',
                 'class' => UserQuestionAnswerTestRequestModel::class,
                 'method' => 'onPreDeserializeUQATRM',
-            ]
+            ],
         ];
     }
 
@@ -129,7 +130,7 @@ class SerializationListener implements EventSubscriberInterface
         }
 
         if ($this->user instanceof User) {
-            foreach ($models['answers'] as $key=>$model) {
+            foreach ($models['answers'] as $key => $model) {
                 if (!array_key_exists('id', $model['question_answers'])) {
                     continue;
                 }

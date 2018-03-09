@@ -30,7 +30,8 @@ class ExamPeriods
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_exam_period", "get_exam_periods", "get_question", "get_questions"
+     *     "get_exam_period", "get_exam_periods", "get_question", "get_questions",
+     *     "get_events"
      * })
      */
     private $id;

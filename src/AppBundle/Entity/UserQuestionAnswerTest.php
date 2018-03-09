@@ -3,12 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
-use Symfony\Component\Validator\Constraints as Assert;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -26,6 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     groups={"post_user_question_answer_test"},
  *     fields={"questionAnswers", "user"}
  * )
+ * @coversNothing
  */
 class UserQuestionAnswerTest
 {
@@ -164,12 +164,10 @@ class UserQuestionAnswerTest
         return $this->user;
     }
 
-
-
     /**
      * Set compareResult.
      *
-     * @param bool|null $compareResult
+     * @param null|bool $compareResult
      *
      * @return UserQuestionAnswerTest
      */
@@ -183,7 +181,7 @@ class UserQuestionAnswerTest
     /**
      * Get compareResult.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function getCompareResult()
     {
@@ -195,7 +193,7 @@ class UserQuestionAnswerTest
      */
     public function PrePersist()
     {
-        $this->compareResult = $this->result == $this->getQuestionAnswers()->getIsTrue();
+        $this->compareResult = $this->result === $this->getQuestionAnswers()->getIsTrue();
     }
 
     /**
@@ -203,6 +201,6 @@ class UserQuestionAnswerTest
      */
     public function PreFlush()
     {
-        $this->compareResult = $this->result == $this->getQuestionAnswers()->getIsTrue();
+        $this->compareResult = $this->result === $this->getQuestionAnswers()->getIsTrue();
     }
 }
