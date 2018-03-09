@@ -154,8 +154,8 @@ class QuestionsRepository extends EntityRepository
 
         if ($parameterBag->get('years')) {
             $orXSearch = $qb->expr()->orX();
-            $yearData = trim($parameterBag->get('years'));
-            foreach (explode(',', $yearData) as $key => $id) {
+
+            foreach ($parameterBag->get('years') as $key => $id) {
                 if (!$id) {
                     continue;
                 }

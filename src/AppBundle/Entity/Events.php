@@ -169,12 +169,13 @@ class Events
     private $sortOrder = 'DESC';
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
+     * @Annotation\Type("array<integer>")
      * @Annotation\Groups({
      *     "post_event"
      * })
      */
-    private $years;
+    private $years = [];
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -685,30 +686,6 @@ class Events
     }
 
     /**
-     * Set years.
-     *
-     * @param string $years
-     *
-     * @return Events
-     */
-    public function setYears($years)
-    {
-        $this->years = $years;
-
-        return $this;
-    }
-
-    /**
-     * Get years.
-     *
-     * @return string
-     */
-    public function getYears()
-    {
-        return $this->years;
-    }
-
-    /**
      * Set search.
      *
      * @param string $search
@@ -733,10 +710,14 @@ class Events
     }
 
     /**
-     * @param string $userState
+     * @param $userState
+     * @return bool
      */
     public function setSerializedAccessorUserState($userState)
     {
+        if ($userState === "") {
+            return false;
+        }
         $this->setUserState($userState);
     }
 
@@ -768,5 +749,29 @@ class Events
     public function getUserState()
     {
         return $this->userState;
+    }
+
+    /**
+     * Set years.
+     *
+     * @param array|null $years
+     *
+     * @return Events
+     */
+    public function setYears($years = null)
+    {
+        $this->years = $years;
+
+        return $this;
+    }
+
+    /**
+     * Get years.
+     *
+     * @return array|null
+     */
+    public function getYears()
+    {
+        return $this->years;
     }
 }
