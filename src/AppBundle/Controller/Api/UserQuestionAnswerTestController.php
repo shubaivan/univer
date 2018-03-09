@@ -104,8 +104,6 @@ class UserQuestionAnswerTestController extends AbstractRestController
 
             $em->flush();
 
-            $answer = $model->getAnswers()->get(0);
-
             $user = $this->getUser();
             $question = $answer->getQuestionAnswers()->getQuestions();
 
