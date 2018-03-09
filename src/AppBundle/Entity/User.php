@@ -35,7 +35,7 @@ class User extends AbstractUser implements UserInterface
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
      *     "get_favorite", "get_favorites", "get_user_question_answer_test",
-     *     "get_events", "get_repeated_questions"
+     *     "get_events", "get_repeated_questions", "get_improvement_suggestions"
      * })
      */
     private $id;
@@ -223,6 +223,13 @@ class User extends AbstractUser implements UserInterface
     private $events;
 
     /**
+     * @var ArrayCollection|ImprovementSuggestions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ImprovementSuggestions", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $improvementSuggestions;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -243,6 +250,7 @@ class User extends AbstractUser implements UserInterface
         $this->userRoles = new ArrayCollection();
         $this->repeatedQuestions = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->improvementSuggestions = new ArrayCollection();
     }
 
     /**

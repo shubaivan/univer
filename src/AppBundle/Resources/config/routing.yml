@@ -83,3 +83,8 @@ api_repeated_questions:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/RepeatedQuestionsController.php"
+
+api_improvement_suggestion:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/ImprovementSuggestionController.php"
