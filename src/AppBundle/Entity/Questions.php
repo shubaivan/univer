@@ -28,7 +28,8 @@ class Questions
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "get_note", "get_notes",
-     *     "get_favorite", "get_favorites", "get_comment", "get_comments"
+     *     "get_favorite", "get_favorites", "get_comment", "get_comments",
+     *     "get_repeated_questions"
      * })
      */
     private $id;

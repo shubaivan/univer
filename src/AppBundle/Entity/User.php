@@ -35,7 +35,7 @@ class User extends AbstractUser implements UserInterface
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
      *     "get_favorite", "get_favorites", "get_user_question_answer_test",
-     *     "get_events"
+     *     "get_events", "get_repeated_questions"
      * })
      */
     private $id;

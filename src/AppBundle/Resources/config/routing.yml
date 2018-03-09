@@ -78,3 +78,8 @@ api_events:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/EventsController.php"
+
+api_repeated_questions:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/RepeatedQuestionsController.php"
