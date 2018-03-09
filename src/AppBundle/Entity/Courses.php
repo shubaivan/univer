@@ -83,12 +83,20 @@ class Courses
     private $subCourses;
 
     /**
+     * @var ArrayCollection|Events[]
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Events", mappedBy="courses", cascade={"persist", "remove"})
+     */
+    private $events;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->subCourses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->coursesOfStudy = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subCourses = new ArrayCollection();
+        $this->coursesOfStudy = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -224,5 +232,41 @@ class Courses
         }
 
         return $this->coursesOfStudy;
+    }
+
+    /**
+     * Add event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return Courses
+     */
+    public function addEvent(\AppBundle\Entity\Events $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeEvent(\AppBundle\Entity\Events $event)
+    {
+        return $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

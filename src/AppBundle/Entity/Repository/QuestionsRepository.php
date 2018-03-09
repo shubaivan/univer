@@ -179,6 +179,17 @@ class QuestionsRepository extends EntityRepository
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
         }
 
+        if ($parameterBag->get('repeated') && $parameterBag->get('repeated') === true) {
+            $qbIncludedRepeatResult = $em->createQueryBuilder();
+            $qbIncludedRepeatResult
+                ->select('IDENTITY(rq.questions)')
+                ->from('AppBundle:RepeatedQuestions', 'rq')
+                ->andWhere($qbIncludedRepeatResult->expr()->eq('rq.user', $parameterBag->get('user')));
+
+            $qb
+                ->andWhere($qb->expr()->in('q.id', $qbIncludedRepeatResult->getDQL()));
+        }
+
         if ($parameterBag->get('user_state')) {
             if (EventStateEnum::UNRESOLVED === $parameterBag->get('user_state')) {
                 $andX = $qb->expr()->andX();

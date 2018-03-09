@@ -198,6 +198,15 @@ class Events
     private $userState;
 
     /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Annotation\Type("array<boolean>")
+     * @Annotation\Groups({
+     *     "post_event", "get_events"
+     * })
+     */
+    private $repeated = [];
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -524,6 +533,10 @@ class Events
     {
         $parameters = new ParameterBag();
 
+        if ($this->getRepeated()) {
+            $parameters->set('repeated', $this->getRepeated()[0]);
+        }
+
         if ($this->getUserState()) {
             $parameters->set('user_state', $this->getUserState());
         }
@@ -777,5 +790,29 @@ class Events
     public function getYears()
     {
         return $this->years;
+    }
+
+    /**
+     * Set repeated.
+     *
+     * @param array|null $repeated
+     *
+     * @return Events
+     */
+    public function setRepeated($repeated = null)
+    {
+        $this->repeated = $repeated;
+
+        return $this;
+    }
+
+    /**
+     * Get repeated.
+     *
+     * @return array|null
+     */
+    public function getRepeated()
+    {
+        return $this->repeated;
     }
 }

@@ -82,11 +82,19 @@ class Lectors
     private $questions;
 
     /**
+     * @var ArrayCollection|Events[]
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Events", mappedBy="lectors", cascade={"persist", "remove"})
+     */
+    private $events;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -201,5 +209,41 @@ class Lectors
     public function getSerializedUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return Lectors
+     */
+    public function addEvent(\AppBundle\Entity\Events $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event.
+     *
+     * @param \AppBundle\Entity\Events $event
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeEvent(\AppBundle\Entity\Events $event)
+    {
+        return $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

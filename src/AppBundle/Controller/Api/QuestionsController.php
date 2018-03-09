@@ -81,7 +81,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="years", "dataType"="text", "required"=false, "description"="years, delimiter (,)"},
      *      {"name"="search", "dataType"="text", "required"=false, "description"="search fields - text, notes"},
      *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"},
-     *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"}
+     *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"},
+     *      {"name"="repeated", "dataType"="array", "required"=false, "description"="repeatd array with one elemnt true/false"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
