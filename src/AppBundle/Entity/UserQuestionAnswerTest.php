@@ -25,7 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     groups={"post_user_question_answer_test"},
  *     fields={"questionAnswers", "user"}
  * )
- * @coversNothing
  */
 class UserQuestionAnswerTest
 {
