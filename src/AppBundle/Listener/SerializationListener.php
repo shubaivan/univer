@@ -195,7 +195,7 @@ class SerializationListener implements EventSubscriberInterface
         $authorFavorites = $this->favoritesRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
         /** @var RepeatedQuestions $authorRepeatedQuestions */
-        $authorRepeatedQuestions = $this->repeatedQuestionObject
+        $authorRepeatedQuestions = $this->repeatedQuestionsRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
         $this->favoriteObject[self::COUNT] = $question->getFavorites()->count();
         $this->repeatedQuestionObject[self::COUNT] = $question->getRepeatedQuestions()->count();
