@@ -541,10 +541,6 @@ class Events
             $parameters->set('user_state', $this->getUserState());
         }
 
-        if ($this->getUser()) {
-            $parameters->set('user', $this->getUser()->getId());
-        }
-
         if ($this->getSearch()) {
             $parameters->set('search', $this->getSearch());
         }
