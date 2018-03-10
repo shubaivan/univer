@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Comments;
 use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
@@ -13,6 +14,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CommentsController extends AbstractRestController
 {
@@ -368,6 +370,9 @@ class CommentsController extends AbstractRestController
         $em = $this->get('doctrine')->getManager();
 
         try {
+            if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN) && $this->getUser() !== $comments->getUser()) {
+                throw new AccessDeniedException();
+            }
             $em->remove($comments);
             $em->flush();
 

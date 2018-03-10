@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Favorites;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
@@ -13,6 +14,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class FavoritesController extends AbstractRestController
 {
@@ -245,11 +247,14 @@ class FavoritesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function deletedFavoritesAction(Favorites $favorites)
+    public function deletedFavoriteAction(Favorites $favorites)
     {
         $em = $this->get('doctrine')->getManager();
 
         try {
+            if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN) && $favorites->getUser() !== $this->getUser()) {
+                throw new AccessDeniedException();
+            }
             $em->remove($favorites);
             $em->flush();
 
