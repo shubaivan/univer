@@ -141,7 +141,7 @@ class QuestionCorrections
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswersCorrections", mappedBy="question_corrections", cascade={"persist" , "remove"})
      * @Assert\Valid
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "post_question_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswersCorrections>")
      * @Annotation\Accessor(setter="setAccessorQuestionAnswersCorrections")
@@ -788,12 +788,12 @@ class QuestionCorrections
     public function addQuestionAnswer(\AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrections)
     {
         $this->questionAnswersCorrections[] = $questionAnswersCorrections;
-        $questionAnswersCorrections->setQuestions($this);
+        $questionAnswersCorrections->setQuestionCorrections($this);
 
         return $this;
     }
 //
-    public function setAccessorQuestionAnswers($questionAnswers)
+    public function setAccessorQuestionAnswersCorrections($questionAnswers)
     {
         $this->getQuestionAnswersCorrections()->clear();
         foreach ($questionAnswers as $questionAnswer) {
