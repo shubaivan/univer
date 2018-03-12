@@ -138,10 +138,10 @@ class QuestionCorrections
     /**
      * @var ArrayCollection|QuestionAnswersCorrections[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswersCorrections", mappedBy="question_corrections", cascade={"persist" , "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswersCorrections", mappedBy="questionCorrections", cascade={"persist" , "remove"})
      * @Assert\Valid
      * @Annotation\Groups({
-     *     "post_question_corrections", "get_question_corrections"
+     *     "post_question_corrections", "get_question_corrections", "get_questions_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswersCorrections>")
      * @Annotation\Accessor(setter="setAccessorQuestionAnswersCorrections")
