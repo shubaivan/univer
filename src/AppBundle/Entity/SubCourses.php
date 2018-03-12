@@ -54,7 +54,8 @@ class SubCourses
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses", cascade={"persist", "remove"})
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question",
+     *      "post_question_corrections", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Courses>")
      * @Assert\NotBlank(groups={"post_sub_course", "put_sub_course"})

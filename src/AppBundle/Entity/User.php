@@ -35,7 +35,8 @@ class User extends AbstractUser implements UserInterface
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
      *     "get_favorite", "get_favorites", "get_user_question_answer_test",
-     *     "get_events", "get_repeated_questions", "get_improvement_suggestions"
+     *     "get_events", "get_repeated_questions", "get_improvement_suggestions",
+     *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -43,7 +44,8 @@ class User extends AbstractUser implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user"
+     *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user",
+     *      "post_question_corrections", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\SerializedName("_username")
      * @Assert\NotBlank(groups={"registration", "admin_post_user"})
