@@ -6,6 +6,7 @@ use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Comments;
 use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Services\ObjectManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -260,6 +261,7 @@ class CommentsController extends AbstractRestController
         $logger = $this->container->get('logger');
 
         try {
+            /** @var ObjectManager $auth */
             $auth = $this->get('app.auth');
             $this->prepareAuthor();
             /** @var Comments $comments */

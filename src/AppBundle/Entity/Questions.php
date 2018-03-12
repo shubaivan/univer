@@ -77,7 +77,7 @@ class Questions
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(groups={"post_course", "put_course"})
+     * @Assert\NotBlank(groups={"post_question"})
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
      *     "get_note", "get_notes"
@@ -242,17 +242,44 @@ class Questions
     private $lectors;
 
     /**
+     * @var CoursesOfStudy
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $coursesOfStudy;
+
+    /**
+     * @var Courses
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Annotation\Type("AppBundle\Entity\Courses")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $courses;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->report = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->note = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->favorites = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questionAnswers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questionAnswersOpen = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->repeatedQuestions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->report = new ArrayCollection();
+        $this->note = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->questionAnswers = new ArrayCollection();
+        $this->questionAnswersOpen = new ArrayCollection();
+        $this->repeatedQuestions = new ArrayCollection();
+        $this->userQuestionAnswerResult = new ArrayCollection();
     }
 
     /**
@@ -880,5 +907,89 @@ class Questions
     public function getRepeatedQuestions()
     {
         return $this->repeatedQuestions ? $this->repeatedQuestions : new ArrayCollection();
+    }
+
+    /**
+     * Add userQuestionAnswerResult.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
+     *
+     * @return Questions
+     */
+    public function addUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
+    {
+        $this->userQuestionAnswerResult[] = $userQuestionAnswerResult;
+
+        return $this;
+    }
+
+    /**
+     * Remove userQuestionAnswerResult.
+     *
+     * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
+    {
+        return $this->userQuestionAnswerResult->removeElement($userQuestionAnswerResult);
+    }
+
+    /**
+     * Get userQuestionAnswerResult.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserQuestionAnswerResult()
+    {
+        return $this->userQuestionAnswerResult;
+    }
+
+    /**
+     * Set coursesOfStudy.
+     *
+     * @param \AppBundle\Entity\CoursesOfStudy|null $coursesOfStudy
+     *
+     * @return Questions
+     */
+    public function setCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy = null)
+    {
+        $this->coursesOfStudy = $coursesOfStudy;
+
+        return $this;
+    }
+
+    /**
+     * Get coursesOfStudy.
+     *
+     * @return \AppBundle\Entity\CoursesOfStudy|null
+     */
+    public function getCoursesOfStudy()
+    {
+        return $this->coursesOfStudy;
+    }
+
+    /**
+     * Set courses.
+     *
+     * @param \AppBundle\Entity\Courses|null $courses
+     *
+     * @return Questions
+     */
+    public function setCourses(\AppBundle\Entity\Courses $courses = null)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * Get courses.
+     *
+     * @return \AppBundle\Entity\Courses|null
+     */
+    public function getCourses()
+    {
+        return $this->courses;
     }
 }

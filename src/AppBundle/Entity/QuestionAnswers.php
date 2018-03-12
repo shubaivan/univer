@@ -42,6 +42,7 @@ class QuestionAnswers
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question"
      * })
+     * @Annotation\Type("boolean")
      */
     private $isTrue = false;
 

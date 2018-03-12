@@ -98,7 +98,7 @@ class FavoritesController extends AbstractRestController
                     'favorites' => $favorites->getEntitiesByParams($paramFetcher),
                     'total' => $favorites->getEntitiesByParams($paramFetcher, true),
                 ],
-                ['get_favorites', 'get_question'],
+                ['get_favorites', 'get_question', 'get_user_question_answer_test'],
                 true
             );
         } catch (\Exception $e) {
