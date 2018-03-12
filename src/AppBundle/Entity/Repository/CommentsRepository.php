@@ -56,7 +56,7 @@ class CommentsRepository extends EntityRepository
                 ->from('AppBundle:Comments', 'c')
                 ->where('c.reply IS NULL');
 
-        if (array_key_exists('approve', $params) && $paramFetcher->get('approve')) {
+        if (array_key_exists('approve', $params)) {
             $qb
                 ->andWhere('c.approve = :approve')
                 ->setParameter('approve', $paramFetcher->get('approve'));
@@ -93,6 +93,11 @@ class CommentsRepository extends EntityRepository
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
                 ->andWhere($qb->expr()->eq('c.user', $paramFetcher->get('user')));
+        }
+
+        if (array_key_exists('approve', $params) && $paramFetcher->get('approve')) {
+            $qb
+                ->andWhere($qb->expr()->eq('c.approve', $paramFetcher->get('approve')));
         }
 
         if (array_key_exists('year', $params) && $paramFetcher->get('year')) {

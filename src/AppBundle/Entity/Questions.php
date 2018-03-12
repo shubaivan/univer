@@ -879,6 +879,6 @@ class Questions
      */
     public function getRepeatedQuestions()
     {
-        return $this->repeatedQuestions;
+        return $this->repeatedQuestions ? $this->repeatedQuestions : new ArrayCollection();
     }
 }
