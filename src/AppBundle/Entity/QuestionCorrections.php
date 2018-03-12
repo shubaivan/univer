@@ -173,7 +173,7 @@ class QuestionCorrections
      * @var Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="question_corrections")
-     * @Assert\NotBlank(groups={"post_question_corrections", "get_question_corrections"})
+     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\Questions")
      * @Annotation\Groups({
      *    "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -186,7 +186,7 @@ class QuestionCorrections
      * @var Semesters
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Semesters", inversedBy="question_corrections")
-     * @Assert\NotBlank(groups={"post_question_corrections", "get_question_corrections"})
+     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\Semesters")
      * @Annotation\Groups({
      *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -199,7 +199,7 @@ class QuestionCorrections
      * @var ExamPeriods
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="question_corrections")
-     * @Assert\NotBlank(groups={"post_question_corrections", "get_question_corrections"})
+     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\ExamPeriods")
      * @Annotation\Groups({
      *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -212,7 +212,7 @@ class QuestionCorrections
      * @var SubCourses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="question_corrections")
-     * @Assert\NotBlank(groups={"post_question_corrections", "get_question_corrections"})
+     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
      *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -226,7 +226,7 @@ class QuestionCorrections
      * @var Lectors
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="question_corrections")
-     * @Assert\NotBlank(groups={"post_question_corrections", "get_question_corrections"})
+     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\Lectors")
      * @Annotation\Groups({
      *      "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -234,6 +234,35 @@ class QuestionCorrections
      * @Evence\onSoftDelete(type="SET NULL")
      */
     private $lectors;
+
+    /**
+     * @var CoursesOfStudy
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question_corrections"})
+     * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
+     * @Annotation\Groups({
+     *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $coursesOfStudy;
+
+    /**
+     * @var Courses
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="questions")
+     * @Assert\NotBlank(groups={"post_question_corrections"})
+     * @Annotation\Type("AppBundle\Entity\Courses")
+     * @Annotation\Groups({
+     *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $courses;
+
+
+
 
     /**
      * Constructor.
@@ -825,6 +854,54 @@ class QuestionCorrections
         }
 
         return $this->questionAnswersCorrections;
+    }
+
+    /**
+     * Set coursesOfStudy.
+     *
+     * @param \AppBundle\Entity\CoursesOfStudy|null $coursesOfStudy
+     *
+     * @return QuestionCorrections
+     */
+    public function setCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy = null)
+    {
+        $this->coursesOfStudy = $coursesOfStudy;
+
+        return $this;
+    }
+
+    /**
+     * Get coursesOfStudy.
+     *
+     * @return \AppBundle\Entity\CoursesOfStudy|null
+     */
+    public function getCoursesOfStudy()
+    {
+        return $this->coursesOfStudy;
+    }
+
+    /**
+     * Set courses.
+     *
+     * @param \AppBundle\Entity\Courses|null $courses
+     *
+     * @return QuestionCorrections
+     */
+    public function setCourses(\AppBundle\Entity\Courses $courses = null)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * Get courses.
+     *
+     * @return \AppBundle\Entity\Courses|null
+     */
+    public function getCourses()
+    {
+        return $this->courses;
     }
 
 //    /**

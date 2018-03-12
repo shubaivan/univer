@@ -31,7 +31,7 @@ class Semesters
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "get_question", "get_questions",
-     *     "get_events"
+     *     "get_events", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -41,7 +41,7 @@ class Semesters
      * @ORM\Column(type="string", length=255, options={"fixed" = true}, nullable=false)
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "post_semester", "put_semester",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\NotBlank(groups={"post_semester", "put_semester"})
      * @Assert\Length(

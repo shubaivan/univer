@@ -31,7 +31,7 @@ class ExamPeriods
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_exam_period", "get_exam_periods", "get_question", "get_questions",
-     *     "get_events"
+     *     "get_events", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -41,7 +41,7 @@ class ExamPeriods
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Annotation\Groups({
      *     "get_exam_period", "get_exam_periods", "post_exam_period", "put_exam_period",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\NotBlank(groups={"post_exam_period", "put_exam_period"})
      * @Assert\Length(

@@ -35,7 +35,7 @@ class Lectors
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_lector", "get_lectors", "get_question", "get_questions",
-     *     "get_events"
+     *     "get_events", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -45,7 +45,7 @@ class Lectors
      * @ORM\Column(name="first_name", type="string", length=100, nullable=false)
      * @Annotation\Groups({
      *     "get_lector", "get_lectors", "post_lector", "put_lector",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\Length(
      *     groups={"post_lector", "put_lector"},
@@ -62,7 +62,7 @@ class Lectors
      * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
      * @Annotation\Groups({
      *     "get_lector", "get_lectors", "post_lector", "put_lector",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\Length(
      *     groups={"post_lector", "put_lector"},
