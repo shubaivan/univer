@@ -72,12 +72,20 @@ class CoursesOfStudy
     private $events;
 
     /**
+     * @var ArrayCollection|Questions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Questions", mappedBy="coursesOfStudy", cascade={"persist"})
+     */
+    private $questions;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->courses = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     /**
@@ -209,5 +217,41 @@ class CoursesOfStudy
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add question.
+     *
+     * @param \AppBundle\Entity\Questions $question
+     *
+     * @return CoursesOfStudy
+     */
+    public function addQuestion(\AppBundle\Entity\Questions $question)
+    {
+        $this->questions[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question.
+     *
+     * @param \AppBundle\Entity\Questions $question
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeQuestion(\AppBundle\Entity\Questions $question)
+    {
+        return $this->questions->removeElement($question);
+    }
+
+    /**
+     * Get questions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 }
