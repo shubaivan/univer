@@ -1,7 +1,13 @@
 parameters:
     app.application.sub_courses_application.class: AppBundle\Application\SubCourses\SubCoursesApplication
+    app.application.notifications_application.class: AppBundle\Application\Notifications\NotificationsApplication
 
 services:
+    app.application.notifications_application:
+        class: "%app.application.notifications_application.class%"
+        arguments:
+            - "@app.domain.notifications_domain"
+
     app.application.sub_courses_application:
         class: "%app.application.sub_courses_application.class%"
         arguments:

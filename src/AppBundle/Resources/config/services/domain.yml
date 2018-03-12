@@ -1,7 +1,13 @@
 parameters:
     app.domain.sub_courses_domain.class: AppBundle\Domain\SubCourses\SubCoursesDomain
+    app.domain.notifications_domain.class: AppBundle\Domain\Notifications\NotificationsDomain
 
 services:
+    app.domain.notifications_domain:
+         class: "%app.domain.notifications_domain.class%"
+         arguments:
+             - "@app.repository.notifications"
+
     app.domain.ebooks_domain:
          class: "%app.domain.sub_courses_domain.class%"
          arguments:

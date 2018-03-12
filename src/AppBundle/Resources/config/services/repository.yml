@@ -17,7 +17,16 @@ parameters:
     app.repository.repeated_questions.class: AppBundle\Entity\Repository\RepeatedQuestionsRepository
     app.entity.repeated_questions.class: AppBundle\Entity\RepeatedQuestions
 
+    app.repository.notifications.class: AppBundle\Entity\Repository\NotificationsRepository
+    app.entity.notifications.class: AppBundle\Entity\Notifications
+
 services:
+    app.repository.notifications:
+        class: "%app.repository.notifications.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.notifications.class%"
+
     app.repository.repeated_questions:
         class: "%app.repository.repeated_questions.class%"
         factory: ["@doctrine.orm.default_entity_manager", getRepository]

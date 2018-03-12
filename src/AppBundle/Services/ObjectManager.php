@@ -57,12 +57,13 @@ class ObjectManager
      * @param $requestType
      * @param $class
      * @param array $groups
+     * @param array $data
      *
      * @throws \Exception|ValidatorException
      *
      * @return object
      */
-    public function validateEntites($requestType, $class, array $groups = [])
+    public function validateEntites($requestType, $class, array $groups = [], $data = [])
     {
         $paramRequest = $this->requestStack->getCurrentRequest();
         if (0 === strpos(
@@ -86,6 +87,9 @@ class ObjectManager
                 $dataJson = $this->mergeData('user', $dataJson);
             }
             $serializedData = $dataJson;
+        } elseif ($data) {
+            $serializedData = $this->getSerializer()
+                ->serialize($data, 'json');
         } else {
             $data = $this->requestStack->getCurrentRequest()->$requestType->all();
             $serializedData = $this->getSerializer()
