@@ -95,6 +95,11 @@ class CommentsRepository extends EntityRepository
                 ->andWhere($qb->expr()->eq('c.user', $paramFetcher->get('user')));
         }
 
+        if (array_key_exists('approve', $params) && $paramFetcher->get('approve')) {
+            $qb
+                ->andWhere($qb->expr()->eq('c.approve', $paramFetcher->get('approve')));
+        }
+
         if (array_key_exists('year', $params) && $paramFetcher->get('year')) {
             $date = $this->additionalFunction->validateDateTime($paramFetcher->get('year'), 'Y');
             $first = clone $date;

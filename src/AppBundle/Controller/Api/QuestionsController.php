@@ -108,9 +108,12 @@ class QuestionsController extends AbstractRestController
             $this->prepareAuthor();
             /** @var Events $events */
             $events = $auth->validateEntites('request', Events::class, ['post_event']);
-            $em->persist($events);
-            $em->flush();
             $parameterBag = $events->checkCondition();
+            if ($parameterBag->count() > 5) {
+                $em->persist($events);
+                $em->flush();
+            }
+
             $questions = $em->getRepository(Questions::class);
 
             return $this->createSuccessResponse(

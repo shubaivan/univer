@@ -112,10 +112,10 @@ class QuestionsRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-//        if ($parameterBag->get('user')) {
-//            $qb
-//                ->andWhere($qb->expr()->eq('q.user', $parameterBag->get('user')));
-//        }
+        if ($parameterBag->get('user')) {
+            $qb
+                ->andWhere($qb->expr()->eq('q.user', $parameterBag->get('user')));
+        }
 
         if ($parameterBag->get('semesters')) {
             $this->queryAndXHelper($qb, $parameterBag, 'semesters', 'semesters');
