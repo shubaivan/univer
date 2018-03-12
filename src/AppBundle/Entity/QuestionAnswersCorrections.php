@@ -23,7 +23,7 @@ class QuestionAnswersCorrections
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "post_question_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -32,7 +32,7 @@ class QuestionAnswersCorrections
      * @ORM\Column(type="text", length=65000, nullable=false)
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Groups({
-     *     "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "post_question_corrections", "get_question_corrections"
      * })
      */
     private $answer;
@@ -40,7 +40,7 @@ class QuestionAnswersCorrections
     /**
      * @ORM\Column(name="is_true", type="boolean", nullable=false)
      * @Annotation\Groups({
-     *     "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "post_question_corrections", "get_question_corrections"
      * })
      */
     private $isTrue = false;
@@ -48,7 +48,7 @@ class QuestionAnswersCorrections
     /**
      * @ORM\Column(name="point_eng", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "post_question_corrections", "get_question_corrections"
      * })
      */
     private $pointEng;
@@ -56,7 +56,7 @@ class QuestionAnswersCorrections
     /**
      * @ORM\Column(name="point_heb", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "post_question_corrections", "get_question_corrections"
      * })
      */
     private $pointHeb;
@@ -66,7 +66,7 @@ class QuestionAnswersCorrections
      * @var QuestionCorrections
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuestionCorrections", inversedBy="question_answers_corrections")
-     * @Assert\NotBlank(groups={"get_question_corrections", "post_question_corrections"})
+     * @Assert\NotBlank(groups={"get_questions_corrections", "post_question_corrections", "get_question_corrections"})
      */
     private $questionCorrections;
 

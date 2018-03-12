@@ -52,7 +52,7 @@ class QuestionCorrectionsController extends AbstractRestController
     {
         return $this->createSuccessResponse(
             $questionCorrections,
-            ['get_question', 'get_user_question_answer_test'],
+            ['get_question_corrections'],
             true
         );
     }
@@ -60,28 +60,15 @@ class QuestionCorrectionsController extends AbstractRestController
     /**
      * Get list corrections questions.
      * <strong>Simple example:</strong><br />
-     * http://host/api/list/question_corrections <br>.
+     * http://host/api/questions_corrections <br>.
      *
-     * @Rest\Get("/api/list/questions")
+     * @Rest\Get("/api/questions_corrections")
      * @ApiDoc(
      * resource = true,
      * description = "Get list corrections questions",
      * authentication=true,
      *  parameters={
-     *      {"name"="courses_of_study", "dataType"="object", "required"=false, "description"="courses_of_study object"},
-     *      {"name"="courses", "dataType"="array<object>", "required"=false, "description"="courses array object"},
-     *      {"name"="sub_courses", "dataType"="array<object>", "required"=false, "description"="sub_courses array object"},
-     *      {"name"="lectors", "dataType"="array<object>", "required"=false, "description"="lecturer array object"},
-     *      {"name"="exam_periods", "dataType"="array<object>", "required"=false, "description"="exam_periods array object"},
-     *      {"name"="semesters", "dataType"="array<object>", "required"=false, "description"="semesters array object"},
-     *      {"name"="count", "dataType"="integer", "required"=false, "description"="count"},
-     *      {"name"="page", "dataType"="integer", "required"=false, "description"="page"},
-     *      {"name"="sort_by", "dataType"="text", "required"=false, "description"="sort_by"},
-     *      {"name"="sort_order", "dataType"="text", "required"=false, "description"="sort_by"},
-     *      {"name"="years", "dataType"="text", "required"=false, "description"="years, delimiter (,)"},
-     *      {"name"="search", "dataType"="text", "required"=false, "description"="search fields - text, notes"},
-     *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"},
-     *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"}
+     *
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -98,7 +85,7 @@ class QuestionCorrectionsController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getQuestionCorrectionsListAction(Request $request)
+    public function getQuestionsCorrectionsAction(Request $request)
     {
         try {
             $em = $this->getDoctrine()->getManager();
@@ -117,7 +104,7 @@ class QuestionCorrectionsController extends AbstractRestController
                     'questions' => $questions->getEntitiesByParams($parameterBag),
                     'total' => $questions->getEntitiesByParams($parameterBag, true),
                 ],
-                ['get_questions', 'get_user_question_answer_test'],
+                ['get_questions_corrections'],
                 true
             );
         } catch (\Exception $e) {

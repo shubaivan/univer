@@ -188,43 +188,43 @@ class QuestionCorrectionsRepository extends EntityRepository
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
         }
 
-        if ($parameterBag->get('user_state')) {
-            if (EventStateEnum::UNRESOLVED === $parameterBag->get('user_state')) {
-                $andX = $qb->expr()->andX();
-
-                $qbExcludedTest = $em->createQueryBuilder();
-                $qbExcludedTest
-                    ->select('IDENTITY(qa.question_corrections)')
-                    ->from('AppBundle:UserQuestionAnswerTest', 'uqat')
-                    ->leftJoin('uqat.questionAnswers', 'qa')
-                    ->where($qbExcludedTest->expr()->eq('uqat.user', $parameterBag->get('user')))
-                    ->groupBy('qa.question_corrections');
-
-                $andX->add($qb->expr()->notIn('q.id', $qbExcludedTest->getDQL()));
-
-                $qbExcludedOpen = $em->createQueryBuilder();
-                $qbExcludedOpen
-                    ->select('IDENTITY(uqao.question_corrections)')
-                    ->from('AppBundle:UserQuestionAnswerOpen', 'uqao')
-                    ->where($qbExcludedOpen->expr()->eq('uqao.user', $parameterBag->get('user')));
-
-                $andX->add($qb->expr()->notIn('q.id', $qbExcludedOpen->getDQL()));
-
-                $qb->andWhere($andX);
-            } elseif (EventStateEnum::NOT_SUCCESSED === $parameterBag->get('user_state')) {
-                $qbExcludedResult = $em->createQueryBuilder();
-                $qbExcludedResult
-                    ->select('IDENTITY(uqar.question_corrections)')
-                    ->from('AppBundle:UserQuestionAnswerResult', 'uqar')
-                    ->where('uqar.result = :uqar_result')
-                    ->setParameter('uqar_result', false)
-                    ->andWhere($qbExcludedResult->expr()->eq('uqar.user', $parameterBag->get('user')));
-
-                $qb
-                    ->setParameter('uqar_result', false)
-                    ->andWhere($qb->expr()->in('q.id', $qbExcludedResult->getDQL()));
-            }
-        }
+//        if ($parameterBag->get('user_state')) {
+//            if (EventStateEnum::UNRESOLVED === $parameterBag->get('user_state')) {
+//                $andX = $qb->expr()->andX();
+//
+//                $qbExcludedTest = $em->createQueryBuilder();
+//                $qbExcludedTest
+//                    ->select('IDENTITY(qa.question_corrections)')
+//                    ->from('AppBundle:UserQuestionAnswerTest', 'uqat')
+//                    ->leftJoin('uqat.questionAnswers', 'qa')
+//                    ->where($qbExcludedTest->expr()->eq('uqat.user', $parameterBag->get('user')))
+//                    ->groupBy('qa.question_corrections');
+//
+//                $andX->add($qb->expr()->notIn('q.id', $qbExcludedTest->getDQL()));
+//
+//                $qbExcludedOpen = $em->createQueryBuilder();
+//                $qbExcludedOpen
+//                    ->select('IDENTITY(uqao.question_corrections)')
+//                    ->from('AppBundle:UserQuestionAnswerOpen', 'uqao')
+//                    ->where($qbExcludedOpen->expr()->eq('uqao.user', $parameterBag->get('user')));
+//
+//                $andX->add($qb->expr()->notIn('q.id', $qbExcludedOpen->getDQL()));
+//
+//                $qb->andWhere($andX);
+//            } elseif (EventStateEnum::NOT_SUCCESSED === $parameterBag->get('user_state')) {
+//                $qbExcludedResult = $em->createQueryBuilder();
+//                $qbExcludedResult
+//                    ->select('IDENTITY(uqar.question_corrections)')
+//                    ->from('AppBundle:UserQuestionAnswerResult', 'uqar')
+//                    ->where('uqar.result = :uqar_result')
+//                    ->setParameter('uqar_result', false)
+//                    ->andWhere($qbExcludedResult->expr()->eq('uqar.user', $parameterBag->get('user')));
+//
+//                $qb
+//                    ->setParameter('uqar_result', false)
+//                    ->andWhere($qb->expr()->in('q.id', $qbExcludedResult->getDQL()));
+//            }
+//        }
 
         if (!$count) {
             $qb
