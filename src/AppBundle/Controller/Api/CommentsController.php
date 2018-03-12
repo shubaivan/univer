@@ -188,6 +188,7 @@ class CommentsController extends AbstractRestController
      *
      * @RestView()
      *
+     * @Rest\QueryParam(name="approve", requirements="\d+", default=1, description="approve 1/0")
      * @Rest\QueryParam(name="year", requirements="\d+", description="year of establishment")
      * @Rest\QueryParam(name="search", description="search fields - text")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
