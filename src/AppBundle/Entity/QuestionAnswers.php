@@ -23,7 +23,7 @@ class QuestionAnswers
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_user_question_answer_test"
+     *     "get_question", "get_questions", "get_user_question_answer_test", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -32,7 +32,7 @@ class QuestionAnswers
      * @ORM\Column(type="text", length=65000, nullable=false)
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $answer;
@@ -40,7 +40,7 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="is_true", type="boolean", nullable=false)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Type("boolean")
      */
@@ -49,7 +49,7 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="point_eng", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $pointEng;
@@ -57,7 +57,7 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="point_heb", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $pointHeb;
