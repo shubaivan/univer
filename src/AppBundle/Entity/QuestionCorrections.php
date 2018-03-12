@@ -65,8 +65,7 @@ class QuestionCorrections
      *
      * @ORM\Column(type="integer", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question_corrections", "put_question",
-     *     "get_note", "get_notes"
+     *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $year;
