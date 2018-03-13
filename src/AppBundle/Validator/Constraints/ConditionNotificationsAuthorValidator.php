@@ -15,7 +15,7 @@ class ConditionNotificationsAuthorValidator extends ConstraintValidator
             foreach ($entity->getNotifications() as $notification) {
                 if ($entity->getUser() !== $notification->getUser()) {
                     $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ compared_value }}', $notification->getUser()->getId())
+                    ->setParameter('{{ compared_value }}', $this->getUser()->getId())
                     ->atPath('user')
                     ->addViolation();
                 }
