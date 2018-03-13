@@ -38,10 +38,15 @@ class NotificationsRepository extends EntityRepository
         $qb
             ->from('AppBundle:Notifications', 'n');
 
-        if (array_key_exists('status', $params)) {
+        if (array_key_exists('status', $params) && $paramFetcher->get('status')) {
             $qb
                 ->andWhere('n.status = :status')
                 ->setParameter('status', $paramFetcher->get('status'));
+        }
+
+        if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
+            $qb
+                ->andWhere($qb->expr()->eq('n.user', $paramFetcher->get('user')));
         }
 
         if (!$count) {

@@ -129,11 +129,11 @@ class AbstractRestController extends FOSRestController
     protected function responsePrepareAuthor(ParamFetcher $paramFetcher)
     {
         if ($this->getUser() instanceof User) {
-            /** @var AbstractUser $authUser */
-            $authUser = $this->getUser();
-            if ($authUser instanceof User) {
-                $paramFetcher = $this->setParamFetcherData($paramFetcher, 'user', $this->getUser()->getId());
-            }
+            $paramFetcher = $this->setParamFetcherData(
+                $paramFetcher,
+                'user',
+                $this->getUser()->getId()
+            );
         }
 
         return $paramFetcher;
