@@ -16,7 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Notifications
 {
     use TraitTimestampable;
+
     const GROUP_POST_NOTIFICATION = 'post_notifications';
+    const GROUP_GET_NOTIFICATIONS = 'get_notifications';
 
     /**
      * @ORM\Column(type="integer")
@@ -80,6 +82,9 @@ class Notifications
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Annotation\Groups({
+     *     "get_notifications"
+     * })
      */
     private $status;
 
@@ -246,5 +251,10 @@ class Notifications
     public static function getPostGroup()
     {
         return [self::GROUP_POST_NOTIFICATION];
+    }
+
+    public static function getGetGroup()
+    {
+        return [self::GROUP_GET_NOTIFICATIONS, 'profile'];
     }
 }

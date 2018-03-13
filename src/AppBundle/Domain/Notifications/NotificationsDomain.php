@@ -2,6 +2,7 @@
 
 namespace AppBundle\Domain\Notifications;
 
+use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Repository\NotificationsRepository;
 use AppBundle\Services\ObjectManager;
@@ -59,6 +60,22 @@ class NotificationsDomain implements NotificationsDomainInterface
         $this->getEntityManager()->persist($notification);
 
         return $notification;
+    }
+
+    /**
+     * @param array $ids
+     * @param string $status
+     * @return bool
+     */
+    public function handleUpdateStatus($ids = [], $status)
+    {
+        if (!$ids) {
+            return false;
+        }
+        $this->getNotificationsRepository()
+            ->updateStatus($ids, $status);
+
+        return true;
     }
 
     /**

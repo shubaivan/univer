@@ -14,7 +14,9 @@ use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserQuestionAnswerTest;
+use AppBundle\Model\Request\NotificationsRequestModel;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
+use Doctrine\ORM\EntityManager;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
@@ -73,20 +75,26 @@ class SerializationListener implements EventSubscriberInterface
     private $repeatedQuestionsRepository;
 
     /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
      * SerializationListener constructor.
-     *
-     * @param TokenStorageInterface            $tokenStorage
-     * @param NotesRepository                  $notesRepository
-     * @param FavoritesRepository              $favoritesRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param NotesRepository $notesRepository
+     * @param FavoritesRepository $favoritesRepository
      * @param UserQuestionAnswerTestRepository $answerTestRepository
-     * @param RepeatedQuestionsRepository      $repeatedQuestionsRepository
+     * @param RepeatedQuestionsRepository $repeatedQuestionsRepository
+     * @param EntityManager $entityManager
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         NotesRepository $notesRepository,
         FavoritesRepository $favoritesRepository,
         UserQuestionAnswerTestRepository $answerTestRepository,
-        RepeatedQuestionsRepository $repeatedQuestionsRepository
+        RepeatedQuestionsRepository $repeatedQuestionsRepository,
+        EntityManager $entityManager
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
@@ -104,6 +112,7 @@ class SerializationListener implements EventSubscriberInterface
 
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
         $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -116,6 +125,11 @@ class SerializationListener implements EventSubscriberInterface
                 'event' => 'serializer.pre_serialize',
                 'class' => Questions::class,
                 'method' => 'onPreSerialize',
+            ],
+            [
+                'event' => 'serializer.pre_serialize',
+                'class' => NotificationsRequestModel::class,
+                'method' => 'onPreSerializeNRM',
             ],
             [
                 'event' => 'serializer.post_serialize',
@@ -133,6 +147,16 @@ class SerializationListener implements EventSubscriberInterface
                 'method' => 'onPreDeserializeUQATRM',
             ],
         ];
+    }
+
+    public function onPreSerializeNRM(PreSerializeEvent $event)
+    {
+        /** @var NotificationsRequestModel $entity */
+        $entity = $event->getObject();
+
+        foreach ($entity->getNotifications() as $notification) {
+            $this->getEntityManager()->refresh($notification);
+        }
     }
 
     public function onPreDeserializeUQATRM(PreDeserializeEvent $event)
@@ -224,5 +248,13 @@ class SerializationListener implements EventSubscriberInterface
     private function getUserQuestionAnswerTestRepository()
     {
         return $this->userQuestionAnswerTestRepository;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        return $this->entityManager;
     }
 }

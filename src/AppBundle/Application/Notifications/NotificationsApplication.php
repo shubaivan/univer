@@ -3,7 +3,9 @@
 namespace AppBundle\Application\Notifications;
 
 use AppBundle\Domain\Notifications\NotificationsDomain;
+use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\User;
+use AppBundle\Model\Request\NotificationsRequestModel;
 
 class NotificationsApplication implements NotificationsApplicationInterface
 {
@@ -42,6 +44,20 @@ class NotificationsApplication implements NotificationsApplicationInterface
 
         $this->getNotificationsDomain()
             ->handleNotificationPrepareData($prepareData);
+    }
+
+    /**
+     * @param NotificationsRequestModel $model
+     */
+    public function changeStatusNotifications(NotificationsRequestModel $model)
+    {
+        $ids = [];
+        foreach ($model->getNotifications() as $notification) {
+            $ids[] = $notification->getId();
+        }
+
+        $this->getNotificationsDomain()
+            ->handleUpdateStatus($ids, $model->getStatus());
     }
 
     /**

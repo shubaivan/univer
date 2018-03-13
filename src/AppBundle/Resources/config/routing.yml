@@ -88,3 +88,8 @@ api_improvement_suggestion:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/ImprovementSuggestionController.php"
+
+api_notifications:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/NotificationsController.php"
