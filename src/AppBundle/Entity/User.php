@@ -851,7 +851,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
     {
@@ -887,7 +887,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
     {
@@ -923,7 +923,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\Events $event
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeEvent(\AppBundle\Entity\Events $event)
     {

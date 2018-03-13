@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Request\ParamFetcher;
 
 /**
- * ImprovementSuggestionsRepository
+ * ImprovementSuggestionsRepository.
  */
 class ImprovementSuggestionsRepository extends EntityRepository
 {

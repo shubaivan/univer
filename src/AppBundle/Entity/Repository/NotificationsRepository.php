@@ -5,7 +5,7 @@ namespace AppBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * NotificationsRepository
+ * NotificationsRepository.
  */
 class NotificationsRepository extends EntityRepository
 {

@@ -892,7 +892,7 @@ class Questions
      *
      * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
     {
@@ -928,7 +928,7 @@ class Questions
      *
      * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
     {
@@ -948,7 +948,7 @@ class Questions
     /**
      * Set coursesOfStudy.
      *
-     * @param \AppBundle\Entity\CoursesOfStudy|null $coursesOfStudy
+     * @param null|\AppBundle\Entity\CoursesOfStudy $coursesOfStudy
      *
      * @return Questions
      */
@@ -962,7 +962,7 @@ class Questions
     /**
      * Get coursesOfStudy.
      *
-     * @return \AppBundle\Entity\CoursesOfStudy|null
+     * @return null|\AppBundle\Entity\CoursesOfStudy
      */
     public function getCoursesOfStudy()
     {
@@ -972,7 +972,7 @@ class Questions
     /**
      * Set courses.
      *
-     * @param \AppBundle\Entity\Courses|null $courses
+     * @param null|\AppBundle\Entity\Courses $courses
      *
      * @return Questions
      */
@@ -986,7 +986,7 @@ class Questions
     /**
      * Get courses.
      *
-     * @return \AppBundle\Entity\Courses|null
+     * @return null|\AppBundle\Entity\Courses
      */
     public function getCourses()
     {

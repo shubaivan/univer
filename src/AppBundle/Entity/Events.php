@@ -791,7 +791,7 @@ class Events
     /**
      * Set repeated.
      *
-     * @param array|null $repeated
+     * @param null|array $repeated
      *
      * @return Events
      */
@@ -805,7 +805,7 @@ class Events
     /**
      * Get repeated.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getRepeated()
     {
