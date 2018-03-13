@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity\Repository;
 
-use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\Notifications;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -16,7 +15,7 @@ class NotificationsRepository extends EntityRepository
      * @param ParamFetcher $paramFetcher
      * @param bool         $count
      *
-     * @return Notifications[]|int
+     * @return int|Notifications[]
      */
     public function getEntitiesByParams(ParamFetcher $paramFetcher, $count = false)
     {

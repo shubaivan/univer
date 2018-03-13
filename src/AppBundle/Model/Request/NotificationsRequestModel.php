@@ -5,18 +5,15 @@ namespace AppBundle\Model\Request;
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\Notifications;
 use AppBundle\Entity\User;
-use AppBundle\Entity\UserQuestionAnswerTest;
-use AppBundle\Validator\Constraints\ConditionAuthor;
 use AppBundle\Validator\Constraints\ConditionNotifications;
 use AppBundle\Validator\Constraints\ConditionNotificationsAuthor;
-use AppBundle\Validator\Constraints\ConditionQuestion;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class NotificationsRequestModel
- * @package AppBundle\Model\Request
+ * Class NotificationsRequestModel.
+ *
  * @ConditionNotifications(groups={"post_notification_model"})
  * @ConditionNotificationsAuthor(value="author id", groups={"post_notification_model"})
  */
@@ -101,6 +98,7 @@ class NotificationsRequestModel
 
     /**
      * @param null $status
+     *
      * @return $this
      */
     public function setStatus($status = null)

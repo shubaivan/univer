@@ -2,7 +2,6 @@
 
 namespace AppBundle\Domain\Notifications;
 
-use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Repository\NotificationsRepository;
 use AppBundle\Services\ObjectManager;
@@ -63,11 +62,12 @@ class NotificationsDomain implements NotificationsDomainInterface
     }
 
     /**
-     * @param array $ids
+     * @param array  $ids
      * @param string $status
+     *
      * @return bool
      */
-    public function handleUpdateStatus($ids = [], $status)
+    public function handleUpdateStatus($ids, $status)
     {
         if (!$ids) {
             return false;

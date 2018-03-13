@@ -3,7 +3,6 @@
 namespace AppBundle\Application\Notifications;
 
 use AppBundle\Domain\Notifications\NotificationsDomain;
-use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\User;
 use AppBundle\Model\Request\NotificationsRequestModel;
 

@@ -3,7 +3,6 @@
 namespace AppBundle\Validator\Constraints;
 
 use AppBundle\Model\Request\NotificationsRequestModel;
-use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
