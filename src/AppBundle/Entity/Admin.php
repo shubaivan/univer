@@ -385,7 +385,7 @@ class Admin extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\Events $event
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeEvent(\AppBundle\Entity\Events $event)
     {

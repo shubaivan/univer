@@ -95,7 +95,7 @@ class RepeatedQuestions
     /**
      * Set questions.
      *
-     * @param \AppBundle\Entity\Questions|null $questions
+     * @param null|\AppBundle\Entity\Questions $questions
      *
      * @return RepeatedQuestions
      */
@@ -109,7 +109,7 @@ class RepeatedQuestions
     /**
      * Get questions.
      *
-     * @return \AppBundle\Entity\Questions|null
+     * @return null|\AppBundle\Entity\Questions
      */
     public function getQuestions()
     {
@@ -119,7 +119,7 @@ class RepeatedQuestions
     /**
      * Set user.
      *
-     * @param \AppBundle\Entity\User|null $user
+     * @param null|\AppBundle\Entity\User $user
      *
      * @return RepeatedQuestions
      */
@@ -133,7 +133,7 @@ class RepeatedQuestions
     /**
      * Get user.
      *
-     * @return \AppBundle\Entity\User|null
+     * @return null|\AppBundle\Entity\User
      */
     public function getUser()
     {

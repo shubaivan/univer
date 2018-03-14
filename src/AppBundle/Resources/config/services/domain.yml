@@ -7,6 +7,8 @@ services:
          class: "%app.domain.notifications_domain.class%"
          arguments:
              - "@app.repository.notifications"
+             - "@app.auth"
+             - "@doctrine.orm.default_entity_manager.delegate"
 
     app.domain.ebooks_domain:
          class: "%app.domain.sub_courses_domain.class%"

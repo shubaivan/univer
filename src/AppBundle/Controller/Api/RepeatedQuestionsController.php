@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Favorites;
 use AppBundle\Entity\RepeatedQuestions;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;

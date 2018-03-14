@@ -3,10 +3,9 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
+use AppBundle\Entity\Enum\ProviderTypeEnum;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,12 +17,15 @@ class Notifications
 {
     use TraitTimestampable;
 
+    const GROUP_POST_NOTIFICATION = 'post_notifications';
+    const GROUP_GET_NOTIFICATIONS = 'get_notifications';
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_favorite", "get_favorites"
+     *     "get_notifications"
      * })
      */
     private $id;
@@ -32,10 +34,10 @@ class Notifications
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="favorites")
-     * @Assert\NotBlank(groups={"post_favorite", "put_favorite"})
+     * @Assert\NotBlank(groups={"post_notifications"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
-     *     "get_favorite", "get_favorites", "post_favorite", "put_favorite"
+     *     "post_notifications", "get_notifications"
      * })
      */
     private $user;
@@ -44,10 +46,10 @@ class Notifications
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="favorites")
-     * @Assert\NotBlank(groups={"post_favorite", "put_favorite"})
+     * @Assert\NotBlank(groups={"post_notifications"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
-     *     "get_favorite", "get_favorites", "post_favorite", "put_favorite"
+     *     "post_notifications", "get_notifications"
      * })
      */
     private $sender;
@@ -56,11 +58,12 @@ class Notifications
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @Assert\NotBlank(groups={"admin_post_user"})
-     * @Assert\Length(groups={"put_user"}, min=2, max=255)
+     * @Assert\NotBlank(groups={"post_notifications"})
+     * @Assert\Length(groups={"post_notifications"}, min=2, max=255)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *     "post_notifications", "get_notifications"
      * })
+     * @Annotation\Accessor(setter="setAccessorProvider")
      */
     private $provider;
 
@@ -68,9 +71,9 @@ class Notifications
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(groups={"put_user"}, min=2, max=255)
+     * @Assert\Length(groups={"post_notifications"}, min=2, max=255)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *     "post_notifications", "get_notifications"
      * })
      */
     private $message;
@@ -79,12 +82,9 @@ class Notifications
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(groups={"admin_post_user"})
-     * @Assert\Length(groups={"put_user"}, min=2, max=255)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *     "get_notifications"
      * })
-     * @Annotation\Accessor(setter="setSerializedAccessorStatus")
      */
     private $status;
 
@@ -99,14 +99,28 @@ class Notifications
     }
 
     /**
+     * @param null $provider
+     */
+    public function setAccessorProvider($provider = null)
+    {
+        $this->setProvider($provider);
+    }
+
+    /**
      * Set provider.
      *
      * @param string $provider
      *
      * @return Notifications
      */
-    public function setProvider($provider)
+    public function setProvider($provider = null)
     {
+        if (!in_array($provider, ProviderTypeEnum::getAvailableTypes(), true)) {
+            throw new \InvalidArgumentException(
+                'Invalid type. Available type: '.implode(',', ProviderTypeEnum::getAvailableTypes())
+            );
+        }
+
         $this->provider = $provider;
 
         return $this;
@@ -125,7 +139,7 @@ class Notifications
     /**
      * Set message.
      *
-     * @param string|null $message
+     * @param null|string $message
      *
      * @return Notifications
      */
@@ -139,7 +153,7 @@ class Notifications
     /**
      * Get message.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getMessage()
     {
@@ -149,13 +163,12 @@ class Notifications
     /**
      * Set status.
      *
-     * @param string|null $status
+     * @param null|string $status
      *
      * @return Notifications
      */
     public function setStatus($status = null)
     {
-
         if (!in_array($status, ImprovementSuggestionStatusEnum::getAvailableTypes(), true)) {
             throw new \InvalidArgumentException(
                 'Invalid type. Available type: '.implode(',', ImprovementSuggestionStatusEnum::getAvailableTypes())
@@ -170,7 +183,7 @@ class Notifications
     /**
      * Get status.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getStatus()
     {
@@ -180,7 +193,7 @@ class Notifications
     /**
      * Set user.
      *
-     * @param \AppBundle\Entity\User|null $user
+     * @param null|\AppBundle\Entity\User $user
      *
      * @return Notifications
      */
@@ -194,7 +207,7 @@ class Notifications
     /**
      * Get user.
      *
-     * @return \AppBundle\Entity\User|null
+     * @return null|\AppBundle\Entity\User
      */
     public function getUser()
     {
@@ -204,7 +217,7 @@ class Notifications
     /**
      * Set sender.
      *
-     * @param \AppBundle\Entity\User|null $sender
+     * @param null|\AppBundle\Entity\User $sender
      *
      * @return Notifications
      */
@@ -218,10 +231,30 @@ class Notifications
     /**
      * Get sender.
      *
-     * @return \AppBundle\Entity\User|null
+     * @return null|\AppBundle\Entity\User
      */
     public function getSender()
     {
         return $this->sender;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        if (!$this->getStatus()) {
+            $this->setStatus(ImprovementSuggestionStatusEnum::NOT_VIEWED);
+        }
+    }
+
+    public static function getPostGroup()
+    {
+        return [self::GROUP_POST_NOTIFICATION];
+    }
+
+    public static function getGetGroup()
+    {
+        return [self::GROUP_GET_NOTIFICATIONS, 'profile'];
     }
 }

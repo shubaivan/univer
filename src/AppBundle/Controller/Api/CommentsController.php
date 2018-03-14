@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Application\Notifications\NotificationsApplication;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Comments;
+use AppBundle\Entity\Enum\ProviderTypeEnum;
 use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Services\ObjectManager;
@@ -266,7 +268,14 @@ class CommentsController extends AbstractRestController
             $this->prepareAuthor();
             /** @var Comments $comments */
             $comments = $auth->validateEntites('request', Comments::class, ['post_comment']);
-
+            /** @var NotificationsApplication $notificationApplication */
+            $notificationApplication = $this->get('app.application.notifications_application');
+            $notificationApplication->createNotification(
+                $comments->getQuestions()->getUser(),
+                $this->getUser(),
+                ProviderTypeEnum::TYPE_PROVIDER_COMMENT,
+                'message'
+            );
             $em->persist($comments);
             $em->flush();
 

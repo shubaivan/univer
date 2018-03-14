@@ -179,7 +179,7 @@ class QuestionsRepository extends EntityRepository
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
         }
 
-        if ($parameterBag->get('repeated') && $parameterBag->get('repeated') === true) {
+        if ($parameterBag->get('repeated') && true === $parameterBag->get('repeated')) {
             $qbIncludedRepeatResult = $em->createQueryBuilder();
             $qbIncludedRepeatResult
                 ->select('IDENTITY(rq.questions)')

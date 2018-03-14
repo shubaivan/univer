@@ -4,9 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -57,7 +55,6 @@ class ImprovementSuggestions
      */
     private $status = ImprovementSuggestionStatusEnum::NOT_VIEWED;
 
-
     /**
      * Get id.
      *
@@ -71,7 +68,7 @@ class ImprovementSuggestions
     /**
      * Set description.
      *
-     * @param string|null $description
+     * @param null|string $description
      *
      * @return ImprovementSuggestions
      */
@@ -85,7 +82,7 @@ class ImprovementSuggestions
     /**
      * Get description.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -95,13 +92,12 @@ class ImprovementSuggestions
     /**
      * Set status.
      *
-     * @param string|null $status
+     * @param null|string $status
      *
      * @return ImprovementSuggestions
      */
     public function setStatus($status = null)
     {
-
         if (!in_array($status, ImprovementSuggestionStatusEnum::getAvailableTypes(), true)) {
             throw new \InvalidArgumentException(
                 'Invalid type. Available type: '.implode(',', ImprovementSuggestionStatusEnum::getAvailableTypes())
@@ -116,7 +112,7 @@ class ImprovementSuggestions
     /**
      * Get status.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getStatus()
     {
@@ -126,7 +122,7 @@ class ImprovementSuggestions
     /**
      * Set user.
      *
-     * @param \AppBundle\Entity\User|null $user
+     * @param null|\AppBundle\Entity\User $user
      *
      * @return ImprovementSuggestions
      */
@@ -140,7 +136,7 @@ class ImprovementSuggestions
     /**
      * Get user.
      *
-     * @return \AppBundle\Entity\User|null
+     * @return null|\AppBundle\Entity\User
      */
     public function getUser()
     {

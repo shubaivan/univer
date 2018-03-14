@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\ImprovementSuggestions;
-use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -51,14 +50,14 @@ class ImprovementSuggestionController extends AbstractRestController
     {
         try {
             if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)
-                && $this->getUser() !== $improvements->getUser())
-            {
+                && $this->getUser() !== $improvements->getUser()) {
                 throw new AccessDeniedException();
             } elseif ($this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)) {
                 $improvements->setStatus(ImprovementSuggestionStatusEnum::VIEWED);
 
                 $this->getDoctrine()->getManager()->flush();
             }
+
             return $this->createSuccessResponse($improvements, ['get_improvement_suggestions'], true);
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);

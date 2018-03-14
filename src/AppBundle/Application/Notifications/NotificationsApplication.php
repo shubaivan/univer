@@ -3,9 +3,8 @@
 namespace AppBundle\Application\Notifications;
 
 use AppBundle\Domain\Notifications\NotificationsDomain;
-use AppBundle\Domain\SubCourses\SubCoursesDomainInterface;
-use AppBundle\Entity\Collections\SubCourses\SubCoursesCollection;
-use FOS\RestBundle\Request\ParamFetcher;
+use AppBundle\Entity\User;
+use AppBundle\Model\Request\NotificationsRequestModel;
 
 class NotificationsApplication implements NotificationsApplicationInterface
 {
@@ -16,12 +15,48 @@ class NotificationsApplication implements NotificationsApplicationInterface
 
     /**
      * NotificationsApplication constructor.
+     *
      * @param NotificationsDomain $notificationsDomain
      */
     public function __construct(
         NotificationsDomain $notificationsDomain
     ) {
         $this->notificationsDomain = $notificationsDomain;
+    }
+
+    public function createNotification(
+        User $user,
+        User $sender,
+        $provider,
+        $message
+    ) {
+        $prepareData = [
+            'user' => [
+                'id' => $user->getId(),
+            ],
+            'sender' => [
+                'id' => $sender->getId(),
+            ],
+            'provider' => $provider,
+            'message' => $message,
+        ];
+
+        $this->getNotificationsDomain()
+            ->handleNotificationPrepareData($prepareData);
+    }
+
+    /**
+     * @param NotificationsRequestModel $model
+     */
+    public function changeStatusNotifications(NotificationsRequestModel $model)
+    {
+        $ids = [];
+        foreach ($model->getNotifications() as $notification) {
+            $ids[] = $notification->getId();
+        }
+
+        $this->getNotificationsDomain()
+            ->handleUpdateStatus($ids, $model->getStatus());
     }
 
     /**

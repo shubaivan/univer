@@ -5,7 +5,7 @@ namespace AppBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RepeatedQuestionsRepository
+ * RepeatedQuestionsRepository.
  */
 class RepeatedQuestionsRepository extends EntityRepository
 {
