@@ -85,14 +85,19 @@ class SubCoursesRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-        if (array_key_exists('courses', $params) && $paramFetcher->get('courses')) {
+        if (array_key_exists('sub_courses', $params) && $paramFetcher->get('sub_courses')) {
             $qb
-                ->andWhere($qb->expr()->eq('s.courses', $paramFetcher->get('courses')));
+                ->andWhere($qb->expr()->eq('q.subCourses', $paramFetcher->get('sub_courses')));
         }
 
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
                 ->andWhere($qb->expr()->eq('n.user', $paramFetcher->get('user')));
+        }
+
+        if (array_key_exists('courses', $params) && $paramFetcher->get('courses')) {
+            $qb
+                ->andWhere($qb->expr()->eq('q.courses', $paramFetcher->get('courses')));
         }
 
         if (!$count) {
