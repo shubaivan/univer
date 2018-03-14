@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
@@ -61,22 +60,13 @@ class QuestionAnswersCorrections
      */
     private $pointHeb;
 
-
     /**
      * @var QuestionCorrections
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuestionCorrections", inversedBy="question_answers_corrections")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuestionCorrections", inversedBy="questionAnswersCorrections")
      * @Assert\NotBlank(groups={"get_questions_corrections", "post_question_corrections", "get_question_corrections"})
      */
     private $questionCorrections;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-//        $this->userQuestionAnswerTest = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id.
@@ -139,11 +129,11 @@ class QuestionAnswersCorrections
     /**
      * Set pointEng.
      *
-     * @param string $pointEng
+     * @param null|string $pointEng
      *
      * @return QuestionAnswersCorrections
      */
-    public function setPointEng($pointEng)
+    public function setPointEng($pointEng = null)
     {
         $this->pointEng = $pointEng;
 
@@ -153,7 +143,7 @@ class QuestionAnswersCorrections
     /**
      * Get pointEng.
      *
-     * @return string
+     * @return null|string
      */
     public function getPointEng()
     {
@@ -163,11 +153,11 @@ class QuestionAnswersCorrections
     /**
      * Set pointHeb.
      *
-     * @param string $pointHeb
+     * @param null|string $pointHeb
      *
      * @return QuestionAnswersCorrections
      */
-    public function setPointHeb($pointHeb)
+    public function setPointHeb($pointHeb = null)
     {
         $this->pointHeb = $pointHeb;
 
@@ -177,51 +167,17 @@ class QuestionAnswersCorrections
     /**
      * Get pointHeb.
      *
-     * @return string
+     * @return null|string
      */
     public function getPointHeb()
     {
         return $this->pointHeb;
     }
 
-//    /**
-//     * Add userQuestionAnswerTest.
-//     *
-//     * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
-//     *
-//     * @return QuestionAnswersCorrections
-//     */
-//    public function addUserQuestionAnswerTest(\AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest)
-//    {
-//        $this->userQuestionAnswerTest[] = $userQuestionAnswerTest;
-//
-//        return $this;
-//    }
-
-//    /**
-//     * Remove userQuestionAnswerTest.
-//     *
-//     * @param \AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest
-//     */
-//    public function removeUserQuestionAnswerTest(\AppBundle\Entity\UserQuestionAnswerTest $userQuestionAnswerTest)
-//    {
-//        $this->userQuestionAnswerTest->removeElement($userQuestionAnswerTest);
-//    }
-
-//    /**
-//     * Get userQuestionAnswerTest.
-//     *
-//     * @return \Doctrine\Common\Collections\Collection
-//     */
-//    public function getUserQuestionAnswerTest()
-//    {
-//        return $this->userQuestionAnswerTest;
-//    }
-
     /**
      * Set questionCorrections.
      *
-     * @param \AppBundle\Entity\QuestionCorrections $questionCorrections
+     * @param null|\AppBundle\Entity\QuestionCorrections $questionCorrections
      *
      * @return QuestionAnswersCorrections
      */
@@ -233,9 +189,9 @@ class QuestionAnswersCorrections
     }
 
     /**
-     * Get questions.
+     * Get questionCorrections.
      *
-     * @return \AppBundle\Entity\QuestionCorrections
+     * @return null|\AppBundle\Entity\QuestionCorrections
      */
     public function getQuestionCorrections()
     {

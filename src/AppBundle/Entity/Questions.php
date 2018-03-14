@@ -268,6 +268,13 @@ class Questions
     private $courses;
 
     /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="questions", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -280,6 +287,7 @@ class Questions
         $this->questionAnswersOpen = new ArrayCollection();
         $this->repeatedQuestions = new ArrayCollection();
         $this->userQuestionAnswerResult = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -892,7 +900,7 @@ class Questions
      *
      * @param \AppBundle\Entity\RepeatedQuestions $repeatedQuestion
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeRepeatedQuestion(\AppBundle\Entity\RepeatedQuestions $repeatedQuestion)
     {
@@ -928,7 +936,7 @@ class Questions
      *
      * @param \AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeUserQuestionAnswerResult(\AppBundle\Entity\UserQuestionAnswerResult $userQuestionAnswerResult)
     {
@@ -948,7 +956,7 @@ class Questions
     /**
      * Set coursesOfStudy.
      *
-     * @param \AppBundle\Entity\CoursesOfStudy|null $coursesOfStudy
+     * @param null|\AppBundle\Entity\CoursesOfStudy $coursesOfStudy
      *
      * @return Questions
      */
@@ -962,7 +970,7 @@ class Questions
     /**
      * Get coursesOfStudy.
      *
-     * @return \AppBundle\Entity\CoursesOfStudy|null
+     * @return null|\AppBundle\Entity\CoursesOfStudy
      */
     public function getCoursesOfStudy()
     {
@@ -972,7 +980,7 @@ class Questions
     /**
      * Set courses.
      *
-     * @param \AppBundle\Entity\Courses|null $courses
+     * @param null|\AppBundle\Entity\Courses $courses
      *
      * @return Questions
      */
@@ -986,10 +994,46 @@ class Questions
     /**
      * Get courses.
      *
-     * @return \AppBundle\Entity\Courses|null
+     * @return null|\AppBundle\Entity\Courses
      */
     public function getCourses()
     {
         return $this->courses;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return Questions
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

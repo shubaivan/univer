@@ -89,12 +89,20 @@ class Lectors
     private $events;
 
     /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="lectors", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -230,7 +238,7 @@ class Lectors
      *
      * @param \AppBundle\Entity\Events $event
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeEvent(\AppBundle\Entity\Events $event)
     {
@@ -245,5 +253,41 @@ class Lectors
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return Lectors
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

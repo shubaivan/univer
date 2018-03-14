@@ -2,15 +2,13 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Admin;
-use AppBundle\Entity\Events;
 use AppBundle\Entity\QuestionCorrections;
-use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
-use AppBundle\Services\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
+use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -52,7 +50,7 @@ class QuestionCorrectionsController extends AbstractRestController
     {
         return $this->createSuccessResponse(
             $questionCorrections,
-            ['get_question_corrections'],
+            ['get_question_correction'],
             true
         );
     }
@@ -79,30 +77,29 @@ class QuestionCorrectionsController extends AbstractRestController
      *
      * @RestView()
      *
-     * @param Request $request
+     * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
+     * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
+     * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="createdAt", description="Sort by", nullable=true)
+     * @Rest\QueryParam(name="sort_order", strict=true, requirements="^[a-zA-Z]+", default="DESC", description="Sort order", nullable=true)
+     *
+     * @param ParamFetcher $paramFetcher
      *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function getQuestionsCorrectionsAction(Request $request)
+    public function getQuestionsCorrectionsAction(ParamFetcher $paramFetcher)
     {
         try {
-            $em = $this->getDoctrine()->getManager();
-            /** @var ObjectManager $auth */
-            $auth = $this->get('app.auth');
             $this->prepareAuthor();
-//            /** @var Events $events */
-            $events = $auth->validateEntites('request', Events::class, ['post_event']);
-            $em->persist($events);
-            $em->flush();
-            $parameterBag = $events->checkCondition();
-            $questions = $em->getRepository(QuestionCorrections::class);
+
+            $questions = $this->getDoctrine()
+                ->getRepository(QuestionCorrections::class);
 
             return $this->createSuccessResponse(
                 [
-                    'questions' => $questions->getEntitiesByParams($parameterBag),
-                    'total' => $questions->getEntitiesByParams($parameterBag, true),
+                    'questions_corrections' => $questions->getEntitiesByParams($paramFetcher),
+                    'total' => $questions->getEntitiesByParams($paramFetcher, true),
                 ],
                 ['get_questions_corrections'],
                 true
@@ -139,7 +136,9 @@ class QuestionCorrectionsController extends AbstractRestController
      *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
      *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"},
      *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"},
-     *      {"name"="question_answers_corrections", "dataType"="array", "required"=false, "description"="question answers array objects"}
+     *      {"name"="question_answers_corrections", "dataType"="array", "required"=false, "description"="question answers array objects"},
+     *      {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or object"},
+     *      {"name"="courses_of_study", "dataType"="integer", "required"=true, "description"="coursesOfStudy id or object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -158,6 +157,7 @@ class QuestionCorrectionsController extends AbstractRestController
      */
     public function postQuestionCorrectionsAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
@@ -172,7 +172,7 @@ class QuestionCorrectionsController extends AbstractRestController
             }
             if ($questionCorrections instanceof QuestionCorrections) {
                 $request->request->set('id', $questionCorrections->getId());
-                $serializerGroup = 'put_question';
+                $serializerGroup = 'put_question_corrections';
                 $persist = false;
             }
 
@@ -206,50 +206,4 @@ class QuestionCorrectionsController extends AbstractRestController
 
         return $this->handleView($view);
     }
-
-//    /**
-//     * Delete question by Admin.
-//     *
-//     * <strong>Simple example:</strong><br />
-//     * http://host/api/admins/question/{id} <br>.
-//     *
-//     * @Rest\Delete("/api/admins/question/{id}")
-//     * @ApiDoc(
-//     *      resource = true,
-//     *      description = "Delete question by Admin",
-//     *      authentication=true,
-//     *      parameters={
-//     *
-//     *      },
-//     *      statusCodes = {
-//     *          200 = "Returned when successful",
-//     *          400 = "Returned bad request"
-//     *      },
-//     *      section="Admins Question"
-//     * )
-//     *
-//     * @RestView()
-//     *
-//     * @param Questions $questions
-//     *
-//     * @throws NotFoundHttpException when not exist
-//     *
-//     * @return Response|View
-//     */
-//    public function deletedQuestionsAction(Questions $questions)
-//    {
-//        $em = $this->get('doctrine')->getManager();
-//
-//        try {
-//            $em->remove($questions);
-//            $em->flush();
-//
-//            return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
-//        } catch (\Exception $e) {
-//            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
-//            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
-//        }
-//
-//        return $this->handleView($view);
-//    }
 }
