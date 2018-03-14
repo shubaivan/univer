@@ -33,7 +33,7 @@ class Notifications
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="favorites")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="userNotifications")
      * @Assert\NotBlank(groups={"post_notifications"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
@@ -45,7 +45,7 @@ class Notifications
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="favorites")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="senderNotifications")
      * @Assert\NotBlank(groups={"post_notifications"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({

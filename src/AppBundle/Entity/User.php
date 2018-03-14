@@ -239,6 +239,20 @@ class User extends AbstractUser implements UserInterface
     private $questionCorrections;
 
     /**
+     * @var ArrayCollection|Notifications[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notifications", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $userNotifications;
+
+    /**
+     * @var ArrayCollection|Notifications[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notifications", mappedBy="sender", cascade={"persist", "remove"})
+     */
+    private $senderNotifications;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -261,6 +275,8 @@ class User extends AbstractUser implements UserInterface
         $this->events = new ArrayCollection();
         $this->improvementSuggestions = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
+        $this->userNotifications = new ArrayCollection();
+        $this->senderNotifications = new ArrayCollection();
     }
 
     /**
@@ -1020,5 +1036,77 @@ class User extends AbstractUser implements UserInterface
     public function getQuestionCorrections()
     {
         return $this->questionCorrections;
+    }
+
+    /**
+     * Add userNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $userNotification
+     *
+     * @return User
+     */
+    public function addUserNotification(\AppBundle\Entity\Notifications $userNotification)
+    {
+        $this->userNotifications[] = $userNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove userNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $userNotification
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeUserNotification(\AppBundle\Entity\Notifications $userNotification)
+    {
+        return $this->userNotifications->removeElement($userNotification);
+    }
+
+    /**
+     * Get userNotifications.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserNotifications()
+    {
+        return $this->userNotifications;
+    }
+
+    /**
+     * Add senderNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $senderNotification
+     *
+     * @return User
+     */
+    public function addSenderNotification(\AppBundle\Entity\Notifications $senderNotification)
+    {
+        $this->senderNotifications[] = $senderNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove senderNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $senderNotification
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeSenderNotification(\AppBundle\Entity\Notifications $senderNotification)
+    {
+        return $this->senderNotifications->removeElement($senderNotification);
+    }
+
+    /**
+     * Get senderNotifications.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSenderNotifications()
+    {
+        return $this->senderNotifications;
     }
 }
