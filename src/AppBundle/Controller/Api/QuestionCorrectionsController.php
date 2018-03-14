@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\QuestionCorrections;
+use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
 use Doctrine\ORM\EntityManager;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class QuestionCorrectionsController extends AbstractRestController
 {
@@ -169,11 +171,15 @@ class QuestionCorrectionsController extends AbstractRestController
             if ($request->get('id')) {
                 $questionCorrections = $em->getRepository('AppBundle\Entity\QuestionCorrections')
                     ->findOneBy(['id' => $request->get('id')]);
-            }
-            if ($questionCorrections instanceof QuestionCorrections) {
-                $request->request->set('id', $questionCorrections->getId());
-                $serializerGroup = 'put_question_corrections';
-                $persist = false;
+                if ($questionCorrections instanceof QuestionCorrections) {
+                    $request->request->set('id', $questionCorrections->getId());
+                    $serializerGroup = 'put_question_corrections';
+                    $persist = false;
+
+                    if ($this->getUser() instanceof User && $questionCorrections->getUser() !== $this->getUser()) {
+                        throw new AccessDeniedException();
+                    }
+                }
             }
 
             $this->prepareAuthor();
