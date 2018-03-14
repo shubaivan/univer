@@ -31,7 +31,7 @@ class Semesters
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "get_question", "get_questions",
-     *     "get_events"
+     *     "get_events", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -41,7 +41,7 @@ class Semesters
      * @ORM\Column(type="string", length=255, options={"fixed" = true}, nullable=false)
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "post_semester", "put_semester",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\NotBlank(groups={"post_semester", "put_semester"})
      * @Assert\Length(
@@ -69,12 +69,20 @@ class Semesters
     private $events;
 
     /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="semesters", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -201,5 +209,41 @@ class Semesters
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return Semesters
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

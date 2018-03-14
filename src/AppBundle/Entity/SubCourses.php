@@ -32,7 +32,7 @@ class SubCourses
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "get_question", "get_questions",
      *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_notes", "get_events"
+     *     "get_notes", "get_events", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -43,7 +43,7 @@ class SubCourses
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
      *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $name;
@@ -54,7 +54,8 @@ class SubCourses
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Courses", inversedBy="subCourses", cascade={"persist", "remove"})
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question",
+     *     "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\Courses>")
      * @Assert\NotBlank(groups={"post_sub_course", "put_sub_course"})
@@ -76,6 +77,13 @@ class SubCourses
     private $events;
 
     /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="subCourses", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -83,6 +91,7 @@ class SubCourses
         $this->questions = new ArrayCollection();
         $this->courses = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -249,5 +258,41 @@ class SubCourses
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return SubCourses
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

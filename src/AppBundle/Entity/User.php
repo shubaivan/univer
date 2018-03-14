@@ -35,7 +35,8 @@ class User extends AbstractUser implements UserInterface
      * @Annotation\Groups({
      *      "profile", "get_question", "get_questions", "get_notes",
      *     "get_favorite", "get_favorites", "get_user_question_answer_test",
-     *     "get_events", "get_repeated_questions", "get_improvement_suggestions"
+     *     "get_events", "get_repeated_questions", "get_improvement_suggestions",
+     *     "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -43,7 +44,8 @@ class User extends AbstractUser implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user"
+     *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user",
+     *      "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\SerializedName("_username")
      * @Assert\NotBlank(groups={"registration", "admin_post_user"})
@@ -230,6 +232,13 @@ class User extends AbstractUser implements UserInterface
     private $improvementSuggestions;
 
     /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -251,6 +260,7 @@ class User extends AbstractUser implements UserInterface
         $this->repeatedQuestions = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->improvementSuggestions = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -938,5 +948,77 @@ class User extends AbstractUser implements UserInterface
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add improvementSuggestion.
+     *
+     * @param \AppBundle\Entity\ImprovementSuggestions $improvementSuggestion
+     *
+     * @return User
+     */
+    public function addImprovementSuggestion(\AppBundle\Entity\ImprovementSuggestions $improvementSuggestion)
+    {
+        $this->improvementSuggestions[] = $improvementSuggestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove improvementSuggestion.
+     *
+     * @param \AppBundle\Entity\ImprovementSuggestions $improvementSuggestion
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeImprovementSuggestion(\AppBundle\Entity\ImprovementSuggestions $improvementSuggestion)
+    {
+        return $this->improvementSuggestions->removeElement($improvementSuggestion);
+    }
+
+    /**
+     * Get improvementSuggestions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImprovementSuggestions()
+    {
+        return $this->improvementSuggestions;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return User
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

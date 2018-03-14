@@ -29,7 +29,7 @@ class Questions
      * @Annotation\Groups({
      *     "get_question", "get_questions", "get_note", "get_notes",
      *     "get_favorite", "get_favorites", "get_comment", "get_comments",
-     *     "get_repeated_questions"
+     *     "get_repeated_questions", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -38,7 +38,7 @@ class Questions
      * @ORM\Column(name="custom_id", type="text", length=255, nullable=true)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $customId;
@@ -48,7 +48,7 @@ class Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="questions")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $user;
@@ -69,7 +69,7 @@ class Questions
      * @ORM\Column(type="integer", nullable=true)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $year;
@@ -80,7 +80,7 @@ class Questions
      * @Assert\NotBlank(groups={"post_question"})
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Accessor(setter="setSerializedAccessorType")
      */
@@ -92,7 +92,7 @@ class Questions
      * @ORM\Column(name="question_number", type="integer", nullable=true)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $questionNumber;
@@ -101,7 +101,7 @@ class Questions
      * @var string
      * @ORM\Column(name="image_url", type="string", length=255, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_note", "get_notes"
+     *     "get_question", "get_questions", "get_note", "get_notes",
      * })
      */
     private $imageUrl;
@@ -110,7 +110,7 @@ class Questions
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_note", "get_notes"
+     *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $notes;
@@ -118,7 +118,7 @@ class Questions
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $text;
@@ -146,7 +146,7 @@ class Questions
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswers", mappedBy="questions", cascade={"persist" , "remove"})
      * @Assert\Valid
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswers>")
      * @Annotation\Accessor(setter="setAccessorQuestionAnswers")
@@ -195,7 +195,7 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Semesters")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -208,7 +208,7 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\ExamPeriods")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -222,7 +222,7 @@ class Questions
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_notes"
+     *     "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -235,7 +235,7 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Lectors")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -248,7 +248,7 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -261,11 +261,18 @@ class Questions
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Courses")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
     private $courses;
+
+    /**
+     * @var ArrayCollection|QuestionCorrections[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionCorrections", mappedBy="questions", cascade={"persist", "remove"})
+     */
+    private $questionCorrections;
 
     /**
      * Constructor.
@@ -280,6 +287,7 @@ class Questions
         $this->questionAnswersOpen = new ArrayCollection();
         $this->repeatedQuestions = new ArrayCollection();
         $this->userQuestionAnswerResult = new ArrayCollection();
+        $this->questionCorrections = new ArrayCollection();
     }
 
     /**
@@ -991,5 +999,41 @@ class Questions
     public function getCourses()
     {
         return $this->courses;
+    }
+
+    /**
+     * Add questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return Questions
+     */
+    public function addQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        $this->questionCorrections[] = $questionCorrection;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionCorrection.
+     *
+     * @param \AppBundle\Entity\QuestionCorrections $questionCorrection
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionCorrection(\AppBundle\Entity\QuestionCorrections $questionCorrection)
+    {
+        return $this->questionCorrections->removeElement($questionCorrection);
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

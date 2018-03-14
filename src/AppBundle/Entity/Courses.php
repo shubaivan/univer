@@ -32,7 +32,7 @@ class Courses
      * @Annotation\Groups({
      *     "get_course", "get_courses", "get_sub_course", "get_sub_courses",
      *     "get_course_of_study", "get_courses_of_study", "get_questions",
-     *     "get_question", "get_events"
+     *     "get_question", "get_events","get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -43,7 +43,7 @@ class Courses
      * @Annotation\Groups({
      *     "post_course", "put_course", "get_course", "get_courses",
      *     "get_sub_course", "get_sub_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_questions", "get_question"
+     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Assert\Length(
@@ -61,7 +61,7 @@ class Courses
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="courses", cascade={"persist", "remove"})
      * @Annotation\Groups({
-     *     "post_course", "put_course", "get_course", "get_courses", "get_questions", "get_question"
+     *     "post_course", "put_course", "get_course", "get_courses", "get_questions", "get_question","get_questions_corrections", "get_question_corrections"
      * })
      * @ORM\JoinTable(name="courses_courses_of_study",
      *      joinColumns={@ORM\JoinColumn(name="courses_id", referencedColumnName="id")},
