@@ -45,26 +45,27 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
      *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user",
-     *      "get_questions_corrections", "get_question_corrections"
+     *      "get_questions_corrections", "get_question_corrections", "put_user"
      * })
      * @Annotation\SerializedName("_username")
-     * @Assert\NotBlank(groups={"registration", "admin_post_user"})
+     * @Assert\NotBlank(groups={"registration", "admin_post_user", "put_user"})
      */
     private $username;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
      * @Annotation\Groups({
-     *      "profile", "admin_post_user", "admin_put_user"
+     *      "profile", "admin_post_user", "admin_put_user", "put_user"
      * })
      * @Annotation\Accessor(setter="setIsActiveAccessor")
      */
     private $isActive;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      * @Annotation\Groups({
-     *      "profile", "registration", "put_user", "admin_post_user", "admin_put_user"
+     *      "profile", "registration", "put_user", "admin_post_user",
+     *      "admin_put_user", "put_user"
      * })
      * @Annotation\SerializedName("_email")
      * @Annotation\Accessor(setter="setEmailAccessor")
@@ -77,9 +78,9 @@ class User extends AbstractUser implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=500)
-     * @Assert\NotBlank(groups={"registration", "admin_post_user"})
+     * @Assert\NotBlank(groups={"registration", "admin_post_user", "put_user"})
      * @Annotation\Groups({
-     *      "registration", "admin_post_user", "admin_put_user"
+     *      "registration", "admin_post_user", "admin_put_user", "put_user"
      * })
      * @Annotation\SerializedName("_password")
      * @Assert\Length(
@@ -94,10 +95,10 @@ class User extends AbstractUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(groups={"admin_post_user"})
-     * @Assert\Length(groups={"put_user"}, min=2, max=255)
+     * @Assert\NotBlank(groups={"admin_post_user", "put_user"})
+     * @Assert\Length(groups={"put_user", "put_user"}, min=2, max=255)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user", "put_user"
      * })
      */
     private $firstName;
@@ -106,9 +107,9 @@ class User extends AbstractUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     * @Assert\NotBlank(groups={"admin_post_user"})
+     * @Assert\NotBlank(groups={"admin_post_user", "put_user"})
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user", "put_user"
      * })
      */
     private $lastName;
@@ -128,7 +129,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @ORM\Column(name="year_of_graduation", type="integer", nullable=true)
      * @Annotation\Groups({
-     *      "profile", "put_user", "admin_post_user", "admin_put_user"
+     *      "profile", "put_user", "admin_post_user", "admin_put_user", "put_user"
      * })
      */
     private $yearOfGraduation;

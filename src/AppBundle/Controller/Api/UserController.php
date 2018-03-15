@@ -48,6 +48,73 @@ class UserController extends AbstractRestController
     }
 
     /**
+     * Put User data.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/user{id} <br>.
+     *
+     * @Rest\Put("/api/admins/user/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Put User data",
+     * authentication=true,
+     *  parameters={
+     *      {"name"="_username", "dataType"="string", "required"=false, "description"="username"},
+     *      {"name"="is_active", "dataType"="boolean", "required"=false, "description"="user is_active parameter"},
+     *      {"name"="_email", "dataType"="string", "required"=false, "description"="user email"},
+     *      {"name"="_password", "dataType"="string", "required"=false, "description"="user password"},
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="user first_name"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
+     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"}
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="User"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Request $request
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function putUserAction(Request $request, User $user)
+    {
+        $em = $this->get('doctrine')->getManager();
+        $logger = $this->container->get('logger');
+
+        try {
+            $auth = $this->get('app.auth');
+            $request->request->set('id', $user->getId());
+            /** @var User $user */
+            $user = $auth->validateEntites('request', User::class, ['put_user']);
+
+            if ($request->request->get('_password')) {
+                $encoder = $this->container->get('security.password_encoder');
+                $password = $request->request->get('_password');
+
+                $user
+                    ->setPassword($encoder->encodePassword($user, $password));
+            }
+
+            $em->flush();
+
+            return $this->createSuccessResponse($user, ['profile'], true);
+        } catch (ValidatorException $e) {
+            $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $logger->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Admin get user by id.
      * <strong>Simple example:</strong><br />
      * http://host/api/admins/user/{id} <br>.
