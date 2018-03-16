@@ -68,6 +68,7 @@ class QuestionsController extends AbstractRestController
      * description = "Get list questions",
      * authentication=true,
      *  parameters={
+     *      {"name"="event_id", "dataType"="object", "required"=false, "description"="event object"},
      *      {"name"="courses_of_study", "dataType"="object", "required"=false, "description"="courses_of_study object"},
      *      {"name"="courses", "dataType"="array<object>", "required"=false, "description"="courses array object"},
      *      {"name"="sub_courses", "dataType"="array<object>", "required"=false, "description"="sub_courses array object"},
@@ -104,18 +105,26 @@ class QuestionsController extends AbstractRestController
     {
         try {
             $em = $this->getDoctrine()->getManager();
-            /** @var ObjectManager $auth */
-            $auth = $this->get('app.auth');
-            $this->prepareAuthor();
-            /** @var Events $events */
-            $events = $auth->validateEntites('request', Events::class, ['post_event']);
-            $parameterBag = $events->checkCondition();
-            if ($parameterBag->count() > 4) {
-                $em->persist($events);
-                $em->flush();
-            }
-
             $questions = $em->getRepository(Questions::class);
+            if ($request->get('event_id'))
+            {
+                $event = $em->getRepository('AppBundle:Events')
+                    ->findOneBy(['id' => $request->get('event_id')]);
+                if ($event) {
+                    $parameterBag = $event->checkCondition();
+                } else {
+                    /** @var ObjectManager $auth */
+                    $auth = $this->get('app.auth');
+                    $this->prepareAuthor();
+                    /** @var Events $events */
+                    $events = $auth->validateEntites('request', Events::class, ['post_event']);
+                    $parameterBag = $events->checkCondition();
+                    if ($parameterBag->count() > 4) {
+                        $em->persist($events);
+                        $em->flush();
+                    }
+                }
+            }
 
             return $this->createSuccessResponse(
                 [
