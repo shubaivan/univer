@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Collections\Questions;
 
 use AppBundle\DTO\Notes\NotesDTO;
+use AppBundle\Entity\QuestionAnswers;
 use JMS\Serializer\Annotation;
 
 class QuestionsCollection
@@ -70,6 +71,12 @@ class QuestionsCollection
     private $notes = [];
 
     /**
+     * @var array|QuestionAnswers[]
+     * @Annotation\Groups({"get_sub_courses"})
+     */
+    private $questionAnswers;
+
+    /**
      * EbooksCollection constructor.
      *
      * @param array $values
@@ -87,6 +94,9 @@ class QuestionsCollection
 
         foreach ($values['notes'] as $value) {
             $this->notes[] = new NotesDTO($value);
+        }
+        if (array_key_exists('question_answers', $values)) {
+            $this->questionAnswers = $values['question_answers'];
         }
     }
 

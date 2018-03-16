@@ -98,3 +98,8 @@ api_notifications:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/NotificationsController.php"
+
+api_votes:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/VotesController.php"

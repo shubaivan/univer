@@ -94,7 +94,7 @@ class NotesController extends AbstractRestController
 
             return $this->createSuccessResponse(
                 $subCourses,
-                ['get_sub_courses'],
+                ['get_sub_courses', 'get_questions', 'get_user_question_answer_test'],
                 true
             );
         } catch (\Exception $e) {

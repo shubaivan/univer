@@ -67,6 +67,31 @@ class QuestionsRepository extends EntityRepository
     }
 
     /**
+     * @return int|Questions[]
+     */
+    public function getEntitiesForProcessing()
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('q')
+            ->from('AppBundle:Questions', 'q')
+            ->where($qb->expr()
+                ->andX(
+                    $qb->expr()->isNotNull('q.votesAt'),
+                    $qb->expr()->lte('q.votesAt', ':dt')
+                    )
+            )
+            ->setParameter(':dt', (new \DateTime())->format('Y-m-d H:i:s'));
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * @param ParameterBag $parameterBag
      * @param bool         $count
      *
@@ -110,6 +135,21 @@ class QuestionsRepository extends EntityRepository
             }
 
             $qb->andWhere($andXSearch);
+        }
+
+        if ($parameterBag->get('votes') !== null) {
+            $qbIncludedVotesResult = $em->createQueryBuilder();
+            $qbIncludedVotesResult
+                ->select('IDENTITY(votes.questions)')
+                ->from('AppBundle:Votes', 'votes');
+
+            if ($parameterBag->get('votes') === true) {
+                $qb
+                    ->andWhere($qb->expr()->in('q.id', $qbIncludedVotesResult->getDQL()));
+            } elseif ($parameterBag->get('votes') === false) {
+                $qb
+                    ->andWhere($qb->expr()->notIn('q.id', $qbIncludedVotesResult->getDQL()));
+            }
         }
 
         if ($parameterBag->get('user')) {

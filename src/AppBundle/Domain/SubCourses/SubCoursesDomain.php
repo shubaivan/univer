@@ -3,8 +3,10 @@
 namespace AppBundle\Domain\SubCourses;
 
 use AppBundle\Entity\Repository\NotesRepository;
+use AppBundle\Entity\Repository\QuestionAnswersRepository;
 use AppBundle\Entity\Repository\QuestionsRepository;
 use AppBundle\Entity\Repository\SubCoursesRepository;
+use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
 use FOS\RestBundle\Request\ParamFetcher;
 
 class SubCoursesDomain implements SubCoursesDomainInterface
@@ -25,20 +27,28 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     private $questionsRepository;
 
     /**
+     * @var QuestionAnswersRepository
+     */
+    private $questionAnswersRepository;
+
+    /**
      * SubCoursesDomain constructor.
      *
      * @param SubCoursesRepository $subCoursesRepository
      * @param NotesRepository      $notesRepository
      * @param QuestionsRepository  $questionsRepository
+     * @param QuestionAnswersRepository $questionAnswersRepository
      */
     public function __construct(
         SubCoursesRepository $subCoursesRepository,
         NotesRepository $notesRepository,
-        QuestionsRepository $questionsRepository
+        QuestionsRepository $questionsRepository,
+        QuestionAnswersRepository $questionAnswersRepository
     ) {
         $this->subCoursesRepository = $subCoursesRepository;
         $this->notesRepository = $notesRepository;
         $this->questionsRepository = $questionsRepository;
+        $this->questionAnswersRepository = $questionAnswersRepository;
     }
 
     /**
@@ -76,6 +86,14 @@ class SubCoursesDomain implements SubCoursesDomainInterface
                 }
                 $questions[$keyQuestion]['notes'] = $notes;
                 unset($questions[$keyQuestion]['note_ids']);
+
+                $answers = $this->getQuestionAnswersRepository()
+                    ->findBy(['questions' => $question['id']]);
+                if ($answers) {
+                    $questions[$keyQuestion]['question_answers'] = $answers;
+                } else {
+                    $questions[$keyQuestion]['question_answers'] = [];
+                }
             }
             if (!$questions) {
                 unset($subCourses[$key]);
@@ -122,5 +140,13 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     private function getQuestionsRepository()
     {
         return $this->questionsRepository;
+    }
+
+    /**
+     * @return QuestionAnswersRepository
+     */
+    private function getQuestionAnswersRepository()
+    {
+        return $this->questionAnswersRepository;
     }
 }
