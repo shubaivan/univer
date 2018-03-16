@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Security\AuthenticationSuccessHandler;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -102,6 +103,17 @@ class UserController extends AbstractRestController
             }
 
             $em->flush();
+
+            if ($request->request->get('_email')) {
+                /** @var AuthenticationSuccessHandler $lexikJwtAuthentication */
+                $lexikJwtAuthentication = $this->get('custom');
+                $event = $lexikJwtAuthentication->handleAuthenticationSuccess($user, null, true);
+
+                return $this->createSuccessResponse([
+                    'user' => $user,
+                    'token' => $event->getData(),
+                ], ['profile'], true);
+            }
 
             return $this->createSuccessResponse($user, ['profile'], true);
         } catch (ValidatorException $e) {
