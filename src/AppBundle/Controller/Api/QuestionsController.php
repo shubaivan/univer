@@ -106,23 +106,21 @@ class QuestionsController extends AbstractRestController
         try {
             $em = $this->getDoctrine()->getManager();
             $questions = $em->getRepository(Questions::class);
-            if ($request->get('event_id'))
-            {
-                $event = $em->getRepository('AppBundle:Events')
-                    ->findOneBy(['id' => $request->get('event_id')]);
-                if ($event) {
-                    $parameterBag = $event->checkCondition();
-                } else {
-                    /** @var ObjectManager $auth */
-                    $auth = $this->get('app.auth');
-                    $this->prepareAuthor();
-                    /** @var Events $events */
-                    $events = $auth->validateEntites('request', Events::class, ['post_event']);
-                    $parameterBag = $events->checkCondition();
-                    if ($parameterBag->count() > 4) {
-                        $em->persist($events);
-                        $em->flush();
-                    }
+
+            $event = $em->getRepository('AppBundle:Events')
+                ->findOneBy(['id' => $request->get('event_id')]);
+            if ($event) {
+                $parameterBag = $event->checkCondition();
+            } else {
+                /** @var ObjectManager $auth */
+                $auth = $this->get('app.auth');
+                $this->prepareAuthor();
+                /** @var Events $events */
+                $events = $auth->validateEntites('request', Events::class, ['post_event']);
+                $parameterBag = $events->checkCondition();
+                if ($parameterBag->count() > 4) {
+                    $em->persist($events);
+                    $em->flush();
                 }
             }
 
