@@ -50,6 +50,18 @@ class DoctrineListener implements EventSubscriber
                     }
                 }
             }
+
+            if ($entity instanceof Questions) {
+                $answers = $entity->getQuestionAnswers();
+                $existAnswers = $this->container->get('app.repository.question_answers')
+                    ->findBy(['questions' => $entity]);
+
+                foreach ($existAnswers as $existAnswer) {
+                    if (!$answers->contains($existAnswer)) {
+                        $em->remove($existAnswer);
+                    }
+                }
+            }
         }
     }
 
