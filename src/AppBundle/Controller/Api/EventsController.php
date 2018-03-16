@@ -52,7 +52,7 @@ class EventsController extends AbstractRestController
             $em = $this->getDoctrine()->getManager();
 
             $repository = $em->getRepository('AppBundle:Events');
-
+            $paramFetcher = $this->responsePrepareAuthor($paramFetcher);
             return $this->createSuccessResponse(
                 [
                     'events' => $repository->getEntitiesByParams($paramFetcher),
