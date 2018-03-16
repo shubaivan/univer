@@ -115,7 +115,7 @@ class UserController extends AbstractRestController
                 ], ['profile'], true);
             }
 
-            return $this->createSuccessResponse($user, ['profile'], true);
+            return $this->createSuccessResponse(['user' => $user], ['profile'], true);
         } catch (ValidatorException $e) {
             $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'validate error: '.$e->getErrorsMessage());
