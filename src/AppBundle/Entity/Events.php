@@ -825,7 +825,7 @@ class Events
     /**
      * Set votes.
      *
-     * @param bool|null $votes
+     * @param null|bool $votes
      *
      * @return Events
      */
@@ -839,7 +839,7 @@ class Events
     /**
      * Get votes.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function getVotes()
     {

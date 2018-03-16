@@ -1058,7 +1058,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\Notifications $userNotification
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeUserNotification(\AppBundle\Entity\Notifications $userNotification)
     {
@@ -1094,7 +1094,7 @@ class User extends AbstractUser implements UserInterface
      *
      * @param \AppBundle\Entity\Notifications $senderNotification
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeSenderNotification(\AppBundle\Entity\Notifications $senderNotification)
     {

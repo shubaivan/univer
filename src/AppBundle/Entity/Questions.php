@@ -342,7 +342,6 @@ class Questions
         return $this->updatedAt;
     }
 
-
     /**
      * Get id.
      *
@@ -1087,7 +1086,7 @@ class Questions
      *
      * @param \AppBundle\Entity\Votes $vote
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeVote(\AppBundle\Entity\Votes $vote)
     {
@@ -1101,13 +1100,13 @@ class Questions
      */
     public function getVotes()
     {
-        return $this->votes? $this->votes : new ArrayCollection();
+        return $this->votes ? $this->votes : new ArrayCollection();
     }
 
     /**
      * Set votesAt.
      *
-     * @param \DateTime|null $votesAt
+     * @param null|\DateTime $votesAt
      *
      * @return Questions
      */
@@ -1121,7 +1120,7 @@ class Questions
     /**
      * Get votesAt.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getVotesAt()
     {

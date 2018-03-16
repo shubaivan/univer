@@ -30,6 +30,7 @@ class ProcessingVotes extends ContainerAwareCommand
         }
         /** @var EntityManager $em */
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+
         try {
             /** @var Questions[] $questions */
             $questions = $this->getContainer()->get('app.repository.questions')

@@ -5,9 +5,8 @@ namespace AppBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * VotesRepository
+ * VotesRepository.
  */
 class VotesRepository extends EntityRepository
 {
-
 }

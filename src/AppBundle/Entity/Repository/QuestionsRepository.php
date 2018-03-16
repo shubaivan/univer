@@ -78,7 +78,8 @@ class QuestionsRepository extends EntityRepository
         $qb
             ->select('q')
             ->from('AppBundle:Questions', 'q')
-            ->where($qb->expr()
+            ->where(
+                $qb->expr()
                 ->andX(
                     $qb->expr()->isNotNull('q.votesAt'),
                     $qb->expr()->lte('q.votesAt', ':dt')
@@ -137,16 +138,16 @@ class QuestionsRepository extends EntityRepository
             $qb->andWhere($andXSearch);
         }
 
-        if ($parameterBag->get('votes') !== null) {
+        if (null !== $parameterBag->get('votes')) {
             $qbIncludedVotesResult = $em->createQueryBuilder();
             $qbIncludedVotesResult
                 ->select('IDENTITY(votes.questions)')
                 ->from('AppBundle:Votes', 'votes');
 
-            if ($parameterBag->get('votes') === true) {
+            if (true === $parameterBag->get('votes')) {
                 $qb
                     ->andWhere($qb->expr()->in('q.id', $qbIncludedVotesResult->getDQL()));
-            } elseif ($parameterBag->get('votes') === false) {
+            } elseif (false === $parameterBag->get('votes')) {
                 $qb
                     ->andWhere($qb->expr()->notIn('q.id', $qbIncludedVotesResult->getDQL()));
             }

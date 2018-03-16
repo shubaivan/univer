@@ -6,7 +6,6 @@ use AppBundle\Entity\Repository\NotesRepository;
 use AppBundle\Entity\Repository\QuestionAnswersRepository;
 use AppBundle\Entity\Repository\QuestionsRepository;
 use AppBundle\Entity\Repository\SubCoursesRepository;
-use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
 use FOS\RestBundle\Request\ParamFetcher;
 
 class SubCoursesDomain implements SubCoursesDomainInterface
@@ -34,9 +33,9 @@ class SubCoursesDomain implements SubCoursesDomainInterface
     /**
      * SubCoursesDomain constructor.
      *
-     * @param SubCoursesRepository $subCoursesRepository
-     * @param NotesRepository      $notesRepository
-     * @param QuestionsRepository  $questionsRepository
+     * @param SubCoursesRepository      $subCoursesRepository
+     * @param NotesRepository           $notesRepository
+     * @param QuestionsRepository       $questionsRepository
      * @param QuestionAnswersRepository $questionAnswersRepository
      */
     public function __construct(
