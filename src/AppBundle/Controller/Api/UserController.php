@@ -52,7 +52,7 @@ class UserController extends AbstractRestController
      * <strong>Simple example:</strong><br />
      * http://host/api/user{id} <br>.
      *
-     * @Rest\Put("/api/admins/user/{id}")
+     * @Rest\Put("/api/user/{id}")
      * @ApiDoc(
      * resource = true,
      * description = "Put User data",
