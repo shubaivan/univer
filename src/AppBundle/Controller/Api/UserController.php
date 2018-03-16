@@ -50,9 +50,9 @@ class UserController extends AbstractRestController
     /**
      * Put User data.
      * <strong>Simple example:</strong><br />
-     * http://host/api/user{id} <br>.
+     * http://host/api/user <br>.
      *
-     * @Rest\Put("/api/user/{id}")
+     * @Rest\Put("/api/user")
      * @ApiDoc(
      * resource = true,
      * description = "Put User data",
@@ -81,12 +81,13 @@ class UserController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function putUserAction(Request $request, User $user)
+    public function putUserAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
         try {
+            $user = $this->getUser();
             $auth = $this->get('app.auth');
             $request->request->set('id', $user->getId());
             /** @var User $user */
