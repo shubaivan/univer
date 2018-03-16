@@ -81,6 +81,14 @@ class QuestionAnswers
     private $questions;
 
     /**
+     * @var QuestionCorrections
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuestionCorrections", inversedBy="questionAnswers")
+     * @Assert\NotBlank(groups={"put_question_corrections", "post_question_corrections"})
+     */
+    private $questionCorrections;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -250,5 +258,29 @@ class QuestionAnswers
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Set questionCorrections.
+     *
+     * @param null|\AppBundle\Entity\QuestionCorrections $questionCorrections
+     *
+     * @return QuestionAnswers
+     */
+    public function setQuestionCorrections(\AppBundle\Entity\QuestionCorrections $questionCorrections = null)
+    {
+        $this->questionCorrections = $questionCorrections;
+
+        return $this;
+    }
+
+    /**
+     * Get questionCorrections.
+     *
+     * @return null|\AppBundle\Entity\QuestionCorrections
+     */
+    public function getQuestionCorrections()
+    {
+        return $this->questionCorrections;
     }
 }

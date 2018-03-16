@@ -138,7 +138,7 @@ class QuestionCorrectionsController extends AbstractRestController
      *      {"name"="sub_courses", "dataType"="integer", "required"=true, "description"="sub courses id"},
      *      {"name"="lectors", "dataType"="integer", "required"=true, "description"="lectors id"},
      *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"},
-     *      {"name"="question_answers_corrections", "dataType"="array", "required"=false, "description"="question answers array objects"},
+     *      {"name"="question_answers", "dataType"="array", "required"=false, "description"="question answers array objects"},
      *      {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or object"},
      *      {"name"="courses_of_study", "dataType"="integer", "required"=true, "description"="coursesOfStudy id or object"}
      *  },

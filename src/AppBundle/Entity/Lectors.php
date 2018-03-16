@@ -45,7 +45,8 @@ class Lectors
      * @ORM\Column(name="first_name", type="string", length=100, nullable=false)
      * @Annotation\Groups({
      *     "get_lector", "get_lectors", "post_lector", "put_lector",
-     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_questions", "get_question", "get_questions_corrections",
+     *     "get_question_corrections", "get_events"
      * })
      * @Assert\Length(
      *     groups={"post_lector", "put_lector"},

@@ -113,18 +113,17 @@ class QuestionCorrections
     private $text;
 
     /**
-     * @var ArrayCollection|QuestionAnswersCorrections[]
+     * @var ArrayCollection|QuestionAnswers[]
      *
-     * @Assert\Valid
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswersCorrections", mappedBy="questionCorrections", cascade={"persist" , "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswers", mappedBy="questionCorrections", cascade={"persist" , "remove"})
      * @Assert\Valid
      * @Annotation\Groups({
      *     "post_question_corrections", "get_question_corrections", "get_questions_corrections", "put_question_corrections"
      * })
-     * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswersCorrections>")
-     * @Annotation\Accessor(setter="setAccessorQuestionAnswersCorrections")
+     * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswers>")
+     * @Annotation\Accessor(setter="setAccessorQuestionAnswers")
      */
-    private $questionAnswersCorrections;
+    private $questionAnswers;
 
     /**
      * @var Questions
@@ -224,7 +223,7 @@ class QuestionCorrections
      */
     public function __construct()
     {
-        $this->questionAnswersCorrections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionAnswers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -441,68 +440,6 @@ class QuestionCorrections
     }
 
     /**
-     * Add questionAnswersCorrection.
-     *
-     * @param \AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrection
-     *
-     * @return QuestionCorrections
-     */
-    public function addQuestionAnswersCorrection(\AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrection)
-    {
-        $this->questionAnswersCorrections[] = $questionAnswersCorrection;
-
-        return $this;
-    }
-
-    /**
-     * Remove questionAnswersCorrection.
-     *
-     * @param \AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrection
-     *
-     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
-     */
-    public function removeQuestionAnswersCorrection(\AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrection)
-    {
-        return $this->questionAnswersCorrections->removeElement($questionAnswersCorrection);
-    }
-
-    /**
-     * Get questionAnswersCorrections.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuestionAnswersCorrections()
-    {
-        return $this->questionAnswersCorrections ? $this->questionAnswersCorrections : new ArrayCollection();
-    }
-
-    /**
-     * @param $questionAnswers
-     */
-    public function setAccessorQuestionAnswersCorrections($questionAnswers)
-    {
-        $this->getQuestionAnswersCorrections()->clear();
-        foreach ($questionAnswers as $questionAnswer) {
-            $this->addQuestionAnswersCorrections($questionAnswer);
-        }
-    }
-
-    /**
-     * Add questionAnswerCorrections.
-     *
-     * @param \AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrections
-     *
-     * @return QuestionCorrections
-     */
-    public function addQuestionAnswersCorrections(\AppBundle\Entity\QuestionAnswersCorrections $questionAnswersCorrections)
-    {
-        $this->questionAnswersCorrections[] = $questionAnswersCorrections;
-        $questionAnswersCorrections->setQuestionCorrections($this);
-
-        return $this;
-    }
-
-    /**
      * Set questions.
      *
      * @param null|\AppBundle\Entity\Questions $questions
@@ -668,5 +605,50 @@ class QuestionCorrections
     public function getCourses()
     {
         return $this->courses;
+    }
+
+    public function setAccessorQuestionAnswers($questionAnswers)
+    {
+        $this->getQuestionAnswers()->clear();
+        foreach ($questionAnswers as $questionAnswer) {
+            $this->addQuestionAnswer($questionAnswer);
+        }
+    }
+
+    /**
+     * Add questionAnswer.
+     *
+     * @param \AppBundle\Entity\QuestionAnswers $questionAnswer
+     *
+     * @return QuestionCorrections
+     */
+    public function addQuestionAnswer(\AppBundle\Entity\QuestionAnswers $questionAnswer)
+    {
+        $this->questionAnswers[] = $questionAnswer;
+        $questionAnswer->setQuestionCorrections($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove questionAnswer.
+     *
+     * @param \AppBundle\Entity\QuestionAnswers $questionAnswer
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeQuestionAnswer(\AppBundle\Entity\QuestionAnswers $questionAnswer)
+    {
+        return $this->questionAnswers->removeElement($questionAnswer);
+    }
+
+    /**
+     * Get questionAnswers.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionAnswers()
+    {
+        return $this->questionAnswers ? $this->questionAnswers : new ArrayCollection();
     }
 }

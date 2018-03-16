@@ -43,7 +43,8 @@ class Courses
      * @Annotation\Groups({
      *     "post_course", "put_course", "get_course", "get_courses",
      *     "get_sub_course", "get_sub_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_questions", "get_question", "get_questions_corrections",
+     *     "get_question_corrections", "get_events"
      * })
      * @Assert\NotBlank(groups={"post_course", "put_course"})
      * @Assert\Length(

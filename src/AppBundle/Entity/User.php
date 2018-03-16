@@ -45,7 +45,7 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
      *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user",
-     *      "get_questions_corrections", "get_question_corrections", "put_user"
+     *      "get_questions_corrections", "get_question_corrections", "put_user", "get_events"
      * })
      * @Annotation\SerializedName("_username")
      * @Assert\NotBlank(groups={"registration", "admin_post_user", "put_user"})
@@ -254,6 +254,13 @@ class User extends AbstractUser implements UserInterface
     private $senderNotifications;
 
     /**
+     * @var ArrayCollection|Votes[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Votes", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $votes;
+
+    /**
      * User constructor.
      *
      * @param $username
@@ -278,6 +285,7 @@ class User extends AbstractUser implements UserInterface
         $this->questionCorrections = new ArrayCollection();
         $this->userNotifications = new ArrayCollection();
         $this->senderNotifications = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     /**
@@ -1109,5 +1117,41 @@ class User extends AbstractUser implements UserInterface
     public function getSenderNotifications()
     {
         return $this->senderNotifications;
+    }
+
+    /**
+     * Add vote.
+     *
+     * @param \AppBundle\Entity\Votes $vote
+     *
+     * @return User
+     */
+    public function addVote(\AppBundle\Entity\Votes $vote)
+    {
+        $this->votes[] = $vote;
+
+        return $this;
+    }
+
+    /**
+     * Remove vote.
+     *
+     * @param \AppBundle\Entity\Votes $vote
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeVote(\AppBundle\Entity\Votes $vote)
+    {
+        return $this->votes->removeElement($vote);
+    }
+
+    /**
+     * Get votes.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }
