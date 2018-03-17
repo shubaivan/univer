@@ -45,7 +45,8 @@ class User extends AbstractUser implements UserInterface
      * @ORM\Column(type="string", length=25, unique=true)
      * @Annotation\Groups({
      *      "profile", "put_user", "registration", "admin_post_user", "admin_put_user",
-     *      "get_questions_corrections", "get_question_corrections", "put_user", "get_events"
+     *      "get_questions_corrections", "get_question_corrections", "put_user", "get_events",
+     *      "get_improvement_suggestions"
      * })
      * @Annotation\SerializedName("_username")
      * @Assert\NotBlank(groups={"registration", "admin_post_user", "put_user"})
