@@ -271,16 +271,10 @@ class QuestionsController extends AbstractRestController
         $em = $this->get('doctrine')->getManager();
 
         try {
-            if ($questions->getVotesAt() && $questions->getVotesAt() <= new \DateTime()) {
-                $votes = $em->getRepository('AppBundle:Votes')
-                    ->findBy(['questions' => $questions]);
-                foreach ($votes as $vote) {
-                    $em->remove($vote);
-                }
-
-                $em->flush();
-            } else {
-                return $this->createSuccessStringResponse(self::DELETED_FAILED, 400);
+            $votes = $em->getRepository('AppBundle:Votes')
+                ->findBy(['questions' => $questions]);
+            foreach ($votes as $vote) {
+                $em->remove($vote);
             }
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
