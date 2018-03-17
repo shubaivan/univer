@@ -41,7 +41,8 @@ class CoursesOfStudy
      * @ORM\Column(type="string", nullable=false, nullable=false)
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "post_course_of_study", "put_course_of_study",
-     *     "get_course", "get_courses", "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_course", "get_courses", "get_questions", "get_question", "get_questions_corrections",
+     *     "get_question_corrections", "get_events"
      * })
      * @Assert\NotBlank(groups={"post_course_of_study", "put_course_of_study"})
      * @Assert\Length(

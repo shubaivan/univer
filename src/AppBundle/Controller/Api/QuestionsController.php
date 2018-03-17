@@ -68,6 +68,7 @@ class QuestionsController extends AbstractRestController
      * description = "Get list questions",
      * authentication=true,
      *  parameters={
+     *      {"name"="event_id", "dataType"="object", "required"=false, "description"="event object"},
      *      {"name"="courses_of_study", "dataType"="object", "required"=false, "description"="courses_of_study object"},
      *      {"name"="courses", "dataType"="array<object>", "required"=false, "description"="courses array object"},
      *      {"name"="sub_courses", "dataType"="array<object>", "required"=false, "description"="sub_courses array object"},
@@ -82,7 +83,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="search", "dataType"="text", "required"=false, "description"="search fields - text, notes"},
      *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"},
      *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"},
-     *      {"name"="repeated", "dataType"="array", "required"=false, "description"="repeatd array with one elemnt true/false"}
+     *      {"name"="repeated", "dataType"="array", "required"=false, "description"="repeatd array with one elemnt true/false"},
+     *      {"name"="votes", "dataType"="boolean", "required"=false, "description"="true/false"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -103,18 +105,24 @@ class QuestionsController extends AbstractRestController
     {
         try {
             $em = $this->getDoctrine()->getManager();
-            /** @var ObjectManager $auth */
-            $auth = $this->get('app.auth');
-            $this->prepareAuthor();
-            /** @var Events $events */
-            $events = $auth->validateEntites('request', Events::class, ['post_event']);
-            $parameterBag = $events->checkCondition();
-            if ($parameterBag->count() > 5) {
-                $em->persist($events);
-                $em->flush();
-            }
-
             $questions = $em->getRepository(Questions::class);
+
+            $event = $em->getRepository('AppBundle:Events')
+                ->findOneBy(['id' => $request->get('event_id')]);
+            if ($event) {
+                $parameterBag = $event->checkCondition();
+            } else {
+                /** @var ObjectManager $auth */
+                $auth = $this->get('app.auth');
+                $this->prepareAuthor();
+                /** @var Events $events */
+                $events = $auth->validateEntites('request', Events::class, ['post_event']);
+                $parameterBag = $events->checkCondition();
+                if ($parameterBag->count() > 4) {
+                    $em->persist($events);
+                    $em->flush();
+                }
+            }
 
             return $this->createSuccessResponse(
                 [
@@ -157,7 +165,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="image_url", "dataType"="file", "required"=false, "description"="file for upload"},
      *      {"name"="question_answers", "dataType"="array", "required"=false, "description"="question answers array objects"},
      *      {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or object"},
-     *      {"name"="courses_of_study", "dataType"="integer", "required"=true, "description"="coursesOfStudy id or object"}
+     *      {"name"="courses_of_study", "dataType"="integer", "required"=true, "description"="coursesOfStudy id or object"},
+     *      {"name"="votes_at", "dataType"="datetime", "required"=true, "format" = "Y-m-d H:i:s", "description"="DatTime for clear votes"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",

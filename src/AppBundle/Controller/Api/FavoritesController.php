@@ -120,7 +120,6 @@ class FavoritesController extends AbstractRestController
      * description = "Create favorite",
      * authentication=true,
      *  parameters={
-     *      {"name"="user", "dataType"="integer", "required"=true, "description"="user id or user object"},
      *      {"name"="questions", "dataType"="integer", "required"=true, "description"="questions id or object"}
      *  },
      * statusCodes = {

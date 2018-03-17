@@ -2,10 +2,12 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\QuestionCorrections;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DoctrineListener implements EventSubscriber
@@ -27,7 +29,40 @@ class DoctrineListener implements EventSubscriber
     {
         return [
             'preRemove',
+            'onFlush',
         ];
+    }
+
+    public function onFlush(OnFlushEventArgs $args)
+    {
+        $em = $args->getEntityManager();
+        $uow = $em->getUnitOfWork();
+
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            if ($entity instanceof QuestionCorrections) {
+                $answers = $entity->getQuestionAnswers();
+                $existAnswers = $this->container->get('app.repository.question_answers')
+                    ->findBy(['questionCorrections' => $entity]);
+
+                foreach ($existAnswers as $existAnswer) {
+                    if (!$answers->contains($existAnswer)) {
+                        $em->remove($existAnswer);
+                    }
+                }
+            }
+
+            if ($entity instanceof Questions) {
+                $answers = $entity->getQuestionAnswers();
+                $existAnswers = $this->container->get('app.repository.question_answers')
+                    ->findBy(['questions' => $entity]);
+
+                foreach ($existAnswers as $existAnswer) {
+                    if (!$answers->contains($existAnswer)) {
+                        $em->remove($existAnswer);
+                    }
+                }
+            }
+        }
     }
 
     public function preRemove(LifecycleEventArgs $args)

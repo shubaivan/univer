@@ -275,6 +275,24 @@ class Questions
     private $questionCorrections;
 
     /**
+     * @var ArrayCollection|Votes[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Votes", mappedBy="questions", cascade={"persist", "remove"})
+     */
+    private $votes;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="votes_at", type="datetime", nullable=true)
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\Groups({
+     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     * })
+     */
+    private $votesAt;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -288,6 +306,40 @@ class Questions
         $this->repeatedQuestions = new ArrayCollection();
         $this->userQuestionAnswerResult = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("integer")
+     * @Annotation\SerializedName("votes_count")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedVotesCount()
+    {
+        return $this->getVotes()->count();
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("created_at")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @Annotation\VirtualProperty
+     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
+     * @Annotation\SerializedName("updated_at")
+     * @Annotation\Groups({"get_question", "get_questions"})
+     */
+    public function getSerializedUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**
@@ -751,28 +803,6 @@ class Questions
     }
 
     /**
-     * @Annotation\VirtualProperty
-     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
-     * @Annotation\SerializedName("created_at")
-     * @Annotation\Groups({"get_question", "get_questions"})
-     */
-    public function getSerializedCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @Annotation\VirtualProperty
-     * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
-     * @Annotation\SerializedName("updated_at")
-     * @Annotation\Groups({"get_question", "get_questions"})
-     */
-    public function getSerializedUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set admin.
      *
      * @param \AppBundle\Entity\Admin $admin
@@ -1035,5 +1065,65 @@ class Questions
     public function getQuestionCorrections()
     {
         return $this->questionCorrections;
+    }
+
+    /**
+     * Add vote.
+     *
+     * @param \AppBundle\Entity\Votes $vote
+     *
+     * @return Questions
+     */
+    public function addVote(\AppBundle\Entity\Votes $vote)
+    {
+        $this->votes[] = $vote;
+
+        return $this;
+    }
+
+    /**
+     * Remove vote.
+     *
+     * @param \AppBundle\Entity\Votes $vote
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeVote(\AppBundle\Entity\Votes $vote)
+    {
+        return $this->votes->removeElement($vote);
+    }
+
+    /**
+     * Get votes.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVotes()
+    {
+        return $this->votes ? $this->votes : new ArrayCollection();
+    }
+
+    /**
+     * Set votesAt.
+     *
+     * @param null|\DateTime $votesAt
+     *
+     * @return Questions
+     */
+    public function setVotesAt($votesAt = null)
+    {
+        $this->votesAt = $votesAt;
+
+        return $this;
+    }
+
+    /**
+     * Get votesAt.
+     *
+     * @return null|\DateTime
+     */
+    public function getVotesAt()
+    {
+        return $this->votesAt;
     }
 }

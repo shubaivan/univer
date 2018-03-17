@@ -207,6 +207,15 @@ class Events
     private $repeated = [];
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Annotation\Type("boolean")
+     * @Annotation\Groups({
+     *     "post_event", "get_events"
+     * })
+     */
+    private $votes;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -216,6 +225,84 @@ class Events
         $this->lectors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examPeriods = new \Doctrine\Common\Collections\ArrayCollection();
         $this->semesters = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return ParameterBag
+     */
+    public function checkCondition()
+    {
+        $parameters = new ParameterBag();
+
+        if ($this->getRepeated()) {
+            $parameters->set('repeated', $this->getRepeated()[0]);
+        }
+
+        if ($this->getUserState()) {
+            $parameters->set('user_state', $this->getUserState());
+        }
+
+        if ($this->getSearch()) {
+            $parameters->set('search', $this->getSearch());
+        }
+
+        if ($this->getYears()) {
+            $parameters->set('years', $this->getYears());
+        }
+
+        if ($this->getCoursesOfStudy()) {
+            $parameters->set('courses_of_study', $this->getCoursesOfStudy()->getId());
+        }
+
+        if ($this->getCourses()->count()) {
+            $coursData = [];
+            foreach ($this->getCourses() as $cours) {
+                $coursData[] = $cours->getId();
+            }
+            $parameters->set('courses', $coursData);
+        }
+
+        if ($this->getSubCourses()->count()) {
+            $subCoursData = [];
+            foreach ($this->getSubCourses() as $subCours) {
+                $subCoursData[] = $subCours->getId();
+            }
+            $parameters->set('sub_courses', $subCoursData);
+        }
+
+        if ($this->getLectors()->count()) {
+            $lectorData = [];
+            foreach ($this->getLectors() as $lector) {
+                $lectorData[] = $lector->getId();
+            }
+            $parameters->set('lectors', $lectorData);
+        }
+
+        if ($this->getExamPeriods()->count()) {
+            $examPeriodData = [];
+            foreach ($this->getExamPeriods() as $examPeriod) {
+                $examPeriodData[] = $examPeriod->getId();
+            }
+            $parameters->set('exam_periods', $examPeriodData);
+        }
+
+        if ($this->getSemesters()->count()) {
+            $semesterData = [];
+            foreach ($this->getSemesters() as $semester) {
+                $semesterData[] = $semester->getId();
+            }
+            $parameters->set('semesters', $semesterData);
+        }
+
+        $parameters->set('sort_by', $this->getSortBy());
+        $parameters->set('sort_order', $this->getSortOrder());
+        $parameters->set('count', $this->getCount());
+        $parameters->set('page', $this->getPage());
+        if ($this->getVotes() !== null) {
+            $parameters->set('votes', $this->getVotes());
+        }
+
+        return $parameters;
     }
 
     /**
@@ -527,81 +614,6 @@ class Events
     }
 
     /**
-     * @return ParameterBag
-     */
-    public function checkCondition()
-    {
-        $parameters = new ParameterBag();
-
-        if ($this->getRepeated()) {
-            $parameters->set('repeated', $this->getRepeated()[0]);
-        }
-
-        if ($this->getUserState()) {
-            $parameters->set('user_state', $this->getUserState());
-        }
-
-        if ($this->getSearch()) {
-            $parameters->set('search', $this->getSearch());
-        }
-
-        if ($this->getYears()) {
-            $parameters->set('years', $this->getYears());
-        }
-
-        if ($this->getCoursesOfStudy()) {
-            $parameters->set('courses_of_study', $this->getCoursesOfStudy()->getId());
-        }
-
-        if ($this->getCourses()->count()) {
-            $coursData = [];
-            foreach ($this->getCourses() as $cours) {
-                $coursData[] = $cours->getId();
-            }
-            $parameters->set('courses', $coursData);
-        }
-
-        if ($this->getSubCourses()->count()) {
-            $subCoursData = [];
-            foreach ($this->getSubCourses() as $subCours) {
-                $subCoursData[] = $subCours->getId();
-            }
-            $parameters->set('sub_courses', $subCoursData);
-        }
-
-        if ($this->getLectors()->count()) {
-            $lectorData = [];
-            foreach ($this->getLectors() as $lector) {
-                $lectorData[] = $lector->getId();
-            }
-            $parameters->set('lectors', $lectorData);
-        }
-
-        if ($this->getExamPeriods()->count()) {
-            $examPeriodData = [];
-            foreach ($this->getExamPeriods() as $examPeriod) {
-                $examPeriodData[] = $examPeriod->getId();
-            }
-            $parameters->set('exam_periods', $examPeriodData);
-        }
-
-        if ($this->getSemesters()->count()) {
-            $semesterData = [];
-            foreach ($this->getSemesters() as $semester) {
-                $semesterData[] = $semester->getId();
-            }
-            $parameters->set('semesters', $semesterData);
-        }
-
-        $parameters->set('sort_by', $this->getSortBy());
-        $parameters->set('sort_order', $this->getSortOrder());
-        $parameters->set('count', $this->getCount());
-        $parameters->set('page', $this->getPage());
-
-        return $parameters;
-    }
-
-    /**
      * Set count.
      *
      * @param int $count
@@ -810,5 +822,29 @@ class Events
     public function getRepeated()
     {
         return $this->repeated;
+    }
+
+    /**
+     * Set votes.
+     *
+     * @param null|bool $votes
+     *
+     * @return Events
+     */
+    public function setVotes($votes = null)
+    {
+        $this->votes = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Get votes.
+     *
+     * @return null|bool
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }

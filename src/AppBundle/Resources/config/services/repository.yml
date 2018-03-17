@@ -20,7 +20,25 @@ parameters:
     app.repository.notifications.class: AppBundle\Entity\Repository\NotificationsRepository
     app.entity.notifications.class: AppBundle\Entity\Notifications
 
+    app.repository.question_answers.class: AppBundle\Entity\Repository\QuestionAnswersRepository
+    app.entity.question_answers.class: AppBundle\Entity\QuestionAnswers
+
+    app.repository.votes.class: AppBundle\Entity\Repository\VotesRepository
+    app.entity.votes.class: AppBundle\Entity\Votes
+
 services:
+    app.repository.votes:
+        class: "%app.repository.votes.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.votes.class%"
+
+    app.repository.question_answers:
+        class: "%app.repository.question_answers.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.question_answers.class%"
+
     app.repository.notifications:
         class: "%app.repository.notifications.class%"
         factory: ["@doctrine.orm.default_entity_manager", getRepository]

@@ -43,7 +43,8 @@ class SubCourses
      * @Annotation\Groups({
      *     "get_sub_course", "get_sub_courses", "post_sub_course", "put_sub_course",
      *     "get_course", "get_courses", "get_course_of_study", "get_courses_of_study",
-     *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_questions", "get_question", "get_questions_corrections",
+     *     "get_question_corrections", "get_events"
      * })
      */
     private $name;
