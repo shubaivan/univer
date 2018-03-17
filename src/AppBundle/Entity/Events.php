@@ -298,7 +298,7 @@ class Events
         $parameters->set('sort_order', $this->getSortOrder());
         $parameters->set('count', $this->getCount());
         $parameters->set('page', $this->getPage());
-        if ($this->getVotes() !== null) {
+        if (null !== $this->getVotes()) {
             $parameters->set('votes', $this->getVotes());
         }
 

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints\ConditionPresentQuestionInAnswer;
+use AppBundle\Validator\Constraints\ConditionQuestionAnswers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="question_answers")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\QuestionAnswersRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionQuestionAnswers(groups={"post_question", "put_question", "post_question_corrections", "put_question_corrections"})
+ * @ConditionPresentQuestionInAnswer(value="question id", groups={"post_question", "put_question", "post_question_corrections", "put_question_corrections"})
  */
 class QuestionAnswers
 {

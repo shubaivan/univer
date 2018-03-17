@@ -128,7 +128,6 @@ class QuestionCorrections
     /**
      * @var Questions
      *
-     * @Assert\Valid
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="questionCorrections")
      * @Assert\NotBlank(groups={"post_question_corrections", "put_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\Questions")
