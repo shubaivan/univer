@@ -22,7 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     fields={"questions", "user"},
  *     errorPath="user, questions"
  * )
- * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Votes
 {
