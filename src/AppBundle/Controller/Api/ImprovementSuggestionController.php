@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\ImprovementSuggestions;
+use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
@@ -125,17 +126,19 @@ class ImprovementSuggestionController extends AbstractRestController
     }
 
     /**
-     * Create improvement.
+     * Create\Put improvement.
      * <strong>Simple example:</strong><br />
      * http://host/api/improvement <br>.
      *
      * @Rest\Post("/api/improvement")
      * @ApiDoc(
      * resource = true,
-     * description = "Create improvement",
+     * description = "Create\Put improvement",
      * authentication=true,
      *  parameters={
-     *      {"name"="description", "dataType"="text", "required"=true, "description"="description"}
+     *      {"name"="id", "dataType"="integer", "required"=false, "description"="id"},
+     *      {"name"="description", "dataType"="text", "required"=true, "description"="description"},
+     *      {"name"="status", "dataType"="enum", "required"=true, "description"="status - viewed/not_viewed"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -150,18 +153,34 @@ class ImprovementSuggestionController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function postImprovementsAction()
+    public function postImprovementsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $logger = $this->container->get('logger');
 
         try {
             $auth = $this->get('app.auth');
+            $serializerGroup = 'post_improvement_suggestions';
+            $persist = true;
+            if ($request->get('id')) {
+                $improvementSuggestions = $em->getRepository('AppBundle:ImprovementSuggestions')
+                    ->findOneBy(['id' => $request->get('id')]);
+                if ($improvementSuggestions instanceof ImprovementSuggestions) {
+                    $request->request->set('id', $improvementSuggestions->getId());
+                    $serializerGroup = 'put_improvement_suggestions';
+                    $persist = false;
+                    if ($this->getUser() instanceof User
+                        && $improvementSuggestions->getUser() !== $this->getUser()) {
+                        throw new AccessDeniedException();
+                    }
+                }
+            }
+
             $this->prepareAuthor();
             /** @var ImprovementSuggestions $improvements */
-            $improvements = $auth->validateEntites('request', ImprovementSuggestions::class, ['post_improvement_suggestions']);
+            $improvements = $auth->validateEntites('request', ImprovementSuggestions::class, [$serializerGroup]);
 
-            $em->persist($improvements);
+            !$persist ?: $em->persist($improvements);
             $em->flush();
 
             return $this->createSuccessResponse($improvements, ['get_improvement_suggestions'], true);
