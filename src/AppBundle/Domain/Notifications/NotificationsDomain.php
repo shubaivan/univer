@@ -6,6 +6,7 @@ use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Repository\NotificationsRepository;
 use AppBundle\Services\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class NotificationsDomain implements NotificationsDomainInterface
 {
@@ -76,6 +77,15 @@ class NotificationsDomain implements NotificationsDomainInterface
             ->updateStatus($ids, $status);
 
         return true;
+    }
+
+    /**
+     * @param ParameterBag $parameterBag
+     */
+    public function createNotifications(ParameterBag $parameterBag)
+    {
+        $this->getNotificationsRepository()
+            ->createNotifications($parameterBag);
     }
 
     /**

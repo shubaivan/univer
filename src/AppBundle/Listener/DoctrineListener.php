@@ -61,9 +61,24 @@ class DoctrineListener implements EventSubscriber
                 $answers = $entity->getQuestionAnswers();
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questions' => $entity]);
-                if (array_diff($existAnswers, $answers->toArray())) {
+                if (array_diff($answers->toArray(), $existAnswers)) {
+                    /** @var NotificationsApplication $notificationApplication */
+                    $notificationApplication = $this->container
+                        ->get('app.application.notifications_application');
+
                     foreach ($existAnswers as $existAnswer) {
                         if (!$answers->contains($existAnswer)) {
+                            /** @var UserQuestionAnswerTest[] $userAnswersTest */
+                            $userAnswersTest = $existAnswer->getUserQuestionAnswerTest();
+                            foreach ($userAnswersTest as $value) {
+                                $notificationApplication->createNotification(
+                                    $value->getUser(),
+                                    $entity->getUser(),
+                                    ProviderTypeEnum::TYPE_PROVIDER_QUESTION_ANSWER_TEST,
+                                    'update your answers',
+                                    true
+                                );
+                            }
                             $em->remove($existAnswer);
                         }
                     }
