@@ -9,6 +9,7 @@ use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
 use AppBundle\Services\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\View\View;
@@ -229,6 +230,62 @@ class QuestionsController extends AbstractRestController
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $logger->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete votes question by Admin.
+     *
+     * <strong>Simple example:</strong><br />
+     * http://host/api/admins/question/votes/{id} <br>.
+     *
+     * @Rest\Delete("/api/admins/question/votes/{id}")
+     * @ApiDoc(
+     *      resource = true,
+     *      description = "Delete votes question by Admin",
+     *      authentication=true,
+     *      parameters={
+     *
+     *      },
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned bad request"
+     *      },
+     *      section="Admins Question"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Questions $questions
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function deletedVotesQuestionsAction(Questions $questions)
+    {
+        /** @var EntityManager $em */
+        $em = $this->get('doctrine')->getManager();
+
+        try {
+            if ($questions->getVotesAt() && $questions->getVotesAt() <= new \DateTime()) {
+                $votes = $em->getRepository('AppBundle:Votes')
+                    ->findBy(['questions' => $questions]);
+                foreach ($votes as $vote) {
+                    $em->remove($vote);
+                }
+
+                $em->flush();
+            } else {
+                return $this->createSuccessStringResponse(self::DELETED_FAILED);
+            }
+
+            return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
         }
 
         return $this->handleView($view);

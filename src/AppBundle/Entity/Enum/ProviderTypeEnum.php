@@ -5,10 +5,12 @@ namespace AppBundle\Entity\Enum;
 abstract class ProviderTypeEnum
 {
     const TYPE_PROVIDER_COMMENT = 'comment';
+    const TYPE_PROVIDER_QUESTION_ANSWER_TEST = 'question_answer_test';
 
     /** @var array user friendly named type */
     protected static $typeName = [
         self::TYPE_PROVIDER_COMMENT => 'comment',
+        self::TYPE_PROVIDER_QUESTION_ANSWER_TEST => 'question_answer_test'
     ];
 
     /**
@@ -32,6 +34,7 @@ abstract class ProviderTypeEnum
     {
         return [
             self::TYPE_PROVIDER_COMMENT,
+            self::TYPE_PROVIDER_QUESTION_ANSWER_TEST
         ];
     }
 }

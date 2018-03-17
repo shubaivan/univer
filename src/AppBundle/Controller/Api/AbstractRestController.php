@@ -22,6 +22,7 @@ class AbstractRestController extends FOSRestController
     const HTTP_STATUS_CODE_INTERNAL_ERROR = 500;
     const DATA_MESSAGE = 'message';
     const DELETED_SUCCESSFULLY = 'deleted successfully';
+    const DELETED_FAILED = 'deleted failed';
 
     const PARAM_DATE_FROM = 'date_from';
     const PARAM_DATE_TO = 'date_to';
