@@ -32,7 +32,7 @@ class ImprovementSuggestions
      * @Assert\NotBlank(groups={"post_improvement_suggestions"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
-     *     "get_improvement_suggestions", "post_improvement_suggestions"
+     *     "get_improvement_suggestions", "post_improvement_suggestions", "put_improvement_suggestions"
      * })
      */
     private $user;
@@ -49,7 +49,7 @@ class ImprovementSuggestions
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Annotation\Groups({
-     *     "get_improvement_suggestions", "post_improvement_suggestions"
+     *     "get_improvement_suggestions", "post_improvement_suggestions", "put_improvement_suggestions"
      * })
      * @Annotation\Accessor(setter="setSerializedAccessorStatus")
      */
