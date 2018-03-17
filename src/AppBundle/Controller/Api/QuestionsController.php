@@ -279,7 +279,7 @@ class QuestionsController extends AbstractRestController
 
                 $em->flush();
             } else {
-                return $this->createSuccessStringResponse(self::DELETED_FAILED);
+                return $this->createSuccessStringResponse(self::DELETED_FAILED, 400);
             }
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);

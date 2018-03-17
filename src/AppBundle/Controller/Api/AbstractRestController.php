@@ -69,14 +69,14 @@ class AbstractRestController extends FOSRestController
     }
 
     /**
-     * @param string $data
-     *
+     * @param $data
+     * @param int $status
      * @return View
      */
-    protected function createSuccessStringResponse($data)
+    protected function createSuccessStringResponse($data, $status = self::HTTP_STATUS_CODE_OK)
     {
         return View::create()
-            ->setStatusCode(self::HTTP_STATUS_CODE_OK)
+            ->setStatusCode($status)
             ->setData([self::DATA_MESSAGE => $data]);
     }
 
