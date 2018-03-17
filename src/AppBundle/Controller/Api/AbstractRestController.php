@@ -22,6 +22,7 @@ class AbstractRestController extends FOSRestController
     const HTTP_STATUS_CODE_INTERNAL_ERROR = 500;
     const DATA_MESSAGE = 'message';
     const DELETED_SUCCESSFULLY = 'deleted successfully';
+    const DELETED_FAILED = 'deleted failed';
 
     const PARAM_DATE_FROM = 'date_from';
     const PARAM_DATE_TO = 'date_to';
@@ -68,14 +69,14 @@ class AbstractRestController extends FOSRestController
     }
 
     /**
-     * @param string $data
-     *
+     * @param $data
+     * @param int $status
      * @return View
      */
-    protected function createSuccessStringResponse($data)
+    protected function createSuccessStringResponse($data, $status = self::HTTP_STATUS_CODE_OK)
     {
         return View::create()
-            ->setStatusCode(self::HTTP_STATUS_CODE_OK)
+            ->setStatusCode($status)
             ->setData([self::DATA_MESSAGE => $data]);
     }
 
