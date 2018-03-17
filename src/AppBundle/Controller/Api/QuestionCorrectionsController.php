@@ -175,7 +175,7 @@ class QuestionCorrectionsController extends AbstractRestController
                     $request->request->set('id', $questionCorrections->getId());
                     $serializerGroup = 'put_question_corrections';
                     $persist = false;
-
+                    $questionCorrections->setUpdatedAt(new \DateTime());
                     if ($this->getUser() instanceof User && $questionCorrections->getUser() !== $this->getUser()) {
                         throw new AccessDeniedException();
                     }
