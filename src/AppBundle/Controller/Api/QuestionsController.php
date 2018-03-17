@@ -277,6 +277,8 @@ class QuestionsController extends AbstractRestController
                 $em->remove($vote);
             }
 
+            $em->flush();
+
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
