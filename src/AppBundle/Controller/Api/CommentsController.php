@@ -9,6 +9,7 @@ use AppBundle\Entity\Enum\ProviderTypeEnum;
 use AppBundle\Entity\Questions;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Services\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -259,6 +260,7 @@ class CommentsController extends AbstractRestController
      */
     public function postCommentsAction()
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 

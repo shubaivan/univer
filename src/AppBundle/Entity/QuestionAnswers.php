@@ -290,4 +290,12 @@ class QuestionAnswers
     {
         return $this->questionCorrections;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }
