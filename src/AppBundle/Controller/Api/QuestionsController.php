@@ -202,6 +202,7 @@ class QuestionsController extends AbstractRestController
                 $request->request->set('id', $questions->getId());
                 $serializerGroup = 'put_question';
                 $persist = false;
+                $questions->setUpdatedAt(new \DateTime());
             }
 
             $this->prepareAuthor();

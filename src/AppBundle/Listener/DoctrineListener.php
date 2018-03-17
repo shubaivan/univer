@@ -41,14 +41,14 @@ class DoctrineListener implements EventSubscriber
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-
+        $em->getFilters()->enable('softdeleteable');
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             if ($entity instanceof QuestionCorrections) {
                 $answers = $entity->getQuestionAnswers();
                 /** @var QuestionAnswers[] $existAnswers */
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questionCorrections' => $entity]);
-                if (array_diff($answers->toArray(), $existAnswers)) {
+                if (array_diff($existAnswers, $answers->toArray())) {
                     foreach ($existAnswers as $existAnswer) {
                         if (!$answers->contains($existAnswer)) {
                             $em->remove($existAnswer);
@@ -61,7 +61,7 @@ class DoctrineListener implements EventSubscriber
                 $answers = $entity->getQuestionAnswers();
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questions' => $entity]);
-                if (array_diff($answers->toArray(), $existAnswers)) {
+                if (array_diff($existAnswers, $answers->toArray())) {
                     foreach ($existAnswers as $existAnswer) {
                         if (!$answers->contains($existAnswer)) {
                             $em->remove($existAnswer);
