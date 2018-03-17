@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints\ConditionPresentQuestionInAnswer;
+use AppBundle\Validator\Constraints\ConditionQuestionAnswers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="question_answers")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\QuestionAnswersRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @ConditionQuestionAnswers(groups={"post_question", "put_question", "post_question_corrections", "put_question_corrections"})
+ * @ConditionPresentQuestionInAnswer(value="question id", groups={"post_question", "put_question", "post_question_corrections", "put_question_corrections"})
  */
 class QuestionAnswers
 {
@@ -23,7 +27,8 @@ class QuestionAnswers
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "get_user_question_answer_test", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "get_user_question_answer_test",
+     *     "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $id;
@@ -32,7 +37,8 @@ class QuestionAnswers
      * @ORM\Column(type="text", length=65000, nullable=false)
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_questions_corrections", "get_question_corrections", "post_question_corrections"
      * })
      */
     private $answer;
@@ -40,7 +46,8 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="is_true", type="boolean", nullable=false)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_questions_corrections", "get_question_corrections", "post_question_corrections"
      * })
      * @Annotation\Type("boolean")
      */
@@ -49,7 +56,8 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="point_eng", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_questions_corrections", "get_question_corrections", "post_question_corrections"
      * })
      */
     private $pointEng;
@@ -57,7 +65,8 @@ class QuestionAnswers
     /**
      * @ORM\Column(name="point_heb", type="string", length=10, options={"fixed" = true}, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_questions_corrections", "get_question_corrections", "post_question_corrections"
      * })
      */
     private $pointHeb;
@@ -76,7 +85,6 @@ class QuestionAnswers
      * @var Questions
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="questionAnswers")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
      */
     private $questions;
 
@@ -84,7 +92,6 @@ class QuestionAnswers
      * @var QuestionCorrections
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuestionCorrections", inversedBy="questionAnswers")
-     * @Assert\NotBlank(groups={"put_question_corrections", "post_question_corrections"})
      */
     private $questionCorrections;
 
@@ -282,5 +289,13 @@ class QuestionAnswers
     public function getQuestionCorrections()
     {
         return $this->questionCorrections;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
     }
 }

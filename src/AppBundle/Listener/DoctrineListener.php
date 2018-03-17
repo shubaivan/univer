@@ -2,9 +2,13 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Application\Notifications\NotificationsApplication;
+use AppBundle\Entity\Enum\ProviderTypeEnum;
+use AppBundle\Entity\QuestionAnswers;
 use AppBundle\Entity\QuestionCorrections;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserQuestionAnswerTest;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -41,12 +45,14 @@ class DoctrineListener implements EventSubscriber
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             if ($entity instanceof QuestionCorrections) {
                 $answers = $entity->getQuestionAnswers();
+                /** @var QuestionAnswers[] $existAnswers */
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questionCorrections' => $entity]);
-
-                foreach ($existAnswers as $existAnswer) {
-                    if (!$answers->contains($existAnswer)) {
-                        $em->remove($existAnswer);
+                if (array_diff($answers->toArray(), $existAnswers)) {
+                    foreach ($existAnswers as $existAnswer) {
+                        if (!$answers->contains($existAnswer)) {
+                            $em->remove($existAnswer);
+                        }
                     }
                 }
             }
@@ -55,10 +61,11 @@ class DoctrineListener implements EventSubscriber
                 $answers = $entity->getQuestionAnswers();
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questions' => $entity]);
-
-                foreach ($existAnswers as $existAnswer) {
-                    if (!$answers->contains($existAnswer)) {
-                        $em->remove($existAnswer);
+                if (array_diff($answers->toArray(), $existAnswers)) {
+                    foreach ($existAnswers as $existAnswer) {
+                        if (!$answers->contains($existAnswer)) {
+                            $em->remove($existAnswer);
+                        }
                     }
                 }
             }
