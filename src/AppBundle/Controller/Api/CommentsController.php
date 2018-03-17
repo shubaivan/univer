@@ -270,14 +270,14 @@ class CommentsController extends AbstractRestController
             $this->prepareAuthor();
             /** @var Comments $comments */
             $comments = $auth->validateEntites('request', Comments::class, ['post_comment']);
-            /** @var NotificationsApplication $notificationApplication */
-            $notificationApplication = $this->get('app.application.notifications_application');
-            $notificationApplication->createNotification(
-                $comments->getQuestions()->getUser(),
-                $this->getUser(),
-                ProviderTypeEnum::TYPE_PROVIDER_COMMENT,
-                'message'
-            );
+//            /** @var NotificationsApplication $notificationApplication */
+//            $notificationApplication = $this->get('app.application.notifications_application');
+//            $notificationApplication->createNotification(
+//                $comments->getQuestions()->getUser(),
+//                $this->getUser(),
+//                ProviderTypeEnum::TYPE_PROVIDER_COMMENT,
+//                'message'
+//            );
             $em->persist($comments);
             $em->flush();
 
