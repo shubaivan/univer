@@ -20,7 +20,6 @@ services:
             - "@app.repository.favorites"
             - "@app.repository.user_question_answer_test"
             - "@app.repository.repeated_questions"
-            - "@app.repository.votes"
             - "@doctrine.orm.default_entity_manager.delegate"
             - "@app.repository.votes"
         tags:
