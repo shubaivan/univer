@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\Events;
 use AppBundle\Entity\Questions;
+use AppBundle\Entity\Repository\QuestionsRepository;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Helper\FileUploader;
@@ -106,6 +107,7 @@ class QuestionsController extends AbstractRestController
     {
         try {
             $em = $this->getDoctrine()->getManager();
+            /** @var QuestionsRepository $questions */
             $questions = $em->getRepository(Questions::class);
 
             $event = $em->getRepository('AppBundle:Events')
