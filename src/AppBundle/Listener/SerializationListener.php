@@ -274,6 +274,7 @@ class SerializationListener implements EventSubscriberInterface
     {
         $event->getVisitor()->addData('favorites', $this->favoriteObject);
         $event->getVisitor()->addData('repeated_questions', $this->repeatedQuestionObject);
+        $event->getVisitor()->addData('votes_questions', $this->voteQuestionObject);
     }
 
     /**
