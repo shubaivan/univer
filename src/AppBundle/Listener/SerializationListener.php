@@ -11,9 +11,11 @@ use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
 use AppBundle\Entity\Repository\RepeatedQuestionsRepository;
 use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
+use AppBundle\Entity\Repository\VotesRepository;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserQuestionAnswerTest;
+use AppBundle\Entity\Votes;
 use AppBundle\Model\Request\NotificationsRequestModel;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use Doctrine\ORM\EntityManager;
@@ -33,6 +35,7 @@ class SerializationListener implements EventSubscriberInterface
     const COUNT = 'count';
     const FAVORITES_AUTH_MARK = 'favorite_id';
     const REPEATED_QUESTION_AUTH_MARK = 'repeated_question_id';
+    const QUESTION_VOTE_MARK = 'vote_id';
 
     /**
      * @var TokenStorageInterface
@@ -65,6 +68,11 @@ class SerializationListener implements EventSubscriberInterface
     private $repeatedQuestionObject;
 
     /**
+     * @var array
+     */
+    private $voteQuestionObject;
+
+    /**
      * @var UserQuestionAnswerTestRepository
      */
     private $userQuestionAnswerTestRepository;
@@ -80,6 +88,11 @@ class SerializationListener implements EventSubscriberInterface
     private $entityManager;
 
     /**
+     * @var VotesRepository
+     */
+    private $votesRepository;
+
+    /**
      * SerializationListener constructor.
      *
      * @param TokenStorageInterface            $tokenStorage
@@ -88,6 +101,7 @@ class SerializationListener implements EventSubscriberInterface
      * @param UserQuestionAnswerTestRepository $answerTestRepository
      * @param RepeatedQuestionsRepository      $repeatedQuestionsRepository
      * @param EntityManager                    $entityManager
+     * @param VotesRepository                  $votesRepository
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -95,7 +109,8 @@ class SerializationListener implements EventSubscriberInterface
         FavoritesRepository $favoritesRepository,
         UserQuestionAnswerTestRepository $answerTestRepository,
         RepeatedQuestionsRepository $repeatedQuestionsRepository,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        VotesRepository $votesRepository
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
@@ -111,9 +126,15 @@ class SerializationListener implements EventSubscriberInterface
             self::REPEATED_QUESTION_AUTH_MARK => null,
         ];
 
+        $this->voteQuestionObject = [
+            self::COUNT => 0,
+            self::QUESTION_VOTE_MARK => null
+        ];
+
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
         $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
         $this->entityManager = $entityManager;
+        $this->votesRepository = $votesRepository;
     }
 
     /**
@@ -224,8 +245,12 @@ class SerializationListener implements EventSubscriberInterface
         /** @var RepeatedQuestions $authorRepeatedQuestions */
         $authorRepeatedQuestions = $this->repeatedQuestionsRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
+        /** @var Votes $authorVotesQuestions */
+        $authorVotesQuestions = $this->votesRepository
+            ->findOneBy(['user' => $this->user, 'questions' => $question]);
         $this->favoriteObject[self::COUNT] = $question->getFavorites()->count();
         $this->repeatedQuestionObject[self::COUNT] = $question->getRepeatedQuestions()->count();
+        $this->voteQuestionObject[self::COUNT] = $question->getVotes()->count();
         if ($authorFavorites) {
             $this->favoriteObject[self::FAVORITES_AUTH_MARK] = $authorFavorites->getId();
         } else {
@@ -236,6 +261,12 @@ class SerializationListener implements EventSubscriberInterface
             $this->repeatedQuestionObject[self::REPEATED_QUESTION_AUTH_MARK] = $authorRepeatedQuestions->getId();
         } else {
             $this->repeatedQuestionObject[self::REPEATED_QUESTION_AUTH_MARK] = null;
+        }
+
+        if ($authorVotesQuestions) {
+            $this->voteQuestionObject[self::QUESTION_VOTE_MARK] = $authorVotesQuestions->getId();
+        } else {
+            $this->voteQuestionObject[self::QUESTION_VOTE_MARK] = null;
         }
     }
 
