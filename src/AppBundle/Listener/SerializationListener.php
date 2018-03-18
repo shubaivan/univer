@@ -11,9 +11,11 @@ use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
 use AppBundle\Entity\Repository\RepeatedQuestionsRepository;
 use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
+use AppBundle\Entity\Repository\VotesRepository;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserQuestionAnswerTest;
+use AppBundle\Entity\Votes;
 use AppBundle\Model\Request\NotificationsRequestModel;
 use AppBundle\Model\Request\UserQuestionAnswerTestRequestModel;
 use Doctrine\ORM\EntityManager;
@@ -33,6 +35,7 @@ class SerializationListener implements EventSubscriberInterface
     const COUNT = 'count';
     const FAVORITES_AUTH_MARK = 'favorite_id';
     const REPEATED_QUESTION_AUTH_MARK = 'repeated_question_id';
+    const VOTES_AUTH_MARK = 'vote_id';
 
     /**
      * @var TokenStorageInterface
@@ -65,6 +68,11 @@ class SerializationListener implements EventSubscriberInterface
     private $repeatedQuestionObject;
 
     /**
+     * @var array
+     */
+    private $votesObject;
+
+    /**
      * @var UserQuestionAnswerTestRepository
      */
     private $userQuestionAnswerTestRepository;
@@ -73,6 +81,11 @@ class SerializationListener implements EventSubscriberInterface
      * @var RepeatedQuestionsRepository
      */
     private $repeatedQuestionsRepository;
+
+    /**
+     * @var VotesRepository
+     */
+    private $votesRepository;
 
     /**
      * @var EntityManager
@@ -87,6 +100,7 @@ class SerializationListener implements EventSubscriberInterface
      * @param FavoritesRepository              $favoritesRepository
      * @param UserQuestionAnswerTestRepository $answerTestRepository
      * @param RepeatedQuestionsRepository      $repeatedQuestionsRepository
+     * @param VotesRepository                  $votesRepository
      * @param EntityManager                    $entityManager
      */
     public function __construct(
@@ -95,6 +109,7 @@ class SerializationListener implements EventSubscriberInterface
         FavoritesRepository $favoritesRepository,
         UserQuestionAnswerTestRepository $answerTestRepository,
         RepeatedQuestionsRepository $repeatedQuestionsRepository,
+        VotesRepository $votesRepository,
         EntityManager $entityManager
     ) {
         $this->tokenStorage = $tokenStorage;
@@ -111,8 +126,15 @@ class SerializationListener implements EventSubscriberInterface
             self::REPEATED_QUESTION_AUTH_MARK => null,
         ];
 
+
+        $this->votesObject = [
+            self::COUNT => 0,
+            self::VOTES_AUTH_MARK => null,
+        ];
+
         $this->userQuestionAnswerTestRepository = $answerTestRepository;
         $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
+        $this->votesRepository = $votesRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -224,8 +246,12 @@ class SerializationListener implements EventSubscriberInterface
         /** @var RepeatedQuestions $authorRepeatedQuestions */
         $authorRepeatedQuestions = $this->repeatedQuestionsRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
+        /** @var Votes $authorVotes */
+        $authorVotes = $this->votesRepository
+            ->findOneBy(['user' => $this->user, 'questions' => $question]);
         $this->favoriteObject[self::COUNT] = $question->getFavorites()->count();
         $this->repeatedQuestionObject[self::COUNT] = $question->getRepeatedQuestions()->count();
+        $this->votesObject[self::COUNT] = $question->getVotes()->count();
         if ($authorFavorites) {
             $this->favoriteObject[self::FAVORITES_AUTH_MARK] = $authorFavorites->getId();
         } else {
@@ -237,12 +263,19 @@ class SerializationListener implements EventSubscriberInterface
         } else {
             $this->repeatedQuestionObject[self::REPEATED_QUESTION_AUTH_MARK] = null;
         }
+
+        if ($authorVotes) {
+            $this->votesObject[self::VOTES_AUTH_MARK] = $authorVotes->getId();
+        } else {
+            $this->votesObject[self::VOTES_AUTH_MARK] = null;
+        }
     }
 
     public function onPreSerializeQuestions(ObjectEvent $event)
     {
         $event->getVisitor()->addData('favorites', $this->favoriteObject);
         $event->getVisitor()->addData('repeated_questions', $this->repeatedQuestionObject);
+        $event->getVisitor()->addData('votes', $this->votesObject);
     }
 
     /**
