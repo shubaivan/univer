@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Events;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -62,6 +64,53 @@ class EventsController extends AbstractRestController
                 ['get_events'],
                 true
             );
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete event
+     *
+     * <strong>Simple example:</strong><br />
+     * http://host/api/events/{id} <br>.
+     *
+     * @Rest\Delete("/api/events/{id}")
+     * @ApiDoc(
+     *      resource = true,
+     *      description = "Delete event",
+     *      authentication=true,
+     *      parameters={
+     *
+     *      },
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned bad request"
+     *      },
+     *      section="Events"
+     * )
+     *
+     * @RestView()
+     *
+     * @param Events $events
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function deletedEventsAction(Events $events)
+    {
+        /** @var EntityManager $em */
+        $em = $this->get('doctrine')->getManager();
+
+        try {
+            $em->remove($events);
+            $em->flush();
+
+            return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
         } catch (\Exception $e) {
             $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
             $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
