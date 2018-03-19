@@ -88,9 +88,9 @@ class Questions
     private $type;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="question_number", type="integer", nullable=true)
+     * @ORM\Column(name="question_number", type="string", nullable=true)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
@@ -311,6 +311,22 @@ class Questions
     }
 
     /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->setQuestionNumber();
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function preFlush()
+    {
+        $this->setQuestionNumber();
+    }
+
+    /**
      * @Annotation\VirtualProperty
      * @Annotation\Type("integer")
      * @Annotation\SerializedName("votes_count")
@@ -439,13 +455,17 @@ class Questions
     /**
      * Set questionNumber.
      *
-     * @param int $questionNumber
+     * @param string $questionNumber
      *
      * @return Questions
      */
-    public function setQuestionNumber($questionNumber)
+    public function setQuestionNumber($questionNumber = null)
     {
-        $this->questionNumber = $questionNumber;
+        if ($questionNumber) {
+            $this->questionNumber = $questionNumber;
+        } else {
+            $this->questionNumber = $this->getCourses()->getId().'/'.$this->getYear().'_'.$this->getExamPeriods()->getId();
+        }
 
         return $this;
     }
@@ -453,7 +473,7 @@ class Questions
     /**
      * Get questionNumber.
      *
-     * @return int
+     * @return string
      */
     public function getQuestionNumber()
     {
