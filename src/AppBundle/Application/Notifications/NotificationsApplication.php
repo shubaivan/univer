@@ -3,8 +3,10 @@
 namespace AppBundle\Application\Notifications;
 
 use AppBundle\Domain\Notifications\NotificationsDomain;
+use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\User;
 use AppBundle\Model\Request\NotificationsRequestModel;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class NotificationsApplication implements NotificationsApplicationInterface
 {
@@ -28,7 +30,8 @@ class NotificationsApplication implements NotificationsApplicationInterface
         User $user,
         User $sender,
         $provider,
-        $message
+        $message,
+        $native = false
     ) {
         $prepareData = [
             'user' => [
@@ -40,9 +43,20 @@ class NotificationsApplication implements NotificationsApplicationInterface
             'provider' => $provider,
             'message' => $message,
         ];
+        if ($native) {
+            $parameterBag = new ParameterBag();
+            $parameterBag->set('user', $user->getId());
+            $parameterBag->set('sender', $sender->getId());
+            $parameterBag->set('provider', $provider);
+            $parameterBag->set('message', $message);
+            $parameterBag->set('status', ImprovementSuggestionStatusEnum::NOT_VIEWED);
 
-        $this->getNotificationsDomain()
-            ->handleNotificationPrepareData($prepareData);
+            $this->getNotificationsDomain()
+                ->createNotifications($parameterBag);
+        } else {
+            $this->getNotificationsDomain()
+                ->handleNotificationPrepareData($prepareData);
+        }
     }
 
     /**

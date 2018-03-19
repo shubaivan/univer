@@ -21,6 +21,7 @@ services:
             - "@app.repository.user_question_answer_test"
             - "@app.repository.repeated_questions"
             - "@doctrine.orm.default_entity_manager.delegate"
+            - "@app.repository.votes"
         tags:
             - {name: jms_serializer.event_subscriber}
 

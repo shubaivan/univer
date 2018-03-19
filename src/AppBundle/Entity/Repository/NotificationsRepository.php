@@ -5,6 +5,7 @@ namespace AppBundle\Entity\Repository;
 use AppBundle\Entity\Notifications;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * NotificationsRepository.
@@ -83,5 +84,36 @@ class NotificationsRepository extends EntityRepository
             ->where($qb->expr()->in('n.id', $ids));
 
         $qb->getQuery()->execute();
+    }
+
+    /**
+     * @param ParameterBag $parameterBag
+     */
+    public function createNotifications(ParameterBag $parameterBag)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->getConnection()->createQueryBuilder();
+
+        $qb
+            ->insert('notifications')
+            ->values([
+                'user_id' => ':user',
+                'sender_id' => ':sender',
+                'provider' => ':provider',
+                'message' => ':message',
+                'status' => ':status',
+                'created_at' => ':createdAt'
+            ])
+            ->setParameters([
+                'user' => $parameterBag->get('user'),
+                'sender' => $parameterBag->get('sender'),
+                'provider' => $parameterBag->get('provider'),
+                'message' => $parameterBag->get('message'),
+                'status' => $parameterBag->get('status'),
+                'createdAt' => (new \DateTime())->format('Y-m-d H:i:s')
+            ]);
+
+        $qb->execute();
     }
 }
