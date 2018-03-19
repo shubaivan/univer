@@ -44,6 +44,40 @@ class EventsRepository extends EntityRepository
                 ->andWhere($qb->expr()->eq('e.user', $paramFetcher->get('user')));
         }
 
+        $qbExcludedEventsResult = $em->createQueryBuilder();
+        $qbExcludedEventsResult
+            ->select('events.id')
+            ->from('AppBundle:Events', 'events')
+
+            ->where($qbExcludedEventsResult->expr()->isNull('events.coursesOfStudy'))
+            ->leftJoin('events.courses', 'courses')
+            ->andWhere('courses.id IS NULL')
+            ->leftJoin('events.examPeriods', 'examPeriods')
+            ->andWhere('examPeriods.id IS NULL')
+            ->leftJoin('events.lectors', 'lectors')
+            ->andWhere('lectors.id IS NULL')
+            ->leftJoin('events.semesters', 'semesters')
+            ->andWhere('semesters.id IS NULL')
+            ->leftJoin('events.subCourses', 'subCourses')
+            ->andWhere('subCourses.id IS NULL')
+            ->andWhere('events.search IS NULL')
+            ->andWhere('events.repeated = :repeated')
+            ->andWhere('events.userState IS NULL')
+            ->andWhere('events.years = :years')
+            ->setParameter('repeated', serialize([]))
+            ->setParameter('years', serialize([]));
+
+        $qbExcludedEventsResult
+            ->expr()->orX(
+                $qbExcludedEventsResult->expr()->isNotNull('events.votes'),
+                $qbExcludedEventsResult->expr()->isNotNull('events.search')
+            );
+
+        $qb
+            ->andWhere($qb->expr()->notIn('e.id', $qbExcludedEventsResult->getDQL()))
+            ->setParameter('repeated', serialize([]))
+            ->setParameter('years', serialize([]));
+
         if (!$count) {
             $qb
                 ->orderBy('e.'.$paramFetcher->get('sort_by'), $paramFetcher->get('sort_order'))
