@@ -2,10 +2,13 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Domain\Favorites\FavoritesDomain;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Favorites;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Model\Request\FavoritesRequestModel;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -251,11 +254,68 @@ class FavoritesController extends AbstractRestController
         $em = $this->get('doctrine')->getManager();
 
         try {
-            if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN) && $favorites->getUser() !== $this->getUser()) {
+            if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)
+                && $favorites->getUser() !== $this->getUser()) {
+
                 throw new AccessDeniedException();
             }
             $em->remove($favorites);
             $em->flush();
+
+            return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
+        } catch (\Exception $e) {
+            $view = $this->view((array) $e->getMessage(), self::HTTP_STATUS_CODE_BAD_REQUEST);
+            $this->getLogger()->error($this->getMessagePrefix().'error: '.$e->getMessage());
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete favorite.
+     *
+     * <strong>Simple example:</strong><br />
+     * http://host/api/favorites <br>.
+     *
+     * @Rest\Delete("/api/favorites")
+     * @ApiDoc(
+     *      resource = true,
+     *      description = "Delete favorite",
+     *      authentication=true,
+     *      parameters={
+     *          {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or user object"}
+     *      },
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned bad request"
+     *      },
+     *      section="Favorite"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function deletedFavoritesByCoursesAction(Request $request)
+    {
+        try {
+            if ($this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)) {
+                throw new AccessDeniedException();
+            }
+
+            $auth = $this->get('app.auth');
+            $this->prepareAuthor();
+            /** @var FavoritesRequestModel $favoritesRequestModel */
+            $favoritesRequestModel = $auth->validateEntites(
+                'request',
+                FavoritesRequestModel::class,
+                FavoritesRequestModel::getRemoveGroup()
+            );
+            /**@var FavoritesDomain $favoritesDomain*/
+            $favoritesDomain = $this->get('app.domain.favorites_domain');
+            $favoritesDomain->deletedFavoritesByCourses($favoritesRequestModel);
 
             return $this->createSuccessStringResponse(self::DELETED_SUCCESSFULLY);
         } catch (\Exception $e) {
