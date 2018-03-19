@@ -8,7 +8,6 @@ use AppBundle\Entity\Favorites;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\FavoritesRequestModel;
-use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -256,7 +255,6 @@ class FavoritesController extends AbstractRestController
         try {
             if (!$this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)
                 && $favorites->getUser() !== $this->getUser()) {
-
                 throw new AccessDeniedException();
             }
             $em->remove($favorites);
@@ -313,7 +311,7 @@ class FavoritesController extends AbstractRestController
                 FavoritesRequestModel::class,
                 FavoritesRequestModel::getRemoveGroup()
             );
-            /**@var FavoritesDomain $favoritesDomain*/
+            /** @var FavoritesDomain $favoritesDomain */
             $favoritesDomain = $this->get('app.domain.favorites_domain');
             $favoritesDomain->deletedFavoritesByCourses($favoritesRequestModel);
 

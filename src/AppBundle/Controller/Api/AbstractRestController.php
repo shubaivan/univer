@@ -71,6 +71,7 @@ class AbstractRestController extends FOSRestController
     /**
      * @param $data
      * @param int $status
+     *
      * @return View
      */
     protected function createSuccessStringResponse($data, $status = self::HTTP_STATUS_CODE_OK)

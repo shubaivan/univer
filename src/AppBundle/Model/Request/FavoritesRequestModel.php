@@ -3,12 +3,7 @@
 namespace AppBundle\Model\Request;
 
 use AppBundle\Entity\Courses;
-use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
-use AppBundle\Entity\Notifications;
 use AppBundle\Entity\User;
-use AppBundle\Validator\Constraints\ConditionNotifications;
-use AppBundle\Validator\Constraints\ConditionNotificationsAuthor;
-use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation;
 use Symfony\Component\Validator\Constraints as Assert;
 

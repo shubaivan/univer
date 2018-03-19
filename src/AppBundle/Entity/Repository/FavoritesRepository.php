@@ -90,6 +90,7 @@ class FavoritesRepository extends EntityRepository
 
     /**
      * @param FavoritesRequestModel $model
+     *
      * @return Favorites[]
      */
     public function getEntitiesForRemove(FavoritesRequestModel $model)

@@ -8,6 +8,7 @@ interface FavoritesDomainInterface
 {
     /**
      * @param FavoritesRequestModel $model
+     *
      * @return mixed
      */
     public function deletedFavoritesByCourses(FavoritesRequestModel $model);

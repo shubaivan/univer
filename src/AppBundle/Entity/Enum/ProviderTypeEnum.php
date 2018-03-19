@@ -10,7 +10,7 @@ abstract class ProviderTypeEnum
     /** @var array user friendly named type */
     protected static $typeName = [
         self::TYPE_PROVIDER_COMMENT => 'comment',
-        self::TYPE_PROVIDER_QUESTION_ANSWER_TEST => 'question_answer_test'
+        self::TYPE_PROVIDER_QUESTION_ANSWER_TEST => 'question_answer_test',
     ];
 
     /**
@@ -34,7 +34,7 @@ abstract class ProviderTypeEnum
     {
         return [
             self::TYPE_PROVIDER_COMMENT,
-            self::TYPE_PROVIDER_QUESTION_ANSWER_TEST
+            self::TYPE_PROVIDER_QUESTION_ANSWER_TEST,
         ];
     }
 }

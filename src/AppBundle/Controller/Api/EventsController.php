@@ -73,7 +73,7 @@ class EventsController extends AbstractRestController
     }
 
     /**
-     * Delete event
+     * Delete event.
      *
      * <strong>Simple example:</strong><br />
      * http://host/api/events/{id} <br>.

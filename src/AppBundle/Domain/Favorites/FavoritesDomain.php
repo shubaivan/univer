@@ -2,13 +2,8 @@
 
 namespace AppBundle\Domain\Favorites;
 
-use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Repository\FavoritesRepository;
-use AppBundle\Entity\Repository\NotificationsRepository;
 use AppBundle\Model\Request\FavoritesRequestModel;
-use AppBundle\Services\ObjectManager;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class FavoritesDomain implements FavoritesDomainInterface
 {
@@ -19,6 +14,7 @@ class FavoritesDomain implements FavoritesDomainInterface
 
     /**
      * FavoritesDomain constructor.
+     *
      * @param FavoritesRepository $favoritesRepository
      */
     public function __construct(
