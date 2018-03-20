@@ -69,8 +69,9 @@ swiftmailer:
     host: '%mailer_host%'
     username: '%mailer_user%'
     password: '%mailer_password%'
-    spool: { type: memory }
-
+    auth_mode: '%auth_mode%'
+    port: '%port%'
+    encryption: '%encryption%'
 
 lexik_jwt_authentication:
     private_key_path: '%jwt_private_key_path%'

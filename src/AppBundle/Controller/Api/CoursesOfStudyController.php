@@ -51,9 +51,9 @@ class CoursesOfStudyController extends AbstractRestController
     /**
      * Get list courses of study.
      * <strong>Simple example:</strong><br />
-     * http://host/api/courses_of_study <br>.
+     * http://host/courses_of_study <br>.
      *
-     * @Rest\Get("/api/courses_of_study")
+     * @Rest\Get("/courses_of_study")
      * @ApiDoc(
      * resource = true,
      * description = "Get list courses of study",
@@ -82,7 +82,7 @@ class CoursesOfStudyController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getAdminCoursesOfStudyAction(ParamFetcher $paramFetcher)
+    public function getCoursesOfStudyAction(ParamFetcher $paramFetcher)
     {
         try {
             $em = $this->getDoctrine()->getManager();

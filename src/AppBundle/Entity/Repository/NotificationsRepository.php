@@ -103,7 +103,7 @@ class NotificationsRepository extends EntityRepository
                 'provider' => ':provider',
                 'message' => ':message',
                 'status' => ':status',
-                'created_at' => ':createdAt'
+                'created_at' => ':createdAt',
             ])
             ->setParameters([
                 'user' => $parameterBag->get('user'),
@@ -111,7 +111,7 @@ class NotificationsRepository extends EntityRepository
                 'provider' => $parameterBag->get('provider'),
                 'message' => $parameterBag->get('message'),
                 'status' => $parameterBag->get('status'),
-                'createdAt' => (new \DateTime())->format('Y-m-d H:i:s')
+                'createdAt' => (new \DateTime())->format('Y-m-d H:i:s'),
             ]);
 
         $qb->execute();

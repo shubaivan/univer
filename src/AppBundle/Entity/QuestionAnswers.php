@@ -104,6 +104,14 @@ class QuestionAnswers
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -289,13 +297,5 @@ class QuestionAnswers
     public function getQuestionCorrections()
     {
         return $this->questionCorrections;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->getId();
     }
 }

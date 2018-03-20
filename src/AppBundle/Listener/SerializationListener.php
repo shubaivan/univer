@@ -128,7 +128,7 @@ class SerializationListener implements EventSubscriberInterface
 
         $this->voteQuestionObject = [
             self::COUNT => 0,
-            self::QUESTION_VOTE_MARK => null
+            self::QUESTION_VOTE_MARK => null,
         ];
 
         $this->userQuestionAnswerTestRepository = $answerTestRepository;

@@ -67,6 +67,7 @@ security:
                     - app.jwt_token_authenticator
 
     access_control:
+        - { path: ^/courses_of_study, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/registrations, roles: IS_AUTHENTICATED_ANONYMOUSLY }

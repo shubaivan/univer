@@ -86,7 +86,8 @@ class QuestionsController extends AbstractRestController
      *      {"name"="user", "dataType"="text", "required"=false, "description"="user object"},
      *      {"name"="user_state", "dataType"="enum", "required"=false, "description"="user state - not_successed, unresolved"},
      *      {"name"="repeated", "dataType"="array", "required"=false, "description"="repeatd array with one elemnt true/false"},
-     *      {"name"="votes", "dataType"="boolean", "required"=false, "description"="true/false"}
+     *      {"name"="votes", "dataType"="boolean", "required"=false, "description"="true/false"},
+     *      {"name"="search", "dataType"="text", "required"=false, "description"="search filed - questionNumber, notes, text"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",

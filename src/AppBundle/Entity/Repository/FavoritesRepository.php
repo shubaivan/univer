@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Repository;
 
 use AppBundle\Entity\Favorites;
+use AppBundle\Model\Request\FavoritesRequestModel;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Request\ParamFetcher;
 
@@ -85,5 +86,56 @@ class FavoritesRepository extends EntityRepository
         }
 
         return $results;
+    }
+
+    /**
+     * @param FavoritesRequestModel $model
+     *
+     * @return Favorites[]
+     */
+    public function getEntitiesForRemove(FavoritesRequestModel $model)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('f');
+
+        $qb
+            ->from('AppBundle:Favorites', 'f');
+
+        if ($model->getUser()) {
+            $qb
+                ->andWhere('f.user = :user')
+                ->setParameter('user', $model->getUser());
+        }
+
+        if ($model->getCourses()) {
+            $qb
+                ->leftJoin('f.questions', 'questions')
+                ->andWhere('questions.courses = :courses')
+                ->setParameter('courses', $model->getCourses());
+        }
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @param Favorites[] $favorites
+     */
+    public function deletedFavorites($favorites = [])
+    {
+        if (!$favorites) {
+            return;
+        }
+        foreach ($favorites as $favorite) {
+            $this->getEntityManager()->remove($favorite);
+        }
+
+        $this->getEntityManager()->flush();
     }
 }
