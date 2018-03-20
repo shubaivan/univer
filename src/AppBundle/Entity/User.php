@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -206,6 +207,18 @@ class User extends AbstractUser implements UserInterface
     private $userRoles;
 
     /**
+     * @var CoursesOfStudy
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="users", )
+     * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
+     * @Annotation\Groups({
+     *     "profile", "put_user", "admin_post_user", "admin_put_user", "put_user", "get_user", "registration"
+     * })
+     * @Evence\onSoftDelete(type="SET NULL")
+     */
+    private $coursesOfStudy;
+
+    /**
      * @var ArrayCollection|RepeatedQuestions[]
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="user", cascade={"persist", "remove"})
@@ -381,6 +394,31 @@ class User extends AbstractUser implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+
+    /**
+     * Set coursesOfStudy.
+     *
+     * @param null|\AppBundle\Entity\CoursesOfStudy $coursesOfStudy
+     *
+     * @return User
+     */
+    public function setCoursesOfStudy(\AppBundle\Entity\CoursesOfStudy $coursesOfStudy = null)
+    {
+        $this->coursesOfStudy = $coursesOfStudy;
+
+        return $this;
+    }
+
+    /**
+     * Get coursesOfStudy.
+     *
+     * @return null|\AppBundle\Entity\CoursesOfStudy
+     */
+    public function getCoursesOfStudy()
+    {
+        return $this->coursesOfStudy;
     }
 
     /**

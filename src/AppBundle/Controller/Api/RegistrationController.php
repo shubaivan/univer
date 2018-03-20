@@ -29,7 +29,8 @@ class RegistrationController extends AbstractRestController
      *  parameters={
      *      {"name"="_password", "dataType"="string", "required"=true, "description"="user password"},
      *      {"name"="_email", "dataType"="string", "required"=true, "description"="user email"},
-     *      {"name"="_username", "dataType"="string", "required"=true, "description"="user name"}
+     *      {"name"="_username", "dataType"="string", "required"=true, "description"="user name"},
+     *      {"name"="courses_of_study", "dataType"="integer", "required"=false, "description"="coursesOfStudy id or object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
