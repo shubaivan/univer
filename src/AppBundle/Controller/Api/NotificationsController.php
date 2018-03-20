@@ -41,7 +41,7 @@ class NotificationsController extends AbstractRestController
      *
      * @RestView()
      *
-     * @Rest\QueryParam(name="status", strict=true, requirements="^[a-zA-Z]+", default="not_viewed", description="status notification, enum - not_viewed, viewed")
+     * @Rest\QueryParam(name="status", requirements="^[a-zA-Z]+", description="status notification, enum - not_viewed, viewed")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
      * @Rest\QueryParam(name="sort_by", strict=true, requirements="^[a-zA-Z]+", default="user", description="Sort by", nullable=true)
