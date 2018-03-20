@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -27,7 +27,8 @@ class AppKernel extends Kernel
             new Evence\Bundle\SoftDeleteableExtensionBundle\EvenceSoftDeleteableExtensionBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle(),
-            new JMS\AopBundle\JMSAopBundle()
+            new JMS\AopBundle\JMSAopBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

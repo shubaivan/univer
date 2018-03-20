@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SubCourses
 {
     use TraitTimestampable;
+    const POST_GROUP = 'post_sub_course';
 
     /**
      * @ORM\Column(type="integer")
@@ -93,6 +94,11 @@ class SubCourses
         $this->courses = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
+    }
+
+    public static function getPostGroup()
+    {
+        return [self::POST_GROUP];
     }
 
     /**

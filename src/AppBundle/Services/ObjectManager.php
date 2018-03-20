@@ -96,6 +96,24 @@ class ObjectManager
                 ->serialize($data, 'json');
         }
 
+        $this->processEntity($groups, $serializedData, $class);
+    }
+
+    /**
+     * @param $groups
+     * @param $serializedData
+     * @param $class
+     *
+     * @throws ValidatorException
+     *
+     * @return array|\JMS\Serializer\scalar|mixed|object
+     */
+    public function processEntity($groups, $serializedData, $class)
+    {
+        if (is_array($serializedData)) {
+            $serializedData = $this->getSerializer()
+                ->serialize($serializedData, 'json');
+        }
         $deserializationContext = null;
         $validateGroups = [];
         if ($groups) {
@@ -104,11 +122,11 @@ class ObjectManager
         }
 
         $dataValidate = $this->getSerializer()
-                ->deserialize(
-                    $serializedData,
-                    $class,
-                    'json',
-                    $deserializationContext
+            ->deserialize(
+                $serializedData,
+                $class,
+                'json',
+                $deserializationContext
             );
 
         $this->validateEntity($dataValidate, $validateGroups);

@@ -28,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Lectors
 {
     use TraitTimestampable;
+    const GROUP_POST = 'post_lector';
 
     /**
      * @ORM\Column(type="integer")
@@ -51,16 +52,14 @@ class Lectors
      * @Assert\Length(
      *     groups={"post_lector", "put_lector"},
      *      min = 2,
-     *      max = 100,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *      max = 100
      * )
      */
     private $firstName;
 
     /**
      * @var string
-     * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
+     * @ORM\Column(name="last_name", type="string", length=100, nullable=true)
      * @Annotation\Groups({
      *     "get_lector", "get_lectors", "post_lector", "put_lector",
      *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
@@ -68,9 +67,7 @@ class Lectors
      * @Assert\Length(
      *     groups={"post_lector", "put_lector"},
      *      min = 2,
-     *      max = 100,
-     *      minMessage = "Your last name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your last name cannot be longer than {{ limit }} characters"
+     *      max = 100
      * )
      */
     private $lastName;
@@ -104,6 +101,11 @@ class Lectors
         $this->questions = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
+    }
+
+    public static function getPostGroup()
+    {
+        return [self::GROUP_POST];
     }
 
     /**
