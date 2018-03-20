@@ -45,13 +45,6 @@ class ExamPeriods
      *     "get_question_corrections", "get_events"
      * })
      * @Assert\NotBlank(groups={"post_exam_period", "put_exam_period"})
-     * @Assert\Length(
-     *     groups={"post_exam_period", "put_exam_period"},
-     *      min = 2,
-     *      max = 100,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
-     * )
      */
     private $name;
 
