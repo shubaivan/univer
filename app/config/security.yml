@@ -73,5 +73,7 @@ security:
         - { path: ^/api/registrations, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/admins, roles: ROLE_ADMIN }
+        - { path: ^/api/admins/user, roles: ROLE_ADMIN }
+        - { path: ^/api/admins/role, roles: ROLE_ADMIN }
+        - { path: ^/api/admins, roles: [ROLE_ADMIN, ROLE_COURSE_COMMITEE] }
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -2,8 +2,16 @@ parameters:
     app.domain.sub_courses_domain.class: AppBundle\Domain\SubCourses\SubCoursesDomain
     app.domain.notifications_domain.class: AppBundle\Domain\Notifications\NotificationsDomain
     app.domain.favorites_domain.class: AppBundle\Domain\Favorites\FavoritesDomain
+    app.domain.comment_domain.class: AppBundle\Domain\Comment\CommentDomain
 
 services:
+    app.domain.comment_domain:
+         class: "%app.domain.comment_domain.class%"
+         arguments:
+             - "@app.repository.comments"
+             - "@app.application.notifications_application"
+             - "@security.token_storage"
+
     app.domain.favorites_domain:
          class: "%app.domain.favorites_domain.class%"
          arguments:

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Enum\RoleEnum;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
@@ -71,7 +72,14 @@ class Role
      */
     public function setName(string $name)
     {
-        $this->name = mb_strtoupper($name);
+        $name = mb_strtoupper($name);
+        if (!in_array($name, RoleEnum::getAvailableTypes(), true)) {
+            throw new \InvalidArgumentException(
+                'Invalid type. Available type: '.implode(',', RoleEnum::getAvailableTypes())
+            );
+        }
+
+        $this->name = $name;
 
         return $this;
     }

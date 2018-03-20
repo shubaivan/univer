@@ -327,6 +327,7 @@ class CommentsController extends AbstractRestController
      */
     public function putCommentsAction(Request $request, Comments $comments)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
@@ -335,6 +336,7 @@ class CommentsController extends AbstractRestController
             $request->request->set('id', $comments->getId());
             /** @var Comments $comments */
             $comments = $auth->validateEntites('request', Comments::class, ['put_comment']);
+            $this->get('app.domain.comment_domain')->approveComment($comments);
 
             $em->flush();
 

@@ -26,7 +26,16 @@ parameters:
     app.repository.votes.class: AppBundle\Entity\Repository\VotesRepository
     app.entity.votes.class: AppBundle\Entity\Votes
 
+    app.repository.comments.class: AppBundle\Entity\Repository\CommentsRepository
+    app.entity.comments.class: AppBundle\Entity\Comments
+
 services:
+    app.repository.comments:
+        class: "%app.repository.comments.class%"
+        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        arguments:
+            - "%app.entity.comments.class%"
+
     app.repository.votes:
         class: "%app.repository.votes.class%"
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
