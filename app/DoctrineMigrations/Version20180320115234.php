@@ -15,7 +15,7 @@ class Version20180320115234 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE users ADD courses_of_study_id INT DEFAULT NULL, DROP courses_of_study');
+        $this->addSql('ALTER TABLE users ADD courses_of_study_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9AD98CD0F FOREIGN KEY (courses_of_study_id) REFERENCES courses_of_study (id)');
         $this->addSql('CREATE INDEX IDX_1483A5E9AD98CD0F ON users (courses_of_study_id)');
     }
