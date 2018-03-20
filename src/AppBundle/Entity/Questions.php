@@ -862,11 +862,16 @@ class Questions
         return $this;
     }
 
+    /**
+     * @param QuestionAnswers[] $questionAnswers
+     */
     public function setAccessorQuestionAnswers($questionAnswers)
     {
         $this->getQuestionAnswers()->clear();
         foreach ($questionAnswers as $questionAnswer) {
-            $this->addQuestionAnswer($questionAnswer);
+            if ($questionAnswer->getAnswer()) {
+                $this->addQuestionAnswer($questionAnswer);
+            }
         }
     }
 
