@@ -31,7 +31,7 @@ class CoursesOfStudy
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "get_course", "get_courses",
-     *     "get_questions", "get_question", "get_events", "get_questions_corrections", "get_question_corrections"
+     *     "get_questions", "get_question", "get_events", "get_questions_corrections", "get_question_corrections", "profile"
      * })
      */
     private $id;
@@ -42,7 +42,7 @@ class CoursesOfStudy
      * @Annotation\Groups({
      *     "get_course_of_study", "get_courses_of_study", "post_course_of_study", "put_course_of_study",
      *     "get_course", "get_courses", "get_questions", "get_question", "get_questions_corrections",
-     *     "get_question_corrections", "get_events"
+     *     "get_question_corrections", "get_events", "profile"
      * })
      * @Assert\NotBlank(groups={"post_course_of_study", "put_course_of_study"})
      * @Assert\Length(

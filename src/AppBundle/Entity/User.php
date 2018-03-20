@@ -209,11 +209,10 @@ class User extends AbstractUser implements UserInterface
     /**
      * @var CoursesOfStudy
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="users")
-     * @Assert\NotBlank(groups={"profile", "put_user", "admin_post_user", "admin_put_user", "put_user"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="users", )
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\Groups({
-     *     "profile", "put_user", "admin_post_user", "admin_put_user", "put_user"
+     *     "profile", "put_user", "admin_post_user", "admin_put_user", "put_user", "get_user", "registration"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */

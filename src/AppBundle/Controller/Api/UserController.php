@@ -65,7 +65,8 @@ class UserController extends AbstractRestController
      *      {"name"="_password", "dataType"="string", "required"=false, "description"="user password"},
      *      {"name"="first_name", "dataType"="string", "required"=false, "description"="user first_name"},
      *      {"name"="last_name", "dataType"="string", "required"=false, "description"="user last_name"},
-     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"}
+     *      {"name"="year_of_graduation", "dataType"="integer", "required"=false, "description"="user year_of_graduation"},
+     *     {"name"="courses_of_study", "dataType"="integer", "required"=false, "description"="coursesOfStudy id or object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
