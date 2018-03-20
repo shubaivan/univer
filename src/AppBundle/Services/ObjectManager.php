@@ -96,7 +96,7 @@ class ObjectManager
                 ->serialize($data, 'json');
         }
 
-        $this->processEntity($groups, $serializedData, $class);
+        return $this->processEntity($groups, $serializedData, $class);
     }
 
     /**

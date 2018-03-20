@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Role;
 use AppBundle\Exception\ValidatorException;
+use AppBundle\Services\ObjectManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\View\View;
@@ -127,6 +128,7 @@ class RoleController extends AbstractRestController
         $logger = $this->container->get('logger');
 
         try {
+            /** @var ObjectManager $auth */
             $auth = $this->get('app.auth');
 
             /** @var Role $role */
