@@ -194,12 +194,6 @@ class QuestionsRepository extends EntityRepository
             $this->queryAndXHelper($qb, $parameterBag, 'lectors', 'lectors');
         }
 
-        if ($parameterBag->get('courses') || $parameterBag->get('courses_of_study')) {
-            $qb
-                ->leftJoin('q.subCourses', 'subCourses')
-                ->leftJoin('subCourses.courses', 'courses');
-        }
-
         if ($parameterBag->get('courses')) {
             $orXSearch = $qb->expr()->orX();
 
@@ -208,7 +202,7 @@ class QuestionsRepository extends EntityRepository
                     continue;
                 }
                 $orXSearch
-                    ->add($qb->expr()->eq('courses.id', $id));
+                    ->add($qb->expr()->eq('q.courses', $id));
             }
             $qb->andWhere($orXSearch);
         }
@@ -235,7 +229,7 @@ class QuestionsRepository extends EntityRepository
 
         if ($parameterBag->get('courses_of_study')) {
             $qb
-                ->leftJoin('courses.coursesOfStudy', 'courses_of_study')
+                ->leftJoin('q.coursesOfStudy', 'courses_of_study')
                 ->andWhere('courses_of_study.id = :courses_of_study_id')
                 ->setParameter('courses_of_study_id', $parameterBag->get('courses_of_study'));
         }
