@@ -49,7 +49,7 @@ class ProcessingParseQuestionXLSX extends ContainerAwareCommand
             $this->output->writeln('<comment>parse start</comment>'.$row);
             if ($data) {
                 for ($i = 0; $i <= 29; ++$i) {
-                    $data = $sheet->getCellByColumnAndRow($i, 4)->getValue();
+                    $data = $sheet->getCellByColumnAndRow($i, $row)->getValue();
                     if ($data && 0 === $i) {
                         $names = explode(',', $data);
                         $courseOfStudy = $courseOfStudyRepo->findOneBy(['name' => $names[0]]);
