@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Questions
 {
     use TraitTimestampable;
+    const GROUP_POST = 'post_question';
 
     /**
      * @ORM\Column(type="integer")
@@ -192,7 +193,7 @@ class Questions
     /**
      * @var Semesters
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Semesters", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Semesters", inversedBy="questions", cascade={"persist"})
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Semesters")
      * @Annotation\Groups({
@@ -205,7 +206,7 @@ class Questions
     /**
      * @var ExamPeriods
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="questions", cascade={"persist"})
      * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\ExamPeriods")
      * @Annotation\Groups({
@@ -308,6 +309,11 @@ class Questions
         $this->userQuestionAnswerResult = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
         $this->votes = new ArrayCollection();
+    }
+
+    public static function getPostGroup()
+    {
+        return [self::GROUP_POST];
     }
 
     /**
@@ -426,7 +432,7 @@ class Questions
      */
     public function setType($type)
     {
-        if (!in_array($type, QuestionsTypeEnum::getAvailableTypes(), true)) {
+        if (!array_key_exists($type, QuestionsTypeEnum::getAvailableTypes())) {
             throw new \InvalidArgumentException(
                 'Invalid type. Available type: '.implode(',', QuestionsTypeEnum::getAvailableTypes())
             );

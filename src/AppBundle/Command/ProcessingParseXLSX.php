@@ -185,9 +185,9 @@ class ProcessingParseXLSX extends ContainerAwareCommand
     {
         $this->output = $output;
         $io = new SymfonyStyle($input, $output);
-        $lockHandler = new LockHandler('ProcessingVotes.lock');
+        $lockHandler = new LockHandler('ProcessingParseXLSX.lock');
         if (!$lockHandler->lock()) {
-            $io->warning('Command ProcessingVotes already locked (previous command in progress)');
+            $io->warning('Command ProcessingParseXLSX already locked (previous command in progress)');
 
             return;
         }
@@ -200,7 +200,7 @@ class ProcessingParseXLSX extends ContainerAwareCommand
             $io->warning($e->getMessage());
         }
 
-        $io->success('ProcessingVotes successful');
+        $io->success('ProcessingParseXLSX successful');
         $lockHandler->release();
     }
 }

@@ -9,8 +9,8 @@ abstract class QuestionsTypeEnum
 
     /** @var array user friendly named type */
     protected static $typeName = [
-        self::TYPE_OPEN => 'Open',
-        self::TYPE_TEST => 'Test',
+        self::TYPE_OPEN => '1',
+        self::TYPE_TEST => '2',
     ];
 
     /**
@@ -32,9 +32,6 @@ abstract class QuestionsTypeEnum
      */
     public static function getAvailableTypes()
     {
-        return [
-            self::TYPE_OPEN,
-            self::TYPE_TEST,
-        ];
+        return self::$typeName;
     }
 }

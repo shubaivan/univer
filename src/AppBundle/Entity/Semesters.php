@@ -42,7 +42,7 @@ class Semesters
      * @Annotation\Groups({
      *     "get_semester", "get_semesters", "post_semester", "put_semester",
      *     "get_questions", "get_question", "get_questions_corrections",
-     *     "get_question_corrections", "get_events"
+     *     "get_question_corrections", "get_events", "post_question"
      * })
      * @Assert\NotBlank(groups={"post_semester", "put_semester"})
      */

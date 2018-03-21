@@ -115,7 +115,8 @@ class SerializationListener implements EventSubscriberInterface
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
         $this->favoritesRepository = $favoritesRepository;
-        $this->user = $tokenStorage->getToken()->getUser();
+        $this->user = $tokenStorage->getToken()
+            ? $tokenStorage->getToken()->getUser() : null;
         $this->favoriteObject = [
             self::COUNT => 0,
             self::FAVORITES_AUTH_MARK => null,
@@ -233,6 +234,9 @@ class SerializationListener implements EventSubscriberInterface
 
     public function onPreSerialize(PreSerializeEvent $event)
     {
+        if (null === $this->user) {
+            return;
+        }
         /** @var Questions $question */
         $question = $event->getObject();
         if ($this->user instanceof User) {

@@ -99,6 +99,13 @@ class Courses
     private $questions;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $courseNum;
+
+    /**
      * Constructor.
      */
     public function __construct()
