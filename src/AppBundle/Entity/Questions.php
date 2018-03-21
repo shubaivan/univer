@@ -470,10 +470,15 @@ class Questions
         if ($questionNumber) {
             $this->questionNumber = $questionNumber;
         } else {
-            $this->questionNumber = $this->getCourses()->getId().'/'.$this->getYear().'/'.$this->getExamPeriods()->getId().'/'. $this->getId();
+            $this->questionNumber = $this->generateNumber();
         }
 
         return $this;
+    }
+
+    public function generateNumber()
+    {
+        return $this->getCourses()->getId().'/'.$this->getYear().'/'.$this->getExamPeriods()->getId().'/'. $this->getId();
     }
 
     /**

@@ -31,6 +31,25 @@ class QuestionsRepository extends EntityRepository
     }
 
     /**
+     * @param $data
+     * @param $id
+     */
+    public function updateNumber($data, $id)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->update('AppBundle:Questions', 'q')
+            ->set('q.questionNumber', $qb->expr()->literal($data))
+            ->where('q.id = :id')
+            ->setParameter('id', $id);
+
+        $qb->getQuery()->execute();
+    }
+
+    /**
      * @param array $ids
      *
      * @return array

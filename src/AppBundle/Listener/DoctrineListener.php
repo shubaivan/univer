@@ -12,6 +12,7 @@ use AppBundle\Entity\UserQuestionAnswerTest;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DoctrineListener implements EventSubscriber
@@ -34,7 +35,25 @@ class DoctrineListener implements EventSubscriber
         return [
             'preRemove',
             'onFlush',
+            'postFlush'
         ];
+    }
+    public function postFlush(PostFlushEventArgs $args)
+    {
+        $em = $args->getEntityManager();
+        $uow = $em->getUnitOfWork();
+        $em->getFilters()->enable('softdeleteable');
+        $identityMap = $uow->getIdentityMap();
+        foreach ($identityMap as $key=>$entity) {
+            if ($key === Questions::class) {
+                $repo = $this->container->get('app.repository.questions');
+                /** @var Questions $value */
+                foreach ($entity as $value) {
+                    $data = $value->generateNumber();
+                    $repo->updateNumber($data, $value->getId());
+                }
+            }
+        }
     }
 
     public function onFlush(OnFlushEventArgs $args)
@@ -42,6 +61,7 @@ class DoctrineListener implements EventSubscriber
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
         $em->getFilters()->enable('softdeleteable');
+
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             if ($entity instanceof QuestionCorrections) {
                 $answers = $entity->getQuestionAnswers();
@@ -58,6 +78,7 @@ class DoctrineListener implements EventSubscriber
             }
 
             if ($entity instanceof Questions) {
+                $entity->setQuestionNumber();
                 $answers = $entity->getQuestionAnswers();
                 $existAnswers = $this->container->get('app.repository.question_answers')
                     ->findBy(['questions' => $entity]);
