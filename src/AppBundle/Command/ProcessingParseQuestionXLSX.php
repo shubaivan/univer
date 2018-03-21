@@ -96,7 +96,7 @@ class ProcessingParseQuestionXLSX extends ContainerAwareCommand
                     }
 
                     if ($data && 8 === $i) {
-                        $valueType = array_search($data, QuestionsTypeEnum::getAvailableTypes(), true);
+                        $valueType = array_search($data, QuestionsTypeEnum::getAvailableTypes());
                         $questions[$row]['type'] = $valueType;
                     }
 

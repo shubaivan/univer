@@ -102,6 +102,9 @@ class Courses
      * @var string
      *
      * @ORM\Column(type="integer", nullable=true)
+     * @Annotation\Groups({
+     *     "post_course"
+     * })
      */
     private $courseNum;
 

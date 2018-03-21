@@ -71,7 +71,7 @@ class ProcessingParseXLSX extends ContainerAwareCommand
             $data = $sheet->getCellByColumnAndRow(0, $column)->getValue();
             $dataId = $sheet->getCellByColumnAndRow(1, $column)->getValue();
             $courses[$dataId]['name'] = $data;
-
+            $courses[$dataId]['course_num'] = $sheet->getCellByColumnAndRow(1, $column)->getValue();
             for ($row = 2; $row <= 4; ++$row) {
                 $subCoursesRelation = $sheet->getCellByColumnAndRow($row, $column)->getValue();
                 if ($subCoursesRelation) {
