@@ -336,6 +336,7 @@ class CommentsController extends AbstractRestController
             $request->request->set('id', $comments->getId());
             /** @var Comments $comments */
             $comments = $auth->validateEntites('request', Comments::class, ['put_comment']);
+            $request->request->remove('id');
             $this->get('app.domain.comment_domain')->approveComment($comments);
 
             $em->flush();

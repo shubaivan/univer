@@ -72,7 +72,7 @@ class ObjectManager
                         'content_type'
                     ),
                     AbstractRestController::REQUEST_HEADER_APPLICATION_JSON
-            )) {
+            ) && !$data) {
             $dataJson = $paramRequest->getContent();
 
             if ($paramRequest->request->get('id')) {
