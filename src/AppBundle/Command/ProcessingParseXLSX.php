@@ -42,6 +42,7 @@ class ProcessingParseXLSX extends ContainerAwareCommand
             ++$row;
         }
         $this->output->writeln('<comment>courseOfStudy finished</comment>');
+        /** @var CoursesOfStudy[] $mappingCourseOfStudy */
         $mappingCourseOfStudy = [];
         $repo = $this->em
             ->getRepository('AppBundle:CoursesOfStudy');
@@ -75,7 +76,7 @@ class ProcessingParseXLSX extends ContainerAwareCommand
             for ($row = 2; $row <= 4; ++$row) {
                 $subCoursesRelation = $sheet->getCellByColumnAndRow($row, $column)->getValue();
                 if ($subCoursesRelation) {
-                    $courses[$dataId]['courses_of_study'][$row] = $mappingCourseOfStudy[$row];
+                    $courses[$dataId]['courses_of_study'][$row] = ['id' => $mappingCourseOfStudy[$row]->getId()];
                 }
             }
 
