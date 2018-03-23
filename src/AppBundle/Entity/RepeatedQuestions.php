@@ -12,19 +12,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="repeated_questions",
  *    uniqueConstraints={
- *        @UniqueConstraint(name="unique_favorites",
- *            columns={"questions_id", "user_id"})
+ *        @UniqueConstraint(name="unique_repeated",
+ *            columns={"questions_repeated_id", "questions_origin_id", "user_id"})
  *    })
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\RepeatedQuestionsRepository")
  * @UniqueEntity(
  *     groups={"post_repeated_questions"},
- *     fields={"questions", "user"},
+ *     fields={"questionsRepeated", "questionsOrigin", "user"},
  *     errorPath="user, questions"
  * )
  */
 class RepeatedQuestions
 {
     use TraitTimestampable;
+    const POST_REPEATED_QUESTIONS = 'post_repeated_questions';
+    const GET_REPEATED_QUESTIONS = 'get_repeated_questions';
 
     /**
      * @ORM\Column(type="integer")
@@ -39,6 +41,18 @@ class RepeatedQuestions
     /**
      * @var Questions
      *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="originQuestions")
+     * @Assert\NotBlank(groups={"post_repeated_questions"})
+     * @Annotation\Type("AppBundle\Entity\Questions")
+     * @Annotation\Groups({
+     *     "post_repeated_questions", "get_repeated_questions"
+     * })
+     */
+    private $questionsOrigin;
+
+    /**
+     * @var Questions
+     *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Questions", inversedBy="repeatedQuestions")
      * @Assert\NotBlank(groups={"post_repeated_questions"})
      * @Annotation\Type("AppBundle\Entity\Questions")
@@ -46,7 +60,7 @@ class RepeatedQuestions
      *     "post_repeated_questions", "get_repeated_questions"
      * })
      */
-    private $questions;
+    private $questionsRepeated;
 
     /**
      * @var User
@@ -59,6 +73,16 @@ class RepeatedQuestions
      * })
      */
     private $user;
+
+    public static function getPostGroup()
+    {
+        return [self::POST_REPEATED_QUESTIONS];
+    }
+
+    public static function getGetGroup()
+    {
+        return [self::GET_REPEATED_QUESTIONS];
+    }
 
     /**
      * @Annotation\VirtualProperty
@@ -93,27 +117,51 @@ class RepeatedQuestions
     }
 
     /**
-     * Set questions.
+     * Set questionsOrigin.
      *
-     * @param null|\AppBundle\Entity\Questions $questions
+     * @param null|\AppBundle\Entity\Questions $questionsOrigin
      *
      * @return RepeatedQuestions
      */
-    public function setQuestions(\AppBundle\Entity\Questions $questions = null)
+    public function setQuestionsOrigin(\AppBundle\Entity\Questions $questionsOrigin = null)
     {
-        $this->questions = $questions;
+        $this->questionsOrigin = $questionsOrigin;
 
         return $this;
     }
 
     /**
-     * Get questions.
+     * Get questionsOrigin.
      *
      * @return null|\AppBundle\Entity\Questions
      */
-    public function getQuestions()
+    public function getQuestionsOrigin()
     {
-        return $this->questions;
+        return $this->questionsOrigin;
+    }
+
+    /**
+     * Set questionsRepeated.
+     *
+     * @param null|\AppBundle\Entity\Questions $questionsRepeated
+     *
+     * @return RepeatedQuestions
+     */
+    public function setQuestionsRepeated(\AppBundle\Entity\Questions $questionsRepeated = null)
+    {
+        $this->questionsRepeated = $questionsRepeated;
+
+        return $this;
+    }
+
+    /**
+     * Get questionsRepeated.
+     *
+     * @return null|\AppBundle\Entity\Questions
+     */
+    public function getQuestionsRepeated()
+    {
+        return $this->questionsRepeated;
     }
 
     /**

@@ -172,9 +172,16 @@ class Questions
     /**
      * @var ArrayCollection|RepeatedQuestions[]
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="questions", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="questionsRepeated", cascade={"persist", "remove"})
      */
     private $repeatedQuestions;
+
+    /**
+     * @var ArrayCollection|RepeatedQuestions[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RepeatedQuestions", mappedBy="questionsOrigin", cascade={"persist", "remove"})
+     */
+    private $originQuestions;
 
     /**
      * @var ArrayCollection|UserQuestionAnswerResult[]
@@ -309,6 +316,7 @@ class Questions
         $this->userQuestionAnswerResult = new ArrayCollection();
         $this->questionCorrections = new ArrayCollection();
         $this->votes = new ArrayCollection();
+        $this->originQuestions = new ArrayCollection();
     }
 
     public static function getPostGroup()
@@ -478,7 +486,7 @@ class Questions
 
     public function generateNumber()
     {
-        return $this->getCourses()->getId().'/'.$this->getYear().'/'.$this->getExamPeriods()->getId().'/'. $this->getId();
+        return $this->getCourses()->getId().'/'.$this->getYear().'/'.$this->getExamPeriods()->getId().'/'.$this->getId();
     }
 
     /**
@@ -1162,5 +1170,41 @@ class Questions
     public function getVotesAt()
     {
         return $this->votesAt;
+    }
+
+    /**
+     * Add originQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $originQuestion
+     *
+     * @return Questions
+     */
+    public function addOriginQuestion(\AppBundle\Entity\RepeatedQuestions $originQuestion)
+    {
+        $this->originQuestions[] = $originQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove originQuestion.
+     *
+     * @param \AppBundle\Entity\RepeatedQuestions $originQuestion
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeOriginQuestion(\AppBundle\Entity\RepeatedQuestions $originQuestion)
+    {
+        return $this->originQuestions->removeElement($originQuestion);
+    }
+
+    /**
+     * Get originQuestions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOriginQuestions()
+    {
+        return $this->originQuestions;
     }
 }

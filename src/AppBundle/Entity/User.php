@@ -4,10 +4,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
-use Evence\Bundle\SoftDeleteableExtensionBundle\Mapping\Annotation as Evence;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -209,7 +209,7 @@ class User extends AbstractUser implements UserInterface
     /**
      * @var CoursesOfStudy
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="users", )
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="users")
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\Groups({
      *     "profile", "put_user", "admin_post_user", "admin_put_user", "put_user", "get_user", "registration"
@@ -395,7 +395,6 @@ class User extends AbstractUser implements UserInterface
     public function eraseCredentials()
     {
     }
-
 
     /**
      * Set coursesOfStudy.

@@ -16,6 +16,41 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class RepeatedQuestionsController extends AbstractRestController
 {
     /**
+     * Get repeated_questions by id.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/repeated_questions/{id} <br>.
+     *
+     * @Rest\Get("/api/repeated_questions/{id}")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get repeated_questions by id",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="RepeatedQuestions"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return Response|View
+     */
+    public function getUserAction(RepeatedQuestions $questions)
+    {
+        return $this->createSuccessResponse(
+            $questions,
+            RepeatedQuestions::getGetGroup(),
+            true
+        );
+    }
+
+    /**
      * Create repeatedQuestions.
      * <strong>Simple example:</strong><br />
      * http://host/api/repeated_questions <br>.
@@ -26,7 +61,8 @@ class RepeatedQuestionsController extends AbstractRestController
      * description = "Create repeatedQuestions",
      * authentication=true,
      *  parameters={
-     *      {"name"="questions", "dataType"="integer", "required"=true, "description"="questions id or object"}
+     *      {"name"="questions_origin", "dataType"="integer", "required"=true, "description"="questions id or object"},
+     *      {"name"="questions_repeated", "dataType"="integer", "required"=true, "description"="questions id or object"}
      *  },
      * statusCodes = {
      *      200 = "Returned when successful",
@@ -50,7 +86,11 @@ class RepeatedQuestionsController extends AbstractRestController
             $auth = $this->get('app.auth');
             $this->prepareAuthor();
             /** @var RepeatedQuestions $entity */
-            $entity = $auth->validateEntites('request', RepeatedQuestions::class, ['post_repeated_questions']);
+            $entity = $auth->validateEntites(
+                'request',
+                RepeatedQuestions::class,
+                RepeatedQuestions::getPostGroup()
+            );
 
             $em->persist($entity);
             $em->flush();

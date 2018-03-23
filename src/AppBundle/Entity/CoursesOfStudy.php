@@ -81,6 +81,13 @@ class CoursesOfStudy
     private $questions;
 
     /**
+     * @var ArrayCollection|User[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="coursesOfStudy", cascade={"persist"})
+     */
+    private $users;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -88,6 +95,7 @@ class CoursesOfStudy
         $this->courses = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public static function getPostGrop()
@@ -260,5 +268,41 @@ class CoursesOfStudy
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Add user.
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return CoursesOfStudy
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user.
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        return $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
