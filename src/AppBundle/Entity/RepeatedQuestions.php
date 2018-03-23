@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints\ConditionRepeatedQuestions;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation;
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     fields={"questionsRepeated", "questionsOrigin", "user"},
  *     errorPath="user, questions"
  * )
+ * @ConditionRepeatedQuestions(value="questions", groups={"post_repeated_questions"})
  */
 class RepeatedQuestions
 {
