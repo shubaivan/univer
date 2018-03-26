@@ -4,11 +4,13 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
+use AppBundle\Entity\Collections\Questions\QuestionsCollection;
 use AppBundle\Entity\Favorites;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\RepeatedQuestions;
 use AppBundle\Entity\Repository\FavoritesRepository;
 use AppBundle\Entity\Repository\NotesRepository;
+use AppBundle\Entity\Repository\QuestionsRepository;
 use AppBundle\Entity\Repository\RepeatedQuestionsRepository;
 use AppBundle\Entity\Repository\UserQuestionAnswerTestRepository;
 use AppBundle\Entity\Repository\VotesRepository;
@@ -93,15 +95,20 @@ class SerializationListener implements EventSubscriberInterface
     private $votesRepository;
 
     /**
+     * @var QuestionsRepository
+     */
+    private $questionsRepository;
+
+    /**
      * SerializationListener constructor.
-     *
-     * @param TokenStorageInterface            $tokenStorage
-     * @param NotesRepository                  $notesRepository
-     * @param FavoritesRepository              $favoritesRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param NotesRepository $notesRepository
+     * @param FavoritesRepository $favoritesRepository
      * @param UserQuestionAnswerTestRepository $answerTestRepository
-     * @param RepeatedQuestionsRepository      $repeatedQuestionsRepository
-     * @param EntityManager                    $entityManager
-     * @param VotesRepository                  $votesRepository
+     * @param RepeatedQuestionsRepository $repeatedQuestionsRepository
+     * @param EntityManager $entityManager
+     * @param VotesRepository $votesRepository
+     * @param QuestionsRepository $questionsRepository
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -110,7 +117,8 @@ class SerializationListener implements EventSubscriberInterface
         UserQuestionAnswerTestRepository $answerTestRepository,
         RepeatedQuestionsRepository $repeatedQuestionsRepository,
         EntityManager $entityManager,
-        VotesRepository $votesRepository
+        VotesRepository $votesRepository,
+        QuestionsRepository $questionsRepository
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->notesRepository = $notesRepository;
@@ -136,6 +144,7 @@ class SerializationListener implements EventSubscriberInterface
         $this->repeatedQuestionsRepository = $repeatedQuestionsRepository;
         $this->entityManager = $entityManager;
         $this->votesRepository = $votesRepository;
+        $this->questionsRepository = $questionsRepository;
     }
 
     /**
@@ -151,12 +160,22 @@ class SerializationListener implements EventSubscriberInterface
             ],
             [
                 'event' => 'serializer.pre_serialize',
+                'class' => QuestionsCollection::class,
+                'method' => 'onPreSerialize',
+            ],
+            [
+                'event' => 'serializer.pre_serialize',
                 'class' => NotificationsRequestModel::class,
                 'method' => 'onPreSerializeNRM',
             ],
             [
                 'event' => 'serializer.post_serialize',
                 'class' => Questions::class,
+                'method' => 'onPreSerializeQuestions',
+            ],
+            [
+                'event' => 'serializer.post_serialize',
+                'class' => QuestionsCollection::class,
                 'method' => 'onPreSerializeQuestions',
             ],
             [
@@ -237,8 +256,11 @@ class SerializationListener implements EventSubscriberInterface
         if (null === $this->user) {
             return;
         }
-        /** @var Questions $question */
         $question = $event->getObject();
+        if ($question instanceof QuestionsCollection) {
+            $question = $this->getQuestionsRepository()
+                ->findOneBy(['id' => $question->getQuestionId()]);
+        }
         if ($this->user instanceof User) {
             $authorNotes = $this->notesRepository->findBy(['user' => $this->user, 'questions' => $question]);
             $question->setNoteCollection($authorNotes);
@@ -295,5 +317,13 @@ class SerializationListener implements EventSubscriberInterface
     private function getEntityManager()
     {
         return $this->entityManager;
+    }
+
+    /**
+     * @return QuestionsRepository
+     */
+    private function getQuestionsRepository()
+    {
+        return $this->questionsRepository;
     }
 }

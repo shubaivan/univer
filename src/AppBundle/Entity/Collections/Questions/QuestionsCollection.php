@@ -107,4 +107,12 @@ class QuestionsCollection
     {
         return $this->notes;
     }
+
+    /**
+     * @return int
+     */
+    public function getQuestionId(): int
+    {
+        return $this->questionId;
+    }
 }
