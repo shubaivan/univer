@@ -37,9 +37,9 @@ class QuestionsCollection
     private $type;
 
     /**
-     * @var int
+     * @var string
      * @Annotation\Groups({"get_sub_courses"})
-     * @Annotation\Type("integer")
+     * @Annotation\Type("string")
      */
     private $questionNumber;
 
