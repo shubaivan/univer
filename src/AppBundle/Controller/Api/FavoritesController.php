@@ -307,7 +307,7 @@ class FavoritesController extends AbstractRestController
             }
             /** @var ObjectManager $auth */
             $auth = $this->get('app.auth');
-            $this->prepareAuthor();
+            $this->prepareAuthor('query');
             /** @var FavoritesRequestModel $favoritesRequestModel */
             $favoritesRequestModel = $auth->validateEntites(
                 'query',

@@ -108,16 +108,19 @@ class AbstractRestController extends FOSRestController
         return $this->get('app.application.sub_courses_application');
     }
 
-    protected function prepareAuthor()
+    /**
+     * @param string $type
+     */
+    protected function prepareAuthor($type = 'request')
     {
         $request = $this->get('request_stack')->getCurrentRequest();
         /** @var AbstractUser $authUser */
         $authUser = $this->getUser();
 
         if ($authUser instanceof User) {
-            $request->request->set('user', $this->getUser()->getId());
+            $request->$type->set('user', $this->getUser()->getId());
         } elseif ($authUser instanceof Admin) {
-            $request->request->set('admin', $this->getUser()->getId());
+            $request->$type->set('admin', $this->getUser()->getId());
         } else {
             throw new AccessDeniedException();
         }
