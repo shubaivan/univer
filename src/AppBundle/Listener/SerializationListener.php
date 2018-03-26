@@ -248,7 +248,7 @@ class SerializationListener implements EventSubscriberInterface
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
         /** @var RepeatedQuestions $authorRepeatedQuestions */
         $authorRepeatedQuestions = $this->repeatedQuestionsRepository
-            ->findOneBy(['user' => $this->user, 'questions' => $question]);
+            ->findOneBy(['user' => $this->user, 'questionsRepeated' => $question]);
         /** @var Votes $authorVotesQuestions */
         $authorVotesQuestions = $this->votesRepository
             ->findOneBy(['user' => $this->user, 'questions' => $question]);
