@@ -283,7 +283,7 @@ class FavoritesController extends AbstractRestController
      *      description = "Delete favorite",
      *      authentication=true,
      *      parameters={
-     *          {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or user object"}
+     *          {"name"="courses", "dataType"="integer", "required"=true, "description"="courses id or courses object"}
      *      },
      *      statusCodes = {
      *          200 = "Returned when successful",
