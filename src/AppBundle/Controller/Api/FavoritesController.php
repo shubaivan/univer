@@ -295,22 +295,26 @@ class FavoritesController extends AbstractRestController
      *
      * @RestView()
      *
+     * @param Request $request
+     *
      * @throws NotFoundHttpException when not exist
      *
      * @return Response|View
      */
-    public function deletedFavoritesByCoursesAction()
+    public function deletedFavoritesByCoursesAction(Request $request)
     {
         try {
             if ($this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)) {
                 throw new AccessDeniedException();
             }
+            $type = $request->request->get('courses')
+                ? 'request' : 'query';
             /** @var ObjectManager $auth */
             $auth = $this->get('app.auth');
-            $this->prepareAuthor('query');
+            $this->prepareAuthor($type);
             /** @var FavoritesRequestModel $favoritesRequestModel */
             $favoritesRequestModel = $auth->validateEntites(
-                'query',
+                $type,
                 FavoritesRequestModel::class,
                 FavoritesRequestModel::getRemoveGroup()
             );
