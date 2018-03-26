@@ -43,7 +43,7 @@ class UserController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getUserAction()
+    public function getUsersAction()
     {
         return $this->createSuccessResponse($this->getUser(), ['profile'], true);
     }
