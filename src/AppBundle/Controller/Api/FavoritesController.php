@@ -8,6 +8,7 @@ use AppBundle\Entity\Favorites;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\FavoritesRequestModel;
+use AppBundle\Services\ObjectManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -298,18 +299,18 @@ class FavoritesController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function deletedFavoritesByCoursesAction(Request $request)
+    public function deletedFavoritesByCoursesAction()
     {
         try {
             if ($this->getUser()->hasRole(AbstractUser::ROLE_ADMIN)) {
                 throw new AccessDeniedException();
             }
-
+            /** @var ObjectManager $auth */
             $auth = $this->get('app.auth');
             $this->prepareAuthor();
             /** @var FavoritesRequestModel $favoritesRequestModel */
             $favoritesRequestModel = $auth->validateEntites(
-                'request',
+                'query',
                 FavoritesRequestModel::class,
                 FavoritesRequestModel::getRemoveGroup()
             );
