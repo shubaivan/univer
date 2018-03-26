@@ -39,10 +39,16 @@ class FavoritesRepository extends EntityRepository
         $qb
             ->from('AppBundle:Favorites', 'f');
 
-        if ($paramFetcher->get('search')) {
+        if ($paramFetcher->get('search')
+            || (array_key_exists('courses', $params) && $paramFetcher->get('courses'))
+            || (array_key_exists('sub_courses', $params) && $paramFetcher->get('sub_courses'))
+        ) {
             $qb
                 ->innerJoin('f.user', 'u')
                 ->innerJoin('f.questions', 'q');
+        }
+
+        if ($paramFetcher->get('search')) {
             $andXSearch = $qb->expr()->andX();
 
             foreach (explode(' ', $paramFetcher->get('search')) as $key => $word) {
@@ -68,6 +74,16 @@ class FavoritesRepository extends EntityRepository
         if (array_key_exists('user', $params) && $paramFetcher->get('user')) {
             $qb
                 ->andWhere($qb->expr()->eq('f.user', $paramFetcher->get('user')));
+        }
+
+        if (array_key_exists('courses', $params) && $paramFetcher->get('courses')) {
+            $qb
+                ->andWhere($qb->expr()->eq('q.courses', $paramFetcher->get('courses')));
+        }
+
+        if (array_key_exists('sub_courses', $params) && $paramFetcher->get('sub_courses')) {
+            $qb
+                ->andWhere($qb->expr()->eq('q.subCourses', $paramFetcher->get('sub_courses')));
         }
 
         if (!$count) {

@@ -75,6 +75,8 @@ class FavoritesController extends AbstractRestController
      *
      * @RestView()
      *
+     * @Rest\QueryParam(name="courses", requirements="\d+", description="courses id")
+     * @Rest\QueryParam(name="sub_courses", requirements="\d+", description="sub_courses id")
      * @Rest\QueryParam(name="search", description="search fields - questions text, notes; user firstName, lastName, username, email")
      * @Rest\QueryParam(name="count", requirements="\d+", default="10", description="Count entity at one page")
      * @Rest\QueryParam(name="page", requirements="\d+", default="1", description="Number of page to be shown")
