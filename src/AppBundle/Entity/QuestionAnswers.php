@@ -47,7 +47,8 @@ class QuestionAnswers
      * @ORM\Column(name="is_true", type="boolean", nullable=false)
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
-     *     "get_questions_corrections", "get_question_corrections", "post_question_corrections"
+     *     "get_questions_corrections", "get_question_corrections",
+     *     "post_question_corrections", "get_user_question_answer_test"
      * })
      * @Annotation\Type("boolean")
      */

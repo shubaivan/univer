@@ -44,7 +44,7 @@ class UserQuestionAnswerTestController extends AbstractRestController
      *
      * @return Response|View
      */
-    public function getFavoritesAction(UserQuestionAnswerTest $questionAnswerTest)
+    public function getAnswersAction(UserQuestionAnswerTest $questionAnswerTest)
     {
         return $this->createSuccessResponse(
             $questionAnswerTest,
