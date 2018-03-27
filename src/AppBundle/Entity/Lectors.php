@@ -64,11 +64,6 @@ class Lectors
      *     "get_lector", "get_lectors", "post_lector", "put_lector",
      *     "get_questions", "get_question", "get_questions_corrections", "get_question_corrections"
      * })
-     * @Assert\Length(
-     *     groups={"post_lector", "put_lector"},
-     *      min = 2,
-     *      max = 100
-     * )
      */
     private $lastName;
 
