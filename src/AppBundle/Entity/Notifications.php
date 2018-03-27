@@ -158,7 +158,7 @@ class Notifications
      */
     public function getProvider()
     {
-        return !$this->provider ?
+        return !$this->provider ? false
             : array_search($this->provider, ProviderTypeEnum::getAvailableTypes());
     }
 

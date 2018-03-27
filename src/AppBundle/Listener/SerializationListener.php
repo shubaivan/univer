@@ -270,6 +270,9 @@ class SerializationListener implements EventSubscriberInterface
         /** @var Notifications $notifications*/
         $notifications = $event->getObject();
         $provider = $notifications->getProvider();
+        if (!$provider) {
+            return;
+        }
         $this->providerEntity = $this->entityManager->getRepository($provider)
             ->findOneBy(['id' => $notifications->getProviderId()]);
         $notifications->setProviderEntity($this->providerEntity);
