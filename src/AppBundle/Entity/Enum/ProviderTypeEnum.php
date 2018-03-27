@@ -2,15 +2,21 @@
 
 namespace AppBundle\Entity\Enum;
 
+use AppBundle\Entity\Comments;
+use AppBundle\Entity\Questions;
+use AppBundle\Entity\UserQuestionAnswerTest;
+
 abstract class ProviderTypeEnum
 {
-    const TYPE_PROVIDER_COMMENT = 'comment';
-    const TYPE_PROVIDER_QUESTION_ANSWER_TEST = 'question_answer_test';
+    const TYPE_PROVIDER_COMMENT = Comments::class;
+    const TYPE_PROVIDER_QUESTIONS = Questions::class;
+    const TYPE_PROVIDER_QUESTION_ANSWER_TEST = UserQuestionAnswerTest::class;
 
     /** @var array user friendly named type */
     protected static $typeName = [
-        self::TYPE_PROVIDER_COMMENT => 'comment',
-        self::TYPE_PROVIDER_QUESTION_ANSWER_TEST => 'question_answer_test',
+        self::TYPE_PROVIDER_COMMENT => 1,
+        self::TYPE_PROVIDER_QUESTION_ANSWER_TEST => 2,
+        self::TYPE_PROVIDER_QUESTIONS => 3,
     ];
 
     /**
@@ -32,9 +38,6 @@ abstract class ProviderTypeEnum
      */
     public static function getAvailableTypes()
     {
-        return [
-            self::TYPE_PROVIDER_COMMENT,
-            self::TYPE_PROVIDER_QUESTION_ANSWER_TEST,
-        ];
+        return self::$typeName;
     }
 }

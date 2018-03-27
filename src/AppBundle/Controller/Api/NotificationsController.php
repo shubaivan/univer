@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Application\Notifications\NotificationsApplication;
 use AppBundle\Entity\Notifications;
+use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\NotificationsRequestModel;
@@ -66,7 +67,7 @@ class NotificationsController extends AbstractRestController
                     'notifications' => $notifications->getEntitiesByParams($paramFetcher),
                     'total' => $notifications->getEntitiesByParams($paramFetcher, true),
                 ],
-                Notifications::getGetGroup(),
+                array_merge(Notifications::getGetGroup(), Questions::getGetGroup()),
                 true
             );
         } catch (\Exception $e) {

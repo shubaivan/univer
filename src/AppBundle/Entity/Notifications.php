@@ -57,15 +57,26 @@ class Notifications
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      * @Assert\NotBlank(groups={"post_notifications"})
-     * @Assert\Length(groups={"post_notifications"}, min=2, max=255)
      * @Annotation\Groups({
      *     "post_notifications", "get_notifications"
      * })
-     * @Annotation\Accessor(setter="setAccessorProvider")
+     * @Annotation\Type("string")
+     * @Annotation\Accessor(setter="setAccessorProvider", getter="getAccessorProvider")
      */
     private $provider;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     * @Assert\NotBlank(groups={"post_notifications"})
+     * @Annotation\Groups({
+     *     "post_notifications", "get_notifications"
+     * })
+     */
+    private $providerId;
 
     /**
      * @var string
@@ -89,6 +100,15 @@ class Notifications
     private $status;
 
     /**
+     * @var object
+     *
+     * @Annotation\Groups({
+     *     "get_notifications"
+     * })
+     */
+    private $providerEntity;
+
+    /**
      * Get id.
      *
      * @return int
@@ -106,22 +126,27 @@ class Notifications
         $this->setProvider($provider);
     }
 
+    public function getAccessorProvider()
+    {
+        return $this->getProvider();
+    }
+
     /**
      * Set provider.
      *
-     * @param string $provider
+     * @param integer $provider
      *
      * @return Notifications
      */
     public function setProvider($provider = null)
     {
-        if (!in_array($provider, ProviderTypeEnum::getAvailableTypes(), true)) {
+        if (!array_key_exists($provider, ProviderTypeEnum::getAvailableTypes())) {
             throw new \InvalidArgumentException(
                 'Invalid type. Available type: '.implode(',', ProviderTypeEnum::getAvailableTypes())
             );
         }
 
-        $this->provider = $provider;
+        $this->provider = ProviderTypeEnum::getAvailableTypes()[$provider];
 
         return $this;
     }
@@ -133,7 +158,8 @@ class Notifications
      */
     public function getProvider()
     {
-        return $this->provider;
+        return !$this->provider ?
+            : array_search($this->provider, ProviderTypeEnum::getAvailableTypes());
     }
 
     /**
@@ -256,5 +282,42 @@ class Notifications
     public static function getGetGroup()
     {
         return [self::GROUP_GET_NOTIFICATIONS, 'profile'];
+    }
+
+    /**
+     * Set providerId.
+     *
+     * @param int $providerId
+     *
+     * @return Notifications
+     */
+    public function setProviderId($providerId)
+    {
+        $this->providerId = $providerId;
+
+        return $this;
+    }
+
+    /**
+     * Get providerId.
+     *
+     * @return int
+     */
+    public function getProviderId()
+    {
+        return $this->providerId;
+    }
+
+    public function getProviderEntity()
+    {
+        return $this->providerEntity;
+    }
+
+    /**
+     * @param $providerEntity
+     */
+    public function setProviderEntity($providerEntity)
+    {
+        $this->providerEntity = $providerEntity;
     }
 }

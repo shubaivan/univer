@@ -30,6 +30,7 @@ class NotificationsApplication implements NotificationsApplicationInterface
         User $user,
         User $sender,
         $provider,
+        $providerId,
         $message,
         $native = false
     ) {
@@ -41,6 +42,7 @@ class NotificationsApplication implements NotificationsApplicationInterface
                 'id' => $sender->getId(),
             ],
             'provider' => $provider,
+            'provider_id' => $providerId,
             'message' => $message,
         ];
         if ($native) {
@@ -48,6 +50,7 @@ class NotificationsApplication implements NotificationsApplicationInterface
             $parameterBag->set('user', $user->getId());
             $parameterBag->set('sender', $sender->getId());
             $parameterBag->set('provider', $provider);
+            $parameterBag->set('providerId', $providerId);
             $parameterBag->set('message', $message);
             $parameterBag->set('status', ImprovementSuggestionStatusEnum::NOT_VIEWED);
 

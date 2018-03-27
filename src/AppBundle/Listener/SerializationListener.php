@@ -5,7 +5,9 @@ namespace AppBundle\Listener;
 use AppBundle\Entity\AbstractUser;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\Collections\Questions\QuestionsCollection;
+use AppBundle\Entity\Comments;
 use AppBundle\Entity\Favorites;
+use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\RepeatedQuestions;
 use AppBundle\Entity\Repository\FavoritesRepository;
@@ -100,6 +102,11 @@ class SerializationListener implements EventSubscriberInterface
     private $questionsRepository;
 
     /**
+     * @var object
+     */
+    private $providerEntity;
+
+    /**
      * SerializationListener constructor.
      * @param TokenStorageInterface $tokenStorage
      * @param NotesRepository $notesRepository
@@ -157,6 +164,11 @@ class SerializationListener implements EventSubscriberInterface
                 'event' => 'serializer.pre_serialize',
                 'class' => Questions::class,
                 'method' => 'onPreSerialize',
+            ],
+            [
+                'event' => 'serializer.pre_serialize',
+                'class' => Notifications::class,
+                'method' => 'onPreSerializeNotifications',
             ],
             [
                 'event' => 'serializer.pre_serialize',
@@ -251,6 +263,21 @@ class SerializationListener implements EventSubscriberInterface
         });
     }
 
+    public function onPreSerializeNotifications(PreSerializeEvent $event) {
+        if (null === $this->user) {
+            return;
+        }
+        /** @var Notifications $notifications*/
+        $notifications = $event->getObject();
+        $provider = $notifications->getProvider();
+        $this->providerEntity = $this->entityManager->getRepository($provider)
+            ->findOneBy(['id' => $notifications->getProviderId()]);
+        $notifications->setProviderEntity($this->providerEntity);
+
+        $attr = $event->getContext()->attributes;
+        $groups = array_merge($attr->all()['groups'], $provider::getGetGroup());
+        $attr->set('groups', $groups);
+    }
     public function onPreSerialize(PreSerializeEvent $event)
     {
         if (null === $this->user) {

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Enum\QuestionsTypeEnum;
+use AppBundle\Entity\Interfaces\NotificationInterface;
 use AppBundle\Validator\Constraints\ConditionAuthor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,10 +19,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @ConditionAuthor(groups={"post_question", "put_question"})
  */
-class Questions
+class Questions implements NotificationInterface
 {
     use TraitTimestampable;
     const GROUP_POST = 'post_question';
+    const GROUP_GET = 'get_question';
 
     /**
      * @ORM\Column(type="integer")
@@ -319,9 +321,20 @@ class Questions
         $this->originQuestions = new ArrayCollection();
     }
 
+    /**
+     * @return array
+     */
     public static function getPostGroup()
     {
         return [self::GROUP_POST];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGetGroup()
+    {
+        return [self::GROUP_GET];
     }
 
     /**

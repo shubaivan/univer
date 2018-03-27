@@ -6,6 +6,7 @@ use AppBundle\Application\Notifications\NotificationsApplication;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\Comments;
 use AppBundle\Entity\Enum\ProviderTypeEnum;
+use AppBundle\Entity\Questions;
 use AppBundle\Entity\Repository\CommentsRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
@@ -48,20 +49,23 @@ class CommentDomain implements CommentDomainInterface
     public function approveComment(Comments $comment)
     {
         if (!$comment->getApprove()
+            || !$this->tokenStorage->getToken()
             || !$this->tokenStorage->getToken()->getUser() instanceof Admin) {
             return false;
         }
-        $questions = $comment->getQuestions();
+        /** @var Questions $question */
+        $question = $comment->getQuestions();
         /** @var Comments[] $comments */
         $comments = $this->getCommentsRepository()
-            ->findBy(['questions' => $questions]);
+            ->findBy(['questions' => $question]);
 
         foreach ($comments as $value) {
             $this->notificationsApplication
                 ->createNotification(
                     $value->getUser(),
                     $comment->getUser(),
-                    ProviderTypeEnum::TYPE_PROVIDER_COMMENT,
+                    ProviderTypeEnum::TYPE_PROVIDER_QUESTIONS,
+                    $question->getId(),
                     'comments has been updated'
                 );
         }
