@@ -229,7 +229,6 @@ class Questions implements NotificationInterface
      * @var SubCourses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="questions")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question",
@@ -243,7 +242,6 @@ class Questions implements NotificationInterface
      * @var Lectors
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="questions")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Lectors")
      * @Annotation\Groups({
      *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
