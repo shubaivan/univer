@@ -86,7 +86,7 @@ class ObjectManager
             if ($paramRequest->request->get('user')) {
                 $dataJson = $this->mergeData('user', $dataJson);
             }
-            $serializedData = $dataJson;
+            $serializedData = (array) json_decode($dataJson);
         } elseif ($data) {
             $serializedData = $data;
         } else {
