@@ -168,7 +168,6 @@ class QuestionCorrections
      * @var SubCourses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="questionCorrections")
-     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
      *     "post_question_corrections", "get_questions_corrections", "get_question_corrections"
@@ -182,7 +181,6 @@ class QuestionCorrections
      * @var Lectors
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="questionCorrections")
-     * @Assert\NotBlank(groups={"post_question_corrections"})
      * @Annotation\Type("AppBundle\Entity\Lectors")
      * @Annotation\Groups({
      *      "post_question_corrections", "get_questions_corrections", "get_question_corrections"
