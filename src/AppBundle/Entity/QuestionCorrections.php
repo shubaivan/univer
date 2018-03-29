@@ -292,9 +292,9 @@ class QuestionCorrections
      */
     public function setType($type)
     {
-        if (!in_array($type, QuestionsTypeEnum::getAvailableTypes(), true)) {
+        if (!array_key_exists($type, QuestionsTypeEnum::getAvailableTypes())) {
             throw new \InvalidArgumentException(
-                'Invalid type. Available type: '.implode(',', QuestionsTypeEnum::getAvailableTypes())
+                'Invalid type. Available type: '.implode(',', array_keys(QuestionsTypeEnum::getAvailableTypes()))
             );
         }
 
