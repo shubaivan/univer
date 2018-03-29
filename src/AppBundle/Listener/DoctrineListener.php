@@ -51,6 +51,9 @@ class DoctrineListener implements EventSubscriber
                 foreach ($entity as $value) {
                     $data = $value->generateNumber();
                     $repo->updateNumber($data, $value->getId());
+                    if (!$value->getCustomId()) {
+                        $repo->updateCustomerId($value->getId());
+                    }
                 }
             }
         }

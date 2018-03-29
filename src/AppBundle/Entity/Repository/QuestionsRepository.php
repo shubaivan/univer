@@ -50,6 +50,24 @@ class QuestionsRepository extends EntityRepository
     }
 
     /**
+     * @param $id
+     */
+    public function updateCustomerId($id)
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->update('AppBundle:Questions', 'q')
+            ->set('q.customId', $qb->expr()->literal($id))
+            ->where('q.id = :id')
+            ->setParameter('id', $id);
+
+        $qb->getQuery()->execute();
+    }
+
+    /**
      * @param array $ids
      *
      * @return array
