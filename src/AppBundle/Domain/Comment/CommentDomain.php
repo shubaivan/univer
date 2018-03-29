@@ -8,6 +8,7 @@ use AppBundle\Entity\Comments;
 use AppBundle\Entity\Enum\ProviderTypeEnum;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\Repository\CommentsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class CommentDomain implements CommentDomainInterface
@@ -58,16 +59,19 @@ class CommentDomain implements CommentDomainInterface
         /** @var Comments[] $comments */
         $comments = $this->getCommentsRepository()
             ->findBy(['questions' => $question]);
-
+        $userBuffer = new ArrayCollection();
         foreach ($comments as $value) {
-            $this->notificationsApplication
-                ->createNotification(
-                    $value->getUser(),
-                    $comment->getUser(),
-                    ProviderTypeEnum::TYPE_PROVIDER_QUESTIONS,
-                    $question->getId(),
-                    'comments has been updated'
-                );
+            if (!$userBuffer->contains($value->getUser())) {
+                $userBuffer->add($value->getUser());
+                $this->notificationsApplication
+                    ->createNotification(
+                        $value->getUser(),
+                        $comment->getUser(),
+                        ProviderTypeEnum::TYPE_PROVIDER_QUESTIONS,
+                        $question->getId(),
+                        'comments has been updated'
+                    );
+            }
         }
 
         return true;

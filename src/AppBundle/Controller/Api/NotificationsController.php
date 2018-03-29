@@ -6,6 +6,7 @@ use AppBundle\Application\Notifications\NotificationsApplication;
 use AppBundle\Entity\Notifications;
 use AppBundle\Entity\Questions;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserQuestionAnswerTest;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\NotificationsRequestModel;
 use Doctrine\ORM\EntityManager;
@@ -67,7 +68,7 @@ class NotificationsController extends AbstractRestController
                     'notifications' => $notifications->getEntitiesByParams($paramFetcher),
                     'total' => $notifications->getEntitiesByParams($paramFetcher, true),
                 ],
-                array_merge(Notifications::getGetGroup(), Questions::getGetGroup()),
+                array_merge(Notifications::getGetGroup(), Questions::getGetGroup(), UserQuestionAnswerTest::getGetGroup()),
                 true
             );
         } catch (\Exception $e) {

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Interfaces\NotificationInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -26,8 +27,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     fields={"questionAnswers", "user"}
  * )
  */
-class UserQuestionAnswerTest
+class UserQuestionAnswerTest implements NotificationInterface
 {
+    const GROUP_GET = 'get_user_question_answer_test';
+    const GROUP_POST = 'post_user_question_answer_test';
+
     use TraitTimestampable;
 
     /**
@@ -80,6 +84,16 @@ class UserQuestionAnswerTest
      * })
      */
     private $compareResult = false;
+
+    public static function getGetGroup()
+    {
+        return [self::GROUP_GET];
+    }
+
+    public static function getPostGroup()
+    {
+        return [self::GROUP_POST];
+    }
 
     /**
      * Get id.
