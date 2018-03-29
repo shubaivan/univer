@@ -86,19 +86,21 @@ class ObjectManager
             if ($paramRequest->request->get('user')) {
                 $dataJson = $this->mergeData('user', $dataJson);
             }
-            $serializedData = (array) json_decode($dataJson);
+            $serializedData = $dataJson;
         } elseif ($data) {
             $serializedData = $data;
         } else {
             $serializedData = $this->requestStack->getCurrentRequest()->$requestType->all();
         }
 
-        $serializedData = (array_filter($serializedData, function($v, $k) {
-            if ($v === 'null') {
-                return false;
-            }
-            return true;
-        }, ARRAY_FILTER_USE_BOTH));
+        if (is_array($serializedData)) {
+            $serializedData = (array_filter($serializedData, function($v, $k) {
+                if ($v === 'null') {
+                    return false;
+                }
+                return true;
+            }, ARRAY_FILTER_USE_BOTH));
+        }
 
         return $this->processEntity($groups, $serializedData, $class);
     }
