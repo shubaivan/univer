@@ -88,13 +88,17 @@ class ObjectManager
             }
             $serializedData = $dataJson;
         } elseif ($data) {
-            $serializedData = $this->getSerializer()
-                ->serialize($data, 'json');
+            $serializedData = $data;
         } else {
-            $data = $this->requestStack->getCurrentRequest()->$requestType->all();
-            $serializedData = $this->getSerializer()
-                ->serialize($data, 'json');
+            $serializedData = $this->requestStack->getCurrentRequest()->$requestType->all();
         }
+
+        $serializedData = (array_filter($serializedData, function($v, $k) {
+            if ($v === 'null') {
+                return false;
+            }
+            return true;
+        }, ARRAY_FILTER_USE_BOTH));
 
         return $this->processEntity($groups, $serializedData, $class);
     }
