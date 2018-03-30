@@ -46,13 +46,23 @@ class Notifications
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="senderNotifications")
-     * @Assert\NotBlank(groups={"post_notifications"})
      * @Annotation\Type("AppBundle\Entity\User")
      * @Annotation\Groups({
      *     "post_notifications", "get_notifications"
      * })
      */
     private $sender;
+
+    /**
+     * @var Admin
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="senderNotifications")
+     * @Annotation\Type("AppBundle\Entity\Admin")
+     * @Annotation\Groups({
+     *     "post_notifications", "get_notifications"
+     * })
+     */
+    private $senderAdmin;
 
     /**
      * @var string
@@ -319,5 +329,29 @@ class Notifications
     public function setProviderEntity($providerEntity)
     {
         $this->providerEntity = $providerEntity;
+    }
+
+    /**
+     * Set senderAdmin.
+     *
+     * @param \AppBundle\Entity\Admin|null $senderAdmin
+     *
+     * @return Notifications
+     */
+    public function setSenderAdmin(\AppBundle\Entity\Admin $senderAdmin = null)
+    {
+        $this->senderAdmin = $senderAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get senderAdmin.
+     *
+     * @return \AppBundle\Entity\Admin|null
+     */
+    public function getSenderAdmin()
+    {
+        return $this->senderAdmin;
     }
 }

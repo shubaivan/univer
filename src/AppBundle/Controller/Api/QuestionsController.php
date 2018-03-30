@@ -155,6 +155,7 @@ class QuestionsController extends AbstractRestController
      * description = "Create/Put question by admin",
      * authentication=true,
      *  parameters={
+     *      {"name"="correction_id", "dataType"="integer", "required"=false, "description"="correction question id"},
      *      {"name"="id", "dataType"="string", "required"=false, "description"="question id"},
      *      {"name"="custom_id", "dataType"="string", "required"=false, "description"="custom id"},
      *      {"name"="year", "dataType"="integer", "required"=false, "description"="year"},
@@ -228,6 +229,18 @@ class QuestionsController extends AbstractRestController
             !$persist ?: $em->persist($questions);
             $em->flush();
             $em->refresh($questions);
+
+            if ($em->getRepository('AppBundle:QuestionCorrections')
+                ->findOneBy(['id' => $request->get('correction_id')])) {
+
+                $em->remove(
+                    $em->getRepository('AppBundle:QuestionCorrections')
+                        ->findOneBy(['id' => $request->get('correction_id')])
+                );
+
+                $em->flush();
+            }
+
             return $this->createSuccessResponse($questions, ['get_question'], true);
         } catch (ValidatorException $e) {
             $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);

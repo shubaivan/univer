@@ -100,12 +100,20 @@ class Admin extends AbstractUser implements UserInterface
      */
     private $events;
 
+    /**
+     * @var ArrayCollection|Notifications[]
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notifications", mappedBy="senderAdmin", cascade={"persist", "remove"})
+     */
+    private $senderNotifications;
+
     public function __construct()
     {
         $this->note = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->senderNotifications = new ArrayCollection();
     }
 
     // --------------------------------implements methods--------------------------------------------------------------
@@ -400,5 +408,41 @@ class Admin extends AbstractUser implements UserInterface
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add senderNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $senderNotification
+     *
+     * @return Admin
+     */
+    public function addSenderNotification(\AppBundle\Entity\Notifications $senderNotification)
+    {
+        $this->senderNotifications[] = $senderNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove senderNotification.
+     *
+     * @param \AppBundle\Entity\Notifications $senderNotification
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeSenderNotification(\AppBundle\Entity\Notifications $senderNotification)
+    {
+        return $this->senderNotifications->removeElement($senderNotification);
+    }
+
+    /**
+     * Get senderNotifications.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSenderNotifications()
+    {
+        return $this->senderNotifications;
     }
 }

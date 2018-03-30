@@ -3,6 +3,7 @@
 namespace AppBundle\Application\Notifications;
 
 use AppBundle\Domain\Notifications\NotificationsDomain;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\Enum\ImprovementSuggestionStatusEnum;
 use AppBundle\Entity\User;
 use AppBundle\Model\Request\NotificationsRequestModel;
@@ -26,9 +27,17 @@ class NotificationsApplication implements NotificationsApplicationInterface
         $this->notificationsDomain = $notificationsDomain;
     }
 
+    /**
+     * @param User $user
+     * @param User|Admin $sender
+     * @param $provider
+     * @param $providerId
+     * @param $message
+     * @param bool $native
+     */
     public function createNotification(
         User $user,
-        User $sender,
+        $sender,
         $provider,
         $providerId,
         $message,
@@ -38,17 +47,25 @@ class NotificationsApplication implements NotificationsApplicationInterface
             'user' => [
                 'id' => $user->getId(),
             ],
-            'sender' => [
-                'id' => $sender->getId(),
-            ],
             'provider' => $provider,
             'provider_id' => $providerId,
             'message' => $message,
         ];
+        if ($sender instanceof User) {
+            $prepareData['sender'] = ['id' => $sender->getId()];
+        }
+        if ($sender instanceof Admin) {
+            $prepareData['sender_admin_id'] = ['id' => $sender->getId()];
+        }
         if ($native) {
             $parameterBag = new ParameterBag();
             $parameterBag->set('user', $user->getId());
-            $parameterBag->set('sender', $sender->getId());
+            if ($sender instanceof User) {
+                $parameterBag->set('sender', $sender->getId());
+            }
+            if ($sender instanceof Admin) {
+                $parameterBag->set('senderAdmin', $sender->getId());
+            }
             $parameterBag->set('provider', $provider);
             $parameterBag->set('providerId', $providerId);
             $parameterBag->set('message', $message);

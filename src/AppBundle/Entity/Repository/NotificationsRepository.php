@@ -94,27 +94,33 @@ class NotificationsRepository extends EntityRepository
         $em = $this->getEntityManager();
 
         $qb = $em->getConnection()->createQueryBuilder();
-
+        $sender = [];
+        $senderValue = [];
+        if ($parameterBag->get('sender')) {
+            $sender = ['sender' => $parameterBag->get('sender')];
+            $senderValue = ['sender_id' => ':sender'];
+        } elseif($parameterBag->get('senderAdmin')) {
+            $sender = ['senderAdmin' => $parameterBag->get('senderAdmin')];
+            $senderValue = ['sender_admin_id' => ':senderAdmin'];
+        }
         $qb
             ->insert('notifications')
-            ->values([
+            ->values(array_merge($senderValue, [
                 'user_id' => ':user',
-                'sender_id' => ':sender',
                 'provider' => ':provider',
                 'provider_id' => ':providerId',
                 'message' => ':message',
                 'status' => ':status',
                 'created_at' => ':createdAt',
-            ])
-            ->setParameters([
+            ]))
+            ->setParameters(array_merge($sender, [
                 'user' => $parameterBag->get('user'),
-                'sender' => $parameterBag->get('sender'),
                 'provider' => $parameterBag->get('provider'),
                 'providerId' => $parameterBag->get('providerId'),
                 'message' => $parameterBag->get('message'),
                 'status' => $parameterBag->get('status'),
                 'createdAt' => (new \DateTime())->format('Y-m-d H:i:s'),
-            ]);
+            ]));
 
         $qb->execute();
     }

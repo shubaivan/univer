@@ -97,7 +97,7 @@ class DoctrineListener implements EventSubscriber
                             foreach ($userAnswersTest as $value) {
                                 $notificationApplication->createNotification(
                                     $value->getUser(),
-                                    $entity->getUser(),
+                                    $entity->getUser() ? $entity->getUser() : $entity->getAdmin(),
                                     ProviderTypeEnum::TYPE_PROVIDER_QUESTION_ANSWER_TEST,
                                     $value->getId(),
                                     'update your answers',
