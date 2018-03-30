@@ -189,6 +189,7 @@ class QuestionsController extends AbstractRestController
      */
     public function postQuestionsAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
@@ -226,7 +227,7 @@ class QuestionsController extends AbstractRestController
 
             !$persist ?: $em->persist($questions);
             $em->flush();
-
+            $em->refresh($questions);
             return $this->createSuccessResponse($questions, ['get_question'], true);
         } catch (ValidatorException $e) {
             $view = $this->view($e->getConstraintViolatinosList(), self::HTTP_STATUS_CODE_BAD_REQUEST);
