@@ -9,10 +9,12 @@ use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Model\Request\FavoritesRequestModel;
 use AppBundle\Services\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View as RestView;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -198,6 +200,7 @@ class FavoritesController extends AbstractRestController
      */
     public function putFavoriteAction(Request $request, Favorites $favorites)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
         $logger = $this->container->get('logger');
 
@@ -253,6 +256,7 @@ class FavoritesController extends AbstractRestController
      */
     public function deletedFavoriteAction(Favorites $favorites)
     {
+        /** @var EntityManager $em */
         $em = $this->get('doctrine')->getManager();
 
         try {
@@ -329,5 +333,50 @@ class FavoritesController extends AbstractRestController
         }
 
         return $this->handleView($view);
+    }
+
+    /**
+     * Get favorite pdf.
+     * <strong>Simple example:</strong><br />
+     * http://host/api/favorite/pdf <br>.
+     *
+     * @Rest\Get("/api/favorite/pdf")
+     * @ApiDoc(
+     * resource = true,
+     * description = "Get favorite pdf",
+     * authentication=true,
+     *  parameters={
+     *
+     *  },
+     * statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Bad request"
+     * },
+     * section="Favorite"
+     * )
+     *
+     * @RestView()
+     *
+     * @throws NotFoundHttpException when not exist
+     *
+     * @return PdfResponse
+     */
+    public function pdfAction()
+    {
+        /** @var Favorites[] $favorites */
+        $favorites = $this->getDoctrine()
+            ->getRepository('AppBundle:Favorites')
+            ->findBy(['user' => $this->getUser()]);
+        $html = $this->renderView(
+            '@App/Favorites/favorites.html.twig',
+            [
+                'data' => $favorites
+            ]
+        );
+
+        return new PdfResponse(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            'file.pdf'
+        );
     }
 }

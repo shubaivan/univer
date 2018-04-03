@@ -1,0 +1,43 @@
+{% extends 'AppBundle::layout-pdf.html.twig' %}
+
+{% block content %}
+    <table border="1">
+    <caption>Favorites</caption>
+    <tr>
+        <th>CustomId</th>
+        <th>Text</th>
+        <th>Answers</th>
+    </tr>
+    {# @var item \AppBundle\Entity\Favorites #}
+    {% for item in data %}
+            <tr>
+                <td>{{ item.questions.customId }}</td>
+                <td>
+                    {{ item.questions.text }}
+                    {% if item.questions.imageUrl %}
+                        <img src="{{ absolute_url(asset(item.questions.imageUrl)) }}" alt="">
+                    {% endif %}
+                </td>
+                <td>
+                    <hr>
+                        {% for answer in item.questions.questionAnswers %}
+                            <ul>
+                                {# @var answer \AppBundle\Entity\QuestionAnswers #}
+                                <li>{{ answer.answer }}</li>
+                                <li>{{ answer.isTrue ? 'true' : 'false' }}</li>
+                            </ul>
+                        {% endfor %}
+                    <hr>
+                </td>
+            </tr>
+
+    {% endfor %}
+
+    </table>
+
+    <figure>
+        <img src="{{ absolute_url(asset('bundles/app/img/password-recovery-app-256.png')) }}" alt="">
+        <figcaption>Univer</figcaption>
+    </figure>
+
+{% endblock %}
