@@ -84,6 +84,7 @@ gesdinet_jwt_refresh_token:
     ttl: '%jwt_refresh_token_ttl%'
     ttl_update: true
     user_provider: security.user.provider.concrete.chain_provider
+    user_identity_field: email
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"

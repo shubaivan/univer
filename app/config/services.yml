@@ -26,12 +26,6 @@ services:
         public: false
         alias: app_serialize.object_constructor
 
-    gesdinet.jwtrefreshtoken.send_token:
-        class: AppBundle\Security\AttachRefreshTokenOnSuccessListener
-        arguments: [ "@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "@validator", "@request_stack" ]
-        tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: attachRefreshToken }
-
     app.doctrine_listener:
         class: AppBundle\Listener\DoctrineListener
         calls:

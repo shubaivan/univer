@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6910160329d67e5540ff8ac8ce9b60c8",
+    "content-hash": "ef693fcae2c8264b9acdb6f789596052",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1456,16 +1456,16 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v0.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
-                "reference": "3c925317c2e07ab49b7e68ae38b26ef452952b83"
+                "reference": "8bb51f710d9dd38374c87f63469cfe4083161310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/3c925317c2e07ab49b7e68ae38b26ef452952b83",
-                "reference": "3c925317c2e07ab49b7e68ae38b26ef452952b83",
+                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/8bb51f710d9dd38374c87f63469cfe4083161310",
+                "reference": "8bb51f710d9dd38374c87f63469cfe4083161310",
                 "shasum": ""
             },
             "require": {
@@ -1473,12 +1473,11 @@
                 "doctrine/orm": "^2.4.8",
                 "lexik/jwt-authentication-bundle": "^1.1|^2.0@dev",
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.3|~3.0",
-                "symfony/validator": "~2.3|~3.0"
+                "symfony/framework-bundle": "~3.3|~4.0",
+                "symfony/validator": "~3.3|~4.0"
             },
             "require-dev": {
-                "henrikbjorn/phpspec-code-coverage": "~1.0",
-                "phpspec/phpspec": "~2.0"
+                "phpspec/phpspec": "^4.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1505,7 +1504,7 @@
             "keywords": [
                 "jwt refresh token bundle symfony json web"
             ],
-            "time": "2017-07-25T06:28:08+00:00"
+            "time": "2018-03-31T11:11:21+00:00"
         },
         {
             "name": "hautelook/alice-bundle",
@@ -4906,6 +4905,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "gesdinet/jwt-refresh-token-bundle": 20,
         "nelmio/api-doc-bundle": 20
     },
     "prefer-stable": false,
