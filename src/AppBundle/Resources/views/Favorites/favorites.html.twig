@@ -21,10 +21,14 @@
                 <td>
                     <hr>
                         {% for answer in item.questions.questionAnswers %}
+                            {% if answer.isTrue %}
+                                {% set color = 'green' %}
+                            {% else %}
+                                {% set color = 'red' %}
+                            {% endif %}
                             <ul>
                                 {# @var answer \AppBundle\Entity\QuestionAnswers #}
-                                <li>{{ answer.answer }}</li>
-                                <li>{{ answer.isTrue ? 'true' : 'false' }}</li>
+                                <li style="color: {{ color }}">{{ answer.answer }}</li>
                             </ul>
                         {% endfor %}
                     <hr>

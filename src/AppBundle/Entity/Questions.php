@@ -17,13 +17,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="questions")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\QuestionsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
- * @ConditionAuthor(groups={"post_question", "put_question"})
+ * @ConditionAuthor(groups={"post_question", "import_post_question", "put_question"})
  */
 class Questions implements NotificationInterface
 {
     use TraitTimestampable;
     const GROUP_POST = 'post_question';
     const GROUP_GET = 'get_question';
+    const GROUP_IMPORT = 'import_post_question';
 
     /**
      * @ORM\Column(type="integer")
@@ -41,7 +42,7 @@ class Questions implements NotificationInterface
     /**
      * @ORM\Column(name="custom_id", type="text", length=255, nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
@@ -52,7 +53,7 @@ class Questions implements NotificationInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="questions")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $user;
@@ -62,7 +63,7 @@ class Questions implements NotificationInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="questions")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question"
      * })
      */
     private $admin;
@@ -72,7 +73,7 @@ class Questions implements NotificationInterface
      *
      * @ORM\Column(type="integer", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
@@ -81,9 +82,9 @@ class Questions implements NotificationInterface
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(groups={"post_question"})
+     * @Assert\NotBlank(groups={"post_question", "import_post_question",})
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Accessor(setter="setSerializedAccessorType")
@@ -95,7 +96,7 @@ class Questions implements NotificationInterface
      *
      * @ORM\Column(name="question_number", type="string", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
@@ -113,7 +114,7 @@ class Questions implements NotificationInterface
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_note", "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      */
@@ -122,7 +123,7 @@ class Questions implements NotificationInterface
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $text;
@@ -150,7 +151,7 @@ class Questions implements NotificationInterface
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuestionAnswers", mappedBy="questions", cascade={"persist" , "remove"})
      * @Assert\Valid
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Annotation\Type("ArrayCollection<AppBundle\Entity\QuestionAnswers>")
      * @Annotation\Accessor(setter="setAccessorQuestionAnswers")
@@ -203,10 +204,10 @@ class Questions implements NotificationInterface
      * @var Semesters
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Semesters", inversedBy="questions", cascade={"persist"})
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Assert\NotBlank(groups={"post_question", "import_post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Semesters")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -216,10 +217,10 @@ class Questions implements NotificationInterface
      * @var ExamPeriods
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExamPeriods", inversedBy="questions", cascade={"persist"})
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Assert\NotBlank(groups={"post_question", "import_post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\ExamPeriods")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -231,7 +232,7 @@ class Questions implements NotificationInterface
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCourses", inversedBy="questions")
      * @Annotation\Type("AppBundle\Entity\SubCourses")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question",
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question",
      *     "get_notes", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
@@ -244,7 +245,7 @@ class Questions implements NotificationInterface
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lectors", inversedBy="questions")
      * @Annotation\Type("AppBundle\Entity\Lectors")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -254,10 +255,10 @@ class Questions implements NotificationInterface
      * @var CoursesOfStudy
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CoursesOfStudy", inversedBy="questions")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Assert\NotBlank(groups={"post_question", "import_post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\CoursesOfStudy")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -267,10 +268,10 @@ class Questions implements NotificationInterface
      * @var Courses
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Courses", inversedBy="questions")
-     * @Assert\NotBlank(groups={"post_question", "put_question"})
+     * @Assert\NotBlank(groups={"post_question", "import_post_question", "put_question"})
      * @Annotation\Type("AppBundle\Entity\Courses")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      * @Evence\onSoftDelete(type="SET NULL")
      */
@@ -296,7 +297,7 @@ class Questions implements NotificationInterface
      * @ORM\Column(name="votes_at", type="datetime", nullable=true)
      * @Annotation\Type("DateTime<'Y-m-d H:i:s'>")
      * @Annotation\Groups({
-     *     "get_question", "get_questions", "post_question", "put_question", "get_questions_corrections", "get_question_corrections"
+     *     "get_question", "get_questions", "post_question", "import_post_question", "put_question", "get_questions_corrections", "get_question_corrections"
      * })
      */
     private $votesAt;
@@ -325,6 +326,14 @@ class Questions implements NotificationInterface
     public static function getPostGroup()
     {
         return [self::GROUP_POST];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getImportGroup()
+    {
+        return [self::GROUP_IMPORT];
     }
 
     /**

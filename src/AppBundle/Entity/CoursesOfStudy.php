@@ -49,9 +49,7 @@ class CoursesOfStudy
      * @Assert\Length(
      *     groups={"post_course_of_study", "put_course_of_study"},
      *      min = 2,
-     *      max = 100,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     *      max = 100
      * )
      */
     private $name;

@@ -42,7 +42,7 @@ class ExamPeriods
      * @Annotation\Groups({
      *     "get_exam_period", "get_exam_periods", "post_exam_period", "put_exam_period",
      *     "get_questions", "get_question", "get_questions_corrections",
-     *     "get_question_corrections", "get_events"
+     *     "get_question_corrections", "get_events", "import_post_question"
      * })
      * @Assert\NotBlank(groups={"post_exam_period", "put_exam_period"})
      */

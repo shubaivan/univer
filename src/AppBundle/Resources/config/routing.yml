@@ -103,3 +103,8 @@ api_votes:
     type: rest
     prefix:   /
     resource: "@AppBundle/Controller/Api/VotesController.php"
+
+api_import:
+    type: rest
+    prefix:   /
+    resource: "@AppBundle/Controller/Api/ImportController.php"

@@ -10,8 +10,16 @@ parameters:
     app.file_uploader.class: AppBundle\Helper\FileUploader
     app.serialization_listener.class: AppBundle\Listener\SerializationListener
     app.additional_function.class:  AppBundle\Helper\AdditionalFunction
+    app.import_manager.class:  AppBundle\Services\ImportManager
 
 services:
+    app.service.import_manager:
+        class: "%app.import_manager.class%"
+        arguments:
+            - "@service_container"
+            - "@doctrine.orm.default_entity_manager.delegate"
+            - "@app.auth"
+
     app.listener.serializationlistener:
         class: "%app.serialization_listener.class%"
         arguments:
